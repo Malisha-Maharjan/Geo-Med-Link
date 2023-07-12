@@ -1,5 +1,8 @@
 import express from "express";
+import { StatusCodes } from "http-status-codes";
+import { User } from "../../entity/User";
 import { userRepository } from "../../repository";
+import { createResponse } from "../../utils/response";
 
 const router = express.Router();
 
@@ -11,10 +14,16 @@ router.post("/api/login", async (req, res) => {
       password: data["password"],
     },
   });
-  if (user) {
-    return res.send(user).status(200);
+  if (!user) {
+    return createResponse<User>(res, StatusCodes.UNAUTHORIZED, {
+      status: "error",
+      error: { message: ["Invalid Username Or Password"] },
+    });
   }
-  return res.send("Invalid Username Or Password").status(404);
+  return createResponse<User>(res, StatusCodes.OK, {
+    status: "success",
+    data: user,
+  });
 });
 
 export { router as login };

@@ -1,4 +1,5 @@
 import express from "express";
+import { StatusCodes } from "http-status-codes";
 import { Blood_Donor } from "../../entity/Blood-donor";
 import { donorRepository, userRepository } from "../../repository";
 import { createResponse } from "../../utils/response";
@@ -14,7 +15,7 @@ registerDonorRouter.post("/api/donor", async (req, res) => {
     },
   });
   if (user === null)
-    return createResponse(res, 400, {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["User Not found"] },
     });
@@ -28,7 +29,7 @@ registerDonorRouter.post("/api/donor", async (req, res) => {
   } catch (error) {
     return res.send("This User is already registered as Donor");
   }
-  return createResponse<Blood_Donor>(res, 200, {
+  return createResponse<Blood_Donor>(res, StatusCodes.OK, {
     status: "success",
     data: donor,
   });
@@ -42,7 +43,7 @@ deactivateDonorRouter.post("/api/donor/deactivate", async (req, res) => {
     },
   });
   if (user === null)
-    return createResponse(res, 400, {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["User Not found"] },
     });
@@ -55,12 +56,12 @@ deactivateDonorRouter.post("/api/donor/deactivate", async (req, res) => {
   if (donor) {
     donor.is_active = false;
     donor.save();
-    return createResponse<Blood_Donor>(res, 200, {
+    return createResponse<Blood_Donor>(res, StatusCodes.OK, {
       status: "success",
       data: donor,
     });
   }
-  return createResponse(res, 400, {
+  return createResponse(res, StatusCodes.BAD_REQUEST, {
     status: "error",
     error: { message: ["This user is not registered as donor."] },
   });
@@ -74,7 +75,7 @@ activateDonorRouter.post("/api/donor/activate", async (req, res) => {
     },
   });
   if (user === null)
-    return createResponse(res, 400, {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["User Not found"] },
     });
@@ -87,12 +88,12 @@ activateDonorRouter.post("/api/donor/activate", async (req, res) => {
   if (donor) {
     donor.is_active = true;
     donor.save();
-    return createResponse<Blood_Donor>(res, 200, {
+    return createResponse<Blood_Donor>(res, StatusCodes.OK, {
       status: "success",
       data: donor,
     });
   }
-  return createResponse(res, 400, {
+  return createResponse(res, StatusCodes.BAD_REQUEST, {
     status: "error",
     error: { message: ["This user is not registered as donor."] },
   });

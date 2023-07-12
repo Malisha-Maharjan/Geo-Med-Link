@@ -1,4 +1,4 @@
-export type ApiResponse<T = any> =
+export type ApiResponse<T> =
   | {
       status: "error";
       error: {
@@ -7,5 +7,5 @@ export type ApiResponse<T = any> =
     }
   | {
       status: "success";
-      data: T;
+      data?: T | undefined;
     };

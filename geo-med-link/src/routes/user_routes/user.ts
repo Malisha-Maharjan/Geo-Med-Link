@@ -1,5 +1,6 @@
 import { default as express } from "express";
 import "express-async-errors";
+import { StatusCodes } from "http-status-codes";
 import { User } from "../../entity/User";
 import { userRepository } from "../../repository";
 import { createResponse } from "../../utils/response";
@@ -19,64 +20,64 @@ createRouter.post("/api/user", async (req, res) => {
   });
   console.log(existingUser);
   if (existingUser.length !== 0) {
-    console.log(existingUser);
-    return createResponse(res, 400, {
-      status: "error",
-      error: {
-        userName: ["Username already exists."],
-      },
+    return createResponse<User>(res, StatusCodes.OK, {
+      status: "success",
+      data: await userRepository.create(userDTO).save(),
     });
   }
-
-  return createResponse<User>(res, 400, {
-    status: "success",
-    data: await userRepository.create(userDTO).save(),
+  console.log(existingUser);
+  return createResponse(res, StatusCodes.BAD_REQUEST, {
+    status: "error",
+    error: {
+      userName: ["Username already exists."],
+    },
   });
 });
 
 getAllRouter.get("/api/user/all", async (req, res) => {
   const user = await userRepository.find();
   console.log(user);
-  if (user.length !== 0)
-    return createResponse<User[]>(res, 200, {
-      status: "success",
-      data: user,
+  if (user.length === 0)
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: { message: ["Bad Request"] },
     });
-  return createResponse(res, 400, {
-    status: "error",
-    error: { message: ["Bad Request"] },
+  return createResponse<User[]>(res, StatusCodes.OK, {
+    status: "success",
+    data: user,
   });
 });
 
 deleteRouter.delete("/api/user/:userId", async (req, res) => {
   const userId = parseInt(req.params.userId);
   const user = await userRepository.findBy({ id: userId });
-  if (user.length !== 0) {
-    await userRepository.delete({ id: userId });
-    return createResponse(res, 200, {
-      status: "success",
-      data: "User deleted",
+  if (user.length === 0) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: {
+        message: ["User Not Found"],
+      },
     });
   }
-  return createResponse(res, 400, {
-    status: "error",
-    error: {
-      message: ["User Not Found"],
-    },
+
+  await userRepository.delete({ id: userId });
+  return createResponse(res, StatusCodes.OK, {
+    status: "success",
   });
 });
 
 getRouter.get("/api/user/:userId", async (req, res) => {
   const userId = parseInt(req.params.userId);
   const user = await userRepository.findBy({ id: userId });
-  if (user.length !== 0)
-    return createResponse<User[]>(res, 200, {
-      status: "success",
-      data: user,
+  if (user.length === 0)
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: { message: ["User Not Found"] },
     });
-  return createResponse(res, 400, {
-    status: "error",
-    error: { message: ["User Not Found"] },
+
+  return createResponse<User[]>(res, StatusCodes.OK, {
+    status: "success",
+    data: user,
   });
 });
 
@@ -84,6 +85,7 @@ updateRouter.put("/api/user", async (req, res) => {
   console.log(req.body);
   const userDTO = validate(createUserSchema, req.body);
   const userName = userDTO.userName;
+  console.log("hello");
   const user = await userRepository.findOne({
     where: {
       userName: userName,
@@ -91,12 +93,12 @@ updateRouter.put("/api/user", async (req, res) => {
   });
   if (user !== null) {
     userRepository.merge(user, userDTO).save();
-    return createResponse<User>(res, 200, {
+    return createResponse<User>(res, StatusCodes.OK, {
       status: "success",
       data: user,
     });
   }
-  return createResponse(res, 400, {
+  return createResponse(res, StatusCodes.BAD_REQUEST, {
     status: "error",
     error: { message: ["User Not Found"] },
   });
