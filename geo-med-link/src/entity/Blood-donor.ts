@@ -1,3 +1,8 @@
+enum USER_TYPE {
+  DOCTOR = 1,
+  BLOOD_DONOR = 2,
+}
+
 import {
   BaseEntity,
   Column,

@@ -15,22 +15,22 @@ const updateRouter = express.Router();
 
 createRouter.post("/api/user", async (req, res) => {
   const userDTO = validate(createUserSchema, req.body);
-  const existingUser = await userRepository.findBy({
-    userName: userDTO.userName,
+  const existingUser = await userRepository.findOne({
+    where: {
+      userName: userDTO.userName,
+    },
   });
   console.log(existingUser);
-  if (existingUser.length !== 0) {
-    return createResponse<User>(res, StatusCodes.OK, {
-      status: "success",
-      data: await userRepository.create(userDTO).save(),
+  if (existingUser)
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: {
+        userName: ["Username already exists."],
+      },
     });
-  }
-  console.log(existingUser);
-  return createResponse(res, StatusCodes.BAD_REQUEST, {
-    status: "error",
-    error: {
-      userName: ["Username already exists."],
-    },
+  return createResponse<User>(res, StatusCodes.OK, {
+    status: "success",
+    data: await userRepository.create(userDTO).save(),
   });
 });
 

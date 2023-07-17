@@ -44,4 +44,10 @@ export class User extends BaseEntity {
 
   @Column({})
   email: string;
+
+  @Column({ default: false })
+  is_donor: Boolean;
+
+  @Column({ nullable: true })
+  blood_Group: String;
 }

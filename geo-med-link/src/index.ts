@@ -1,9 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
-import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 import { AppDataSource } from "./data-source";
-import { verifyToken } from "./routes/login_routes/jwt";
 
 import { routes } from "./routes";
 import { createResponse } from "./utils/response";
@@ -18,26 +16,26 @@ async function main() {
 
   app.use(express.json());
 
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.url != "/api/login") {
-      const token = req.headers["authorization"];
-      if (!token)
-        return createResponse(res, StatusCodes.FORBIDDEN, {
-          status: "error",
-          error: { message: ["Invalid Token"] },
-        });
-      if (!token?.includes("Bearer"))
-        return createResponse(res, 400, {
-          status: "error",
-          error: { message: ["Token invalid"] },
-        });
+  // app.use((req: Request, res: Response, next: NextFunction) => {
+  //   if (req.url != "/api/login") {
+  //     const token = req.headers["authorization"];
+  //     if (!token)
+  //       return createResponse(res, StatusCodes.UNAUTHORIZED, {
+  //         status: "error",
+  //         error: { message: ["Invalid Token"] },
+  //       });
+  //     if (!token?.startsWith("Bearer "))
+  //       return createResponse(res, StatusCodes.UNAUTHORIZED, {
+  //         status: "error",
+  //         error: { message: ["Token invalid"] },
+  //       });
 
-      if (verifyToken(token.split(" ")[1])) {
-        console.log({ token });
-      }
-    }
-    next();
-  });
+  //     if (verifyToken(token.split(" ")[1])) {
+  //       console.log({ token });
+  //     }
+  //   }
+  //   next();
+  // });
 
   app.get("/", async (req, res) => {
     return res.send("Geo Med Link");

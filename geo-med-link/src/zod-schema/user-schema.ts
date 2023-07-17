@@ -14,6 +14,12 @@ export const createUserSchema = z.object({
   lastName: z.string({ invalid_type_error: "Must be a string" }),
 });
 
+export const DonorSchema = z.object({
+  blood_Group: z
+    .string({ invalid_type_error: "Must be a string" })
+    .regex(/^(A|B|AB|O)[+-]$/, "Invalid Blood Group"),
+});
+
 export const loginSchema = z.object({
   userName: z.string({ invalid_type_error: "Must be a string" }),
   password: z

@@ -3,7 +3,6 @@ import { login } from "./routes/login_routes/login";
 import {
   activateDonor,
   deactivateDonor,
-  registerDonor,
 } from "./routes/user_routes/blood-donor";
 import {
   createUser,
@@ -17,7 +16,6 @@ const app = express();
 
 export const routes =
   (app.use(getAllUser),
-  app.use(registerDonor),
   app.use(createUser),
   app.use(getUser),
   app.use(deleteUser),
