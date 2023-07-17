@@ -4,6 +4,7 @@ import {
   activateDonor,
   deactivateDonor,
 } from "./routes/user_routes/blood-donor";
+import { registerDoctor } from "./routes/user_routes/doctor";
 import {
   createUser,
   deleteUser,
@@ -22,4 +23,5 @@ export const routes =
   app.use(updateUser),
   app.use(deactivateDonor),
   app.use(activateDonor),
-  app.use(login));
+  app.use(login),
+  app.use(registerDoctor));

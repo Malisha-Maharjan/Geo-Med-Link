@@ -1,6 +1,6 @@
 import { AppDataSource } from "./data-source";
-import { Blood_Donor } from "./entity/Blood-donor";
+import { Doctor } from "./entity/Doctor";
 import { User } from "./entity/User";
 
 export const userRepository = AppDataSource.getRepository(User);
-export const donorRepository = AppDataSource.getRepository(Blood_Donor);
+export const doctorRepository = AppDataSource.getRepository(Doctor);
