@@ -6,23 +6,26 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Blood_Donor } from "./Blood-donor";
+import { User } from "./User";
 @Entity()
 export class Doctor extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
-  NMC_number: number;
+  NMC: number;
 
-  @OneToOne(() => Blood_Donor, {
+  @Column({ nullable: false })
+  degree: string;
+
+  @Column({ default: false })
+  is_verified: Boolean;
+
+  @OneToOne(() => User, {
     onDelete: "CASCADE",
     nullable: false,
   })
   @JoinColumn()
-  user: Blood_Donor;
-  donor: Promise<Blood_Donor[]>;
-
-  @Column({ default: true })
-  is_active: Boolean;
+  user: User;
+  donor: Promise<User[]>;
 }

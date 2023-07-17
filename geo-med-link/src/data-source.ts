@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { Doctor } from "./entity/Doctor";
 import { User } from "./entity/User";
 import { env } from "./utils/env";
 
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource({
   password: env.DATABASE_PASSWORD,
   database: env.DATABASE_NAME,
   logging: env.DATABASE_LOGGING,
-  entities: [User],
+  entities: [User, Doctor],
   migrations: [env.MIGRATION_URL],
   subscribers: [],
 });
