@@ -13,3 +13,14 @@ export const createUserSchema = z.object({
     .regex(/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/, "Password is invalid"),
   lastName: z.string({ invalid_type_error: "Must be a string" }),
 });
+
+export const loginSchema = z.object({
+  userName: z.string({ invalid_type_error: "Must be a string" }),
+  password: z
+    .string()
+    .regex(/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/, "Password is invalid"),
+});
+
+export const userNameSchema = z.object({
+  userName: z.string({ invalid_type_error: "Must be a string" }),
+});

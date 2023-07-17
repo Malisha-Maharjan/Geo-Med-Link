@@ -5,7 +5,7 @@ import { User } from "../../entity/User";
 import { userRepository } from "../../repository";
 import { createResponse } from "../../utils/response";
 import { validate } from "../../validation-zod";
-import { createUserSchema } from "../../zod-schema/user-schema";
+import { createUserSchema, userNameSchema } from "../../zod-schema/user-schema";
 
 const createRouter = express.Router();
 const getAllRouter = express.Router();
@@ -48,9 +48,10 @@ getAllRouter.get("/api/user/all", async (req, res) => {
   });
 });
 
-deleteRouter.delete("/api/user/:userId", async (req, res) => {
-  const userId = parseInt(req.params.userId);
-  const user = await userRepository.findBy({ id: userId });
+deleteRouter.delete("/api/user/:username", async (req, res) => {
+  const username = req.params.username;
+  userNameSchema.parse(username);
+  const user = await userRepository.findBy({ userName: username });
   if (user.length === 0) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
@@ -60,15 +61,15 @@ deleteRouter.delete("/api/user/:userId", async (req, res) => {
     });
   }
 
-  await userRepository.delete({ id: userId });
+  await userRepository.delete({ userName: username });
   return createResponse(res, StatusCodes.OK, {
     status: "success",
   });
 });
 
-getRouter.get("/api/user/:userId", async (req, res) => {
-  const userId = parseInt(req.params.userId);
-  const user = await userRepository.findBy({ id: userId });
+getRouter.get("/api/user/:username", async (req, res) => {
+  const username = req.params.username;
+  const user = await userRepository.findBy({ userName: username });
   if (user.length === 0)
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",

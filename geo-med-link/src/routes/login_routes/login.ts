@@ -3,10 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { User } from "../../entity/User";
 import { userRepository } from "../../repository";
 import { createResponse } from "../../utils/response";
+import { loginSchema } from "../../zod-schema/user-schema";
+import { createToken } from "./jwt";
 
 const router = express.Router();
 
 router.post("/api/login", async (req, res) => {
+  loginSchema.parse(req.body);
   const data = req.body;
   const user = await userRepository.findOne({
     where: {
@@ -20,9 +23,10 @@ router.post("/api/login", async (req, res) => {
       error: { message: ["Invalid Username Or Password"] },
     });
   }
-  return createResponse<User>(res, StatusCodes.OK, {
+  const token = createToken(user.id, user.userName);
+  return createResponse(res, StatusCodes.OK, {
     status: "success",
-    data: user,
+    data: token,
   });
 });
 

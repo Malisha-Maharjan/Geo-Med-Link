@@ -2,16 +2,17 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { Blood_Donor } from "./entity/Blood-donor";
 import { User } from "./entity/User";
+import { env } from "./utils/env";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
-  host: "127.0.0.1",
-  port: 3306,
-  username: "root",
-  password: "Malisha2001",
-  database: "geo-med-link",
-  logging: false,
+  host: env.DATABASE_HOST,
+  port: env.DATABASE_PORT,
+  username: env.DATABASE_USER,
+  password: env.DATABASE_PASSWORD,
+  database: env.DATABASE_NAME,
+  logging: env.DATABASE_LOGGING,
   entities: [User, Blood_Donor],
-  migrations: ["./build/migration/**.js"],
+  migrations: [env.MIGRATION_URL],
   subscribers: [],
 });
