@@ -1,11 +1,14 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import "express-async-errors";
-import { ZodError } from "zod";
 import { AppDataSource } from "./data-source";
 
+import http from "http";
+import { errorMiddleware } from "./middleware/error";
+import { token } from "./middleware/token";
 import { routes } from "./routes";
-import { createResponse } from "./utils/response";
 const app = express();
+
+const hostname = "192.168.100.230";
 
 async function main() {
   AppDataSource.initialize()
@@ -16,26 +19,7 @@ async function main() {
 
   app.use(express.json());
 
-  // app.use((req: Request, res: Response, next: NextFunction) => {
-  //   if (req.url != "/api/login") {
-  //     const token = req.headers["authorization"];
-  //     if (!token)
-  //       return createResponse(res, StatusCodes.UNAUTHORIZED, {
-  //         status: "error",
-  //         error: { message: ["Invalid Token"] },
-  //       });
-  //     if (!token?.startsWith("Bearer "))
-  //       return createResponse(res, StatusCodes.UNAUTHORIZED, {
-  //         status: "error",
-  //         error: { message: ["Token invalid"] },
-  //       });
-
-  //     if (verifyToken(token.split(" ")[1])) {
-  //       console.log({ token });
-  //     }
-  //   }
-  //   next();
-  // });
+  app.use(token);
 
   app.get("/", async (req, res) => {
     return res.send("Geo Med Link");
@@ -43,25 +27,19 @@ async function main() {
 
   app.use(routes);
 
-  app.use((e: Error, req: Request, res: Response, next: NextFunction) => {
-    if (!e) {
-      console.log("no error");
-      next();
-      return;
-    }
+  app.use(errorMiddleware);
 
-    if (e instanceof ZodError) {
-      console.log("this is zod error");
-      return createResponse(res, 400, {
-        status: "error",
-        error: e.flatten().fieldErrors,
-      });
-    }
-
-    console.log("not zod error");
-    return res.status(500).send(e);
+  const server = http.createServer((req: any, res: any) => {
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "text/plain");
+    res.end("Hello world");
   });
-  app.listen(8080, () => {
+  const port = 3000;
+  server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}`);
+  });
+
+  app.listen(8080, hostname, () => {
     console.log("Now running on port 8080");
   });
 }

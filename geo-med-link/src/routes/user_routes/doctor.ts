@@ -6,13 +6,10 @@ import { doctorRepository, userRepository } from "../../repository";
 import { createResponse } from "../../utils/response";
 
 const registerRouter = express.Router();
-
 registerRouter.post("/api/register/doctor", async (req, res) => {
   const data = req.body;
   const user = await userRepository.findOne({
-    where: {
-      userName: data["userName"],
-    },
+    where: { userName: data["userName"] },
   });
   if (user === null) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
