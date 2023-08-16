@@ -10,4 +10,8 @@ export const env = load({
   DATABASE_LOGGING: Boolean,
   MIGRATION_URL: String,
   SECRET_KEY: String,
+  SMTP_HOST: String,
+  SMTP_PORT: Number,
+  SMTP_USER: String,
+  SMTP_PASSWORD: String,
 });
