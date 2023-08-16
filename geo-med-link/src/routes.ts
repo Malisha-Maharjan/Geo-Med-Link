@@ -1,6 +1,11 @@
 import express from "express";
 import { login } from "./routes/login_routes/login";
 import {
+  createOrganization,
+  deleteOrganization,
+  getOrganization,
+} from "./routes/organization_routes/organizations";
+import {
   activateDonor,
   deactivateDonor,
 } from "./routes/user_routes/blood-donor";
@@ -24,4 +29,7 @@ export const routes =
   app.use(deactivateDonor),
   app.use(activateDonor),
   app.use(login),
-  app.use(registerDoctor));
+  app.use(registerDoctor),
+  app.use(createOrganization),
+  app.use(deleteOrganization),
+  app.use(getOrganization));

@@ -23,5 +23,6 @@ export const errorMiddleware = (
   }
 
   console.log("not zod error");
+  console.log(e);
   return res.status(500).send(e);
 };

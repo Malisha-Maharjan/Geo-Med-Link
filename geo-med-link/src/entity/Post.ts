@@ -1,10 +1,12 @@
-// import { BaseEntity, Entity, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn} from "typeorm";
 
-// @Entity()
-// export class Post extends BaseEntity{
-//   @PrimaryGeneratedColumn()
-//   id: number
+@Entity()
+export class Post extends BaseEntity{
+  @PrimaryGeneratedColumn()
+  id: number
 
-//   @Column()
-//   id
-// }
+  @Column()
+  post: String
+
+  
+}
