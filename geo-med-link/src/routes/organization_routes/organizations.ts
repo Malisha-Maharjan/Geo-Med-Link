@@ -12,6 +12,7 @@ const getRouter = express.Router();
 export enum OrganizationTypes {
   HOSPITAL = 1,
   CLINIC = 2,
+  AMBULANCE = 3,
 }
 
 createRouter.post("/api/organization", async (req, res) => {

@@ -16,6 +16,7 @@ export const errorMiddleware = (
 
   if (e instanceof ZodError) {
     console.log("this is zod error");
+    console.log(e.flatten().fieldErrors);
     return createResponse(res, 400, {
       status: "error",
       error: e.flatten().fieldErrors,

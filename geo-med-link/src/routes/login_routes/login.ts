@@ -14,7 +14,7 @@ router.post("/api/login", async (req, res) => {
   const data = req.body;
   const user = await userRepository.findOne({
     where: {
-      userName: data["userName"],
+      userName: data["userName"].replace(),
       password: data["password"],
     },
   });
@@ -25,11 +25,10 @@ router.post("/api/login", async (req, res) => {
     });
   }
   const token = createToken(user.id, user.userName);
-  await sendEmail([user.email], "GEOMEDLINK", "<p>hi<p>");
+  await sendEmail([user.email], "GEOMEDLINK", `<p>hi<p>`);
   return createResponse(res, StatusCodes.OK, {
     status: "success",
     data: token,
   });
 });
-
 export { router as login };

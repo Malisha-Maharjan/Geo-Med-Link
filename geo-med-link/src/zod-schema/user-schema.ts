@@ -22,9 +22,7 @@ export const DonorSchema = z.object({
 
 export const loginSchema = z.object({
   userName: z.string({ invalid_type_error: "Must be a string" }),
-  password: z
-    .string()
-    .regex(/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/, "Password is invalid"),
+  password: z.string(),
 });
 
 export const userNameSchema = z.object({

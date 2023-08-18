@@ -1,4 +1,5 @@
 import express from "express";
+import { forgetPassword } from "./routes/login_routes/forget-password";
 import { login } from "./routes/login_routes/login";
 import {
   createOrganization,
@@ -32,4 +33,5 @@ export const routes =
   app.use(registerDoctor),
   app.use(createOrganization),
   app.use(deleteOrganization),
-  app.use(getOrganization));
+  app.use(getOrganization),
+  app.use(forgetPassword));

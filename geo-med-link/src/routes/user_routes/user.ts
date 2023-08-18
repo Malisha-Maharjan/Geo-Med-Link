@@ -3,6 +3,7 @@ import "express-async-errors";
 import { StatusCodes } from "http-status-codes";
 import { User } from "../../entity/User";
 import { userRepository } from "../../repository";
+import { sendEmail } from "../../utils/email";
 import { createResponse } from "../../utils/response";
 import { validate } from "../../validation-zod";
 import { createUserSchema, userNameSchema } from "../../zod-schema/user-schema";
@@ -28,6 +29,11 @@ createRouter.post("/api/user", async (req, res) => {
         userName: ["Username already exists."],
       },
     });
+  await sendEmail(
+    [userDTO.email],
+    "Registration Successful",
+    `<h>You have been successfully Registered.</h><br/><p>Following is your login credentials.</p><br/><br/><p><b>User Name: ${userDTO.userName}</b><br/></p><b>Password:${userDTO.password}</b><p></p></br></br><p><i>Best Regards,</i></p><p>GeoMedLink</p>`
+  );
   return createResponse<User>(res, StatusCodes.OK, {
     status: "success",
     data: await userRepository.create(userDTO).save(),
