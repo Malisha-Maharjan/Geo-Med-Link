@@ -1,15 +1,15 @@
 import express from "express";
 import "express-async-errors";
+import http from "http";
 import { AppDataSource } from "./data-source";
 
-import http from "http";
 import { StatusCodes } from "http-status-codes";
 import { errorMiddleware } from "./middleware/error";
 import { routes } from "./routes";
 import { createResponse } from "./utils/response";
 const app = express();
 
-const hostname = "192.168.1.71";
+const hostname = "192.168.101.184";
 
 async function main() {
   AppDataSource.initialize()
@@ -41,9 +41,9 @@ async function main() {
     console.log(`Server running at http://${hostname}:${port}`);
   });
 
-  // app.listen(8080, () => {
-  //   console.log("Now running on port 8080");
-  // });
+  app.listen(8080, () => {
+    console.log("Now running on port 8080");
+  });
 }
 
 main();

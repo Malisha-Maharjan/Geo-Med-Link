@@ -19,6 +19,19 @@ createRouter.post("/api/organization", async (req, res) => {
   console.log(req.body);
   const organizationDTO = createOrganizationSchema.parse(req.body);
   console.log(organizationDTO);
+  const existingUser = await organizationRepository.findOne({
+    where: {
+      userName: organizationDTO.userName,
+    },
+  });
+  console.log(existingUser);
+  if (existingUser)
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: {
+        userName: ["Username already exists."],
+      },
+    });
   return createResponse(res, StatusCodes.OK, {
     status: "success",
     data: await organizationRepository.create(organizationDTO).save(),

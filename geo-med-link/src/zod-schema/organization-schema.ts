@@ -9,4 +9,8 @@ export const createOrganizationSchema = z.object({
     .email("Invalid email pattern"),
   phoneNumber: z.string().regex(/^9\d{9}$/, "Invalid Phone number"),
   type: z.number(),
+  userName: z.string({ invalid_type_error: "Must be a string" }),
+  password: z
+    .string()
+    .regex(/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/, "Password is invalid"),
 });

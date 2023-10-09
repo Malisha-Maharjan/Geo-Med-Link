@@ -1,7 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { User } from "../../entity/User";
-import { userRepository } from "../../repository";
+import { organizationRepository, userRepository } from "../../repository";
 import { sendEmail } from "../../utils/email";
 import { createResponse } from "../../utils/response";
 import { loginSchema } from "../../zod-schema/user-schema";
@@ -19,6 +19,20 @@ router.post("/api/login", async (req, res) => {
     },
   });
   if (!user) {
+    const organization = await organizationRepository.findOne({
+      where: {
+        userName: data["userName"].replace(),
+        password: data["password"],
+      },
+    });
+    if (organization) {
+      const token = createToken(organization.id, organization.userName);
+      // await sendEmail([user.email], "GEOMEDLINK", `<p>hi<p>`);
+      return createResponse(res, StatusCodes.OK, {
+        status: "success",
+        data: token,
+      });
+    }
     return createResponse<User>(res, StatusCodes.UNAUTHORIZED, {
       status: "error",
       error: { message: ["Invalid Username Or Password"] },

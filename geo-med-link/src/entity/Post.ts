@@ -1,12 +1,18 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn} from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Post extends BaseEntity{
+export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  post: String
+  post: String;
 
-  
+  @Column({ type: "timestamptz" })
+  date: Date;
+
+  // @Column({})
+  // url: string;
+  // @ManyToOne(() => User, (user) => user.post)
+  // user: User;
 }

@@ -50,4 +50,7 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   blood_Group: String;
+
+  // @OneToMany(() => Post, (post) => post.user)
+  // post: Post[];
 }
