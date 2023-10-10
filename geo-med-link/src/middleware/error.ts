@@ -23,7 +23,11 @@ export const errorMiddleware = (
     });
   }
 
+  console.log(JSON.stringify({ headers: req.headers }, null, 2));
+  console.log(JSON.stringify({ body: req.body }, null, 2));
+
   console.log("not zod error");
+  console.log(e.message);
   console.log(e);
   return res.status(500).send(e);
 };

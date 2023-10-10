@@ -6,6 +6,7 @@ import {
   deleteOrganization,
   getOrganization,
 } from "./routes/organization_routes/organizations";
+import { scrapGet, scrapPost } from "./routes/scrap_routes/post";
 import {
   activateDonor,
   deactivateDonor,
@@ -34,4 +35,6 @@ export const routes =
   app.use(createOrganization),
   app.use(deleteOrganization),
   app.use(getOrganization),
-  app.use(forgetPassword));
+  app.use(forgetPassword),
+  app.use(scrapPost),
+  app.use(scrapGet));
