@@ -1,18 +1,31 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { User } from "./User";
 
 @Entity()
 export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  post: String;
+  @Column({
+    nullable: true,
+  })
+  post!: String;
 
-  @Column({ type: "timestamptz" })
+  @Column({ type: "datetime" })
   date: Date;
 
-  // @Column({})
-  // url: string;
-  // @ManyToOne(() => User, (user) => user.post)
-  // user: User;
+  @Column({ nullable: true })
+  photo: string;
+
+  @Column({ default: 0 })
+  likes: number;
+
+  @ManyToOne(() => User)
+  user: User;
 }

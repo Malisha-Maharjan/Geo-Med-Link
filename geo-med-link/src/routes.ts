@@ -6,12 +6,22 @@ import {
   deleteOrganization,
   getOrganization,
 } from "./routes/organization_routes/organizations";
+import {
+  LikePost,
+  createPost,
+  getAllPost,
+  getPost,
+} from "./routes/post_routes/post";
 import { scrapGet, scrapPost } from "./routes/scrap_routes/post";
 import {
   activateDonor,
   deactivateDonor,
 } from "./routes/user_routes/blood-donor";
-import { registerDoctor } from "./routes/user_routes/doctor";
+import {
+  UpdateDoctor,
+  registerDoctor,
+  verifyDoctor,
+} from "./routes/user_routes/doctor";
 import {
   createUser,
   deleteUser,
@@ -32,9 +42,15 @@ export const routes =
   app.use(activateDonor),
   app.use(login),
   app.use(registerDoctor),
+  app.use(verifyDoctor),
+  app.use(UpdateDoctor),
   app.use(createOrganization),
   app.use(deleteOrganization),
   app.use(getOrganization),
   app.use(forgetPassword),
   app.use(scrapPost),
-  app.use(scrapGet));
+  app.use(scrapGet),
+  app.use(createPost),
+  app.use(LikePost),
+  app.use(getPost),
+  app.use(getAllPost));
