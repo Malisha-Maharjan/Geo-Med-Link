@@ -75,14 +75,17 @@ deleteRouter.delete("/api/user/:username", async (req, res) => {
 
 getRouter.get("/api/user/:username", async (req, res) => {
   const username = req.params.username;
-  const user = await userRepository.findBy({ userName: username });
-  if (user.length === 0)
+  const user = await userRepository.findOne({
+    where: {
+      userName: username,
+    },
+  });
+  if (user === null)
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["User Not Found"] },
     });
-
-  return createResponse<User[]>(res, StatusCodes.OK, {
+  return createResponse<User>(res, StatusCodes.OK, {
     status: "success",
     data: user,
   });

@@ -51,6 +51,9 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   blood_Group: String;
 
+  @Column({ default: false })
+  is_doctor: Boolean;
+
   // @OneToMany(() => Post, (post) => post.user)
   // post: Post[];
 }
