@@ -2,8 +2,10 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { Post } from "../../entity/Post";
 import { postRepository, userRepository } from "../../repository";
+
 import { createResponse } from "../../utils/response";
 import { createPostSchema } from "../../zod-schema/post-post";
+import { userNameSchema } from "../../zod-schema/user-schema";
 
 const createPostRouter = express.Router();
 const likePostRouter = express.Router();
@@ -14,9 +16,10 @@ const getAllPostRouter = express.Router();
 createPostRouter.post("/api/post/create", async (req, res) => {
   const data = req.body;
   createPostSchema.parse(data);
+  console.log(data[""]);
   const user = await userRepository.findOne({
     where: {
-      userName: data["username"],
+      userName: data["userName"],
     },
   });
 
@@ -33,14 +36,13 @@ createPostRouter.post("/api/post/create", async (req, res) => {
       error: { message: ["Null post"] },
     });
   }
-
+  console.log(user);
   const post = postRepository.create();
   post.photo = data["photo"];
   post.user = user;
   post.date = new Date();
   post.post = data["post"];
 
-  // await post.save();
   return createResponse<Post>(res, StatusCodes.OK, {
     status: "success",
     data: await post.save(),
@@ -48,10 +50,10 @@ createPostRouter.post("/api/post/create", async (req, res) => {
 });
 
 likePostRouter.put("/api/post/like/:id", async (req, res) => {
-  const postId = parseInt(req.params.id);
+  const postId = { id: parseInt(req.params.id) };
   const post = await postRepository.findOne({
     where: {
-      id: postId,
+      id: postId["id"],
     },
   });
   if (!post) {
@@ -69,10 +71,10 @@ likePostRouter.put("/api/post/like/:id", async (req, res) => {
 });
 
 getPostRouter.get("/api/post/get/:id", async (req, res) => {
-  const postId = parseInt(req.params.id);
+  const postId = { id: parseInt(req.params.id) };
   const post = await postRepository.findOne({
     where: {
-      id: postId,
+      id: postId["id"],
     },
   });
 
@@ -82,7 +84,7 @@ getPostRouter.get("/api/post/get/:id", async (req, res) => {
       error: { message: ["Post not available"] },
     });
   }
-  console.log(post.date);
+  console.log(post);
   return createResponse<Post>(res, StatusCodes.OK, {
     status: "success",
     data: post,
@@ -90,10 +92,11 @@ getPostRouter.get("/api/post/get/:id", async (req, res) => {
 });
 
 getPostOfUserRouter.get("/api/post/get/:userName", async (req, res) => {
-  const username = req.params.userName;
+  const data = { userName: req.params.userName };
+  userNameSchema.parse(data);
   const user = await userRepository.findOne({
     where: {
-      userName: username,
+      userName: data["userName"],
     },
   });
   if (!user) {
@@ -110,7 +113,6 @@ getPostOfUserRouter.get("/api/post/get/:userName", async (req, res) => {
       error: { message: ["Post not available"] },
     });
   }
-
   return createResponse<Post[]>(res, StatusCodes.OK, {
     status: "success",
     data: post,

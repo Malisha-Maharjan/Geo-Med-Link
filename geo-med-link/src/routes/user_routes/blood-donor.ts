@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { User } from "../../entity/User";
 import { userRepository } from "../../repository";
 import { createResponse } from "../../utils/response";
-import { DonorSchema } from "../../zod-schema/user-schema";
+import { DonorSchema, userNameSchema } from "../../zod-schema/user-schema";
 
 const activeDonorRouter = express.Router();
 const deactivateDonorRouter = express.Router();
@@ -12,8 +12,10 @@ activeDonorRouter.put("/api/donor/activate/:userName", async (req, res) => {
   const data = req.body;
   const username = req.params.userName;
   DonorSchema.parse(data);
-  console.log(data);
-  // userNameSchema.parse(username);
+  const obj = {
+    userName: username,
+  };
+  userNameSchema.parse(obj);
   const user = await userRepository.findOne({
     where: {
       userName: username,
@@ -39,8 +41,10 @@ deactivateDonorRouter.put(
   "/api/donor/deactivate/:userName",
   async (req, res) => {
     const userName = req.params.userName;
-    // console.log(JSON.stringify(userName));
-    // userNameSchema.parse(req.params.userName);
+    const data = {
+      userName: userName,
+    };
+    userNameSchema.parse(data);
     const user = await userRepository.findOne({
       where: {
         userName: userName,

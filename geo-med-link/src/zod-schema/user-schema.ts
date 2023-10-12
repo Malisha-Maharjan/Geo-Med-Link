@@ -21,10 +21,10 @@ export const DonorSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  userName: z.string({ invalid_type_error: "Must be a string" }),
+  userName: z.string(),
   password: z.string(),
 });
 
 export const userNameSchema = z.object({
-  userName: z.string({ invalid_type_error: "Must be a string" }),
+  userName: z.string(),
 });

@@ -23,5 +23,5 @@ export const sendEmail = async (
     html: html,
   };
 
-  smtpConnector.sendMail(mailOptions);
+  // smtpConnector.sendMail(mailOptions);
 };

@@ -10,8 +10,9 @@ import { createToken } from "./jwt";
 const router = express.Router();
 
 router.post("/api/login", async (req, res) => {
-  loginSchema.parse(req.body);
   const data = req.body;
+  console.log(data);
+  loginSchema.parse(data);
   const user = await userRepository.findOne({
     where: {
       userName: data["userName"].replace(),

@@ -55,9 +55,9 @@ getAllRouter.get("/api/user/all", async (req, res) => {
 });
 
 deleteRouter.delete("/api/user/:username", async (req, res) => {
-  const username = req.params.username;
-  userNameSchema.parse(username);
-  const user = await userRepository.findBy({ userName: username });
+  const data = { userName: req.params.username };
+  userNameSchema.parse(data);
+  const user = await userRepository.findBy({ userName: data["userName"] });
   if (user.length === 0) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
@@ -67,17 +67,18 @@ deleteRouter.delete("/api/user/:username", async (req, res) => {
     });
   }
 
-  await userRepository.delete({ userName: username });
+  await userRepository.delete({ userName: data["userName"] });
   return createResponse(res, StatusCodes.OK, {
     status: "success",
   });
 });
 
 getRouter.get("/api/user/:username", async (req, res) => {
-  const username = req.params.username;
+  const data = { userName: req.params.username };
+  userNameSchema.parse(data);
   const user = await userRepository.findOne({
     where: {
-      userName: username,
+      userName: data["userName"],
     },
   });
   if (user === null)
