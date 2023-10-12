@@ -19,6 +19,7 @@ import {
 } from "./routes/user_routes/blood-donor";
 import {
   UpdateDoctor,
+  getDoctor,
   registerDoctor,
   verifyDoctor,
 } from "./routes/user_routes/doctor";
@@ -53,4 +54,5 @@ export const routes =
   app.use(createPost),
   app.use(LikePost),
   app.use(getPost),
-  app.use(getAllPost));
+  app.use(getAllPost),
+  app.use(getDoctor));

@@ -26,6 +26,6 @@ export class Post extends BaseEntity {
   @Column({ default: 0 })
   likes: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   user: User;
 }

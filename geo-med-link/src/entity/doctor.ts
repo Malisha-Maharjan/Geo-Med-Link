@@ -24,6 +24,7 @@ export class Doctor extends BaseEntity {
   @OneToOne(() => User, {
     onDelete: "CASCADE",
     nullable: false,
+    eager: true,
   })
   @JoinColumn()
   user: User;
