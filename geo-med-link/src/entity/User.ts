@@ -53,7 +53,4 @@ export class User extends BaseEntity {
 
   @Column({ default: false })
   is_doctor: Boolean;
-
-  // @OneToMany(() => Post, (post) => post.user)
-  // post: Post[];
 }

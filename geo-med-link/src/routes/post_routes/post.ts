@@ -169,7 +169,7 @@ sharedPostRouter.post("/api/post/shared", async (req, res) => {
   });
 });
 
-deletePostRouter.post("/api/delete/post/:id", async (req, res) => {
+deletePostRouter.delete("/api/delete/post/:id", async (req, res) => {
   const postId = { id: parseInt(req.params.id) };
   const post = await postRepository.findOne({
     where: {

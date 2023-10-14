@@ -25,9 +25,9 @@ export class Comment extends BaseEntity {
   @Column({ default: 0 })
   likes: number;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, { eager: true, onDelete: "CASCADE" })
   user: User;
 
-  @ManyToOne(() => Post, { eager: true })
+  @ManyToOne(() => Post, { eager: true, onDelete: "CASCADE" })
   post: Post;
 }

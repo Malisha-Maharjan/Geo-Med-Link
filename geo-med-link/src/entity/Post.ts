@@ -32,6 +32,6 @@ export class Post extends BaseEntity {
   @Column({ nullable: true })
   sharedPID: number;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, { eager: true, onDelete: "CASCADE" })
   user: User;
 }

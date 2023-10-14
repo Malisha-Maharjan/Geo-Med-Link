@@ -1,5 +1,11 @@
 import express from "express";
-import { getComment, postComment } from "./routes/comment_routes/comment";
+import {
+  deleteComment,
+  getComment,
+  likeComment,
+  postComment,
+  updateComment,
+} from "./routes/comment_routes/comment";
 import { forgetPassword } from "./routes/login_routes/forget-password";
 import { login } from "./routes/login_routes/login";
 import {
@@ -10,6 +16,7 @@ import {
 import {
   LikePost,
   createPost,
+  deletePost,
   getAllPost,
   getPost,
 } from "./routes/post_routes/post";
@@ -58,4 +65,8 @@ export const routes =
   app.use(getAllPost),
   app.use(getDoctor),
   app.use(postComment),
-  app.use(getComment));
+  app.use(getComment),
+  app.use(deletePost),
+  app.use(deleteComment),
+  app.use(likeComment),
+  app.use(updateComment));
