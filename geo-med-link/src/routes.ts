@@ -1,4 +1,5 @@
 import express from "express";
+import { getComment, postComment } from "./routes/comment_routes/comment";
 import { forgetPassword } from "./routes/login_routes/forget-password";
 import { login } from "./routes/login_routes/login";
 import {
@@ -55,4 +56,6 @@ export const routes =
   app.use(LikePost),
   app.use(getPost),
   app.use(getAllPost),
-  app.use(getDoctor));
+  app.use(getDoctor),
+  app.use(postComment),
+  app.use(getComment));

@@ -5,33 +5,29 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Post } from "./Post";
 import { User } from "./User";
 
 @Entity()
-export class Post extends BaseEntity {
+export class Comment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    nullable: true,
-  })
-  post!: String;
+  @Column({})
+  comment: String;
 
   @Column({ type: "datetime" })
   date: Date;
 
-  @Column({ nullable: true })
-  photo: string;
+  // @Column({ nullable: true })
+  // photo: string;
 
   @Column({ default: 0 })
   likes: number;
 
-  @Column({ default: false })
-  is_shared: Boolean;
-
-  @Column({ nullable: true })
-  sharedPID: number;
-
   @ManyToOne(() => User, { eager: true })
   user: User;
+
+  @ManyToOne(() => Post, { eager: true })
+  post: Post;
 }
