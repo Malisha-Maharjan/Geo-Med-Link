@@ -1,7 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import { User } from "../../entity/User";
-import { userRepository } from "../../repository";
+import { People } from "../../entity/People";
+import { personRepository, userRepository } from "../../repository";
 import { createResponse } from "../../utils/response";
 import { DonorSchema, userNameSchema } from "../../zod-schema/user-schema";
 
@@ -9,13 +9,14 @@ const activeDonorRouter = express.Router();
 const deactivateDonorRouter = express.Router();
 
 activeDonorRouter.put("/api/donor/activate/:userName", async (req, res) => {
-  const data = req.body;
+  // const data = req.body;
   const username = req.params.userName;
-  DonorSchema.parse(data);
-  const obj = {
+  // DonorSchema.parse(data);
+  const data = {
     userName: username,
+    blood_Group: req.body["blood_Group"],
   };
-  userNameSchema.parse(obj);
+  DonorSchema.parse(data);
   const user = await userRepository.findOne({
     where: {
       userName: username,
@@ -28,12 +29,26 @@ activeDonorRouter.put("/api/donor/activate/:userName", async (req, res) => {
     });
   }
 
-  user.blood_Group = data["blood_Group"];
-  user.is_donor = true;
-  await user.save();
-  return createResponse<User>(res, StatusCodes.OK, {
+  const person = await personRepository.findOne({
+    where: {
+      user: { id: user.id },
+    },
+  });
+
+  if (person === null) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: {
+        message: ["User Not Found"],
+      },
+    });
+  }
+  person.blood_Group = data.blood_Group;
+  person.is_donor = true;
+  await person.save();
+  return createResponse<People>(res, StatusCodes.OK, {
     status: "success",
-    data: user,
+    data: person,
   });
 });
 
@@ -56,11 +71,25 @@ deactivateDonorRouter.put(
         error: { message: ["User Not Found"] },
       });
     }
-    user.is_donor = false;
-    user.save();
-    return createResponse<User>(res, StatusCodes.OK, {
+    const person = await personRepository.findOne({
+      where: {
+        user: { id: user.id },
+      },
+    });
+
+    if (person === null) {
+      return createResponse(res, StatusCodes.BAD_REQUEST, {
+        status: "error",
+        error: {
+          message: ["User Not Found"],
+        },
+      });
+    }
+    person.is_donor = false;
+    person.save();
+    return createResponse<People>(res, StatusCodes.OK, {
       status: "success",
-      data: user,
+      data: person,
     });
   }
 );

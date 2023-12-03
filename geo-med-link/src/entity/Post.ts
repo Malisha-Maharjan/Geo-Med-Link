@@ -20,7 +20,7 @@ export class Post extends BaseEntity {
   @Column({ type: "datetime" })
   date: Date;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "longtext" })
   photo: string;
 
   @Column({ default: 0 })
@@ -31,6 +31,9 @@ export class Post extends BaseEntity {
 
   @Column({ nullable: true })
   sharedPID: number;
+
+  @Column({ default: 0 })
+  reported_spam: number;
 
   @ManyToOne(() => User, { eager: true, onDelete: "CASCADE" })
   user: User;

@@ -8,22 +8,6 @@ export class User extends BaseEntity {
   id: number;
 
   @Column({
-    nullable: false,
-  })
-  firstName: string;
-
-  @Column({
-    nullable: true,
-    type: "text",
-  })
-  middleName!: string | null;
-
-  @Column({
-    nullable: false,
-  })
-  lastName: string;
-
-  @Column({
     unique: true,
   })
   userName: string;
@@ -45,12 +29,9 @@ export class User extends BaseEntity {
   @Column({})
   email: string;
 
-  @Column({ default: false })
-  is_donor: Boolean;
+  @Column({ nullable: false })
+  type: number;
 
   @Column({ nullable: true })
-  blood_Group: String;
-
-  @Column({ default: false })
-  is_doctor: Boolean;
+  phoneNumber: string;
 }

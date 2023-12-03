@@ -15,15 +15,18 @@ const getPostOfUserRouter = express.Router();
 const getAllPostRouter = express.Router();
 const sharedPostRouter = express.Router();
 const deletePostRouter = express.Router();
+const reportPostRouter = express.Router();
 
 createPostRouter.post("/api/post/create", async (req, res) => {
   const data = req.body;
+  console.log(data);
   createPostSchema.parse(data);
   const user = await userRepository.findOne({
     where: {
       userName: data["userName"],
     },
   });
+  console.log(user);
 
   if (!user) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
@@ -32,7 +35,7 @@ createPostRouter.post("/api/post/create", async (req, res) => {
     });
   }
 
-  if (data["post"] && data["photo"]) {
+  if (!data["post"] && !data["photo"]) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["Null post"] },
@@ -189,10 +192,32 @@ deletePostRouter.delete("/api/delete/post/:id", async (req, res) => {
   });
 });
 
+reportPostRouter.put("/api/post/report/:id", async (req, res) => {
+  const postId = { id: parseInt(req.params.id) };
+  const post = await postRepository.findOne({
+    where: {
+      id: postId["id"],
+    },
+  });
+  if (!post) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: { message: ["Post not available"] },
+    });
+  }
+  post.reported_spam = post.reported_spam + 1;
+  post.save();
+  return createResponse(res, StatusCodes.OK, {
+    status: "success",
+    data: "Spam Reported",
+  });
+});
+
 export {
   likePostRouter as LikePost,
   createPostRouter as createPost,
   deletePostRouter as deletePost,
   getAllPostRouter as getAllPost,
   getPostRouter as getPost,
+  reportPostRouter as reportPost,
 };

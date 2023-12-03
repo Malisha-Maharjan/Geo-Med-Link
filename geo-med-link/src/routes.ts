@@ -1,4 +1,6 @@
 import express from "express";
+import { spamPost } from "./routes/admin_routes/spam_post";
+import { unverifiedDoctor } from "./routes/admin_routes/unverified_doctor";
 import {
   deleteComment,
   getComment,
@@ -9,16 +11,12 @@ import {
 import { forgetPassword } from "./routes/login_routes/forget-password";
 import { login } from "./routes/login_routes/login";
 import {
-  createOrganization,
-  deleteOrganization,
-  getOrganization,
-} from "./routes/organization_routes/organizations";
-import {
   LikePost,
   createPost,
   deletePost,
   getAllPost,
   getPost,
+  reportPost,
 } from "./routes/post_routes/post";
 import { scrapGet, scrapPost } from "./routes/scrap_routes/post";
 import {
@@ -42,31 +40,31 @@ import {
 const app = express();
 
 export const routes =
-  (app.use(getAllUser),
-  app.use(createUser),
+  (app.use(createUser),
+  app.use(getAllUser),
   app.use(getUser),
   app.use(deleteUser),
   app.use(updateUser),
-  app.use(deactivateDonor),
   app.use(activateDonor),
-  app.use(login),
-  app.use(registerDoctor),
-  app.use(verifyDoctor),
+  app.use(deactivateDonor),
   app.use(UpdateDoctor),
-  app.use(createOrganization),
-  app.use(deleteOrganization),
-  app.use(getOrganization),
-  app.use(forgetPassword),
-  app.use(scrapPost),
-  app.use(scrapGet),
-  app.use(createPost),
-  app.use(LikePost),
-  app.use(getPost),
-  app.use(getAllPost),
+  app.use(verifyDoctor),
+  app.use(registerDoctor),
   app.use(getDoctor),
-  app.use(postComment),
-  app.use(getComment),
+  app.use(scrapGet),
+  app.use(scrapPost),
+  app.use(login),
+  app.use(forgetPassword),
+  app.use(LikePost),
+  app.use(createPost),
   app.use(deletePost),
+  app.use(getAllPost),
+  app.use(getPost),
   app.use(deleteComment),
+  app.use(getComment),
   app.use(likeComment),
-  app.use(updateComment));
+  app.use(postComment),
+  app.use(updateComment),
+  app.use(reportPost),
+  app.use(spamPost),
+  app.use(unverifiedDoctor));

@@ -2,7 +2,11 @@ import { default as express } from "express";
 import "express-async-errors";
 import { StatusCodes } from "http-status-codes";
 import { Doctor } from "../../entity/Doctor";
-import { doctorRepository, userRepository } from "../../repository";
+import {
+  doctorRepository,
+  personRepository,
+  userRepository,
+} from "../../repository";
 import { sendEmail } from "../../utils/email";
 import { createResponse } from "../../utils/response";
 import { DoctorSchema } from "../../zod-schema/doctor-schema";
@@ -25,12 +29,24 @@ registerRouter.post("/api/register/doctor", async (req, res) => {
       error: { message: ["User Not Found"] },
     });
   }
-  console.log(user);
-  console.log(user.id);
+  const person = await personRepository.findOne({
+    where: {
+      user: { id: user.id },
+    },
+  });
+
+  if (person === null) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: {
+        message: ["User Not Found"],
+      },
+    });
+  }
   const doctor = new Doctor();
   doctor.NMC = data["NMC"];
   doctor.degree = data["degree"];
-  doctor.user = user;
+  doctor.person = person;
   const existingDoctor = await doctorRepository.findOne({
     where: { NMC: doctor.NMC },
   });
@@ -55,6 +71,7 @@ registerRouter.post("/api/register/doctor", async (req, res) => {
 
 verifiedRouter.put("/api/verify/doctor", async (req, res) => {
   const data = req.body;
+  console.log(data);
   userNameSchema.parse(data);
   console.log(data["userName"]);
   const user = await userRepository.findOne({
@@ -66,9 +83,23 @@ verifiedRouter.put("/api/verify/doctor", async (req, res) => {
       error: { message: ["User Not Found"] },
     });
   }
-  const doctor = await doctorRepository.findOne({
+  const person = await personRepository.findOne({
     where: {
       user: { id: user.id },
+    },
+  });
+
+  if (person === null) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: {
+        message: ["User Not Found"],
+      },
+    });
+  }
+  const doctor = await doctorRepository.findOne({
+    where: {
+      person: { id: person.id },
     },
   });
 
@@ -78,9 +109,9 @@ verifiedRouter.put("/api/verify/doctor", async (req, res) => {
       error: { message: ["User Not Found"] },
     });
   }
-  user.is_doctor = true;
+  person.is_doctor = data["is_verified"];
 
-  doctor.is_verified = true;
+  doctor.is_verified = data["is_verified"];
   await sendEmail(
     [user.email],
     "Verified Successful",
@@ -106,9 +137,24 @@ DoctorUpdateRouter.put("/api/doctor/update", async (req, res) => {
       error: { message: ["User Not Found"] },
     });
   }
-  const doctor = await doctorRepository.findOne({
+
+  const person = await personRepository.findOne({
     where: {
       user: { id: user.id },
+    },
+  });
+
+  if (person === null) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: {
+        message: ["User Not Found"],
+      },
+    });
+  }
+  const doctor = await doctorRepository.findOne({
+    where: {
+      person: { id: person.id },
     },
   });
 

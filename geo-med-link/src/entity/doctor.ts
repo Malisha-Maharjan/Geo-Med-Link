@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
+import { People } from "./People";
 @Entity()
 export class Doctor extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -21,12 +21,12 @@ export class Doctor extends BaseEntity {
   @Column({ default: false })
   is_verified: Boolean;
 
-  @OneToOne(() => User, {
+  @OneToOne(() => People, {
     onDelete: "CASCADE",
     nullable: false,
     eager: true,
   })
   @JoinColumn()
-  user: User;
-  donor: Promise<User[]>;
+  person: People;
+  // donor: Promise<User[]>;
 }

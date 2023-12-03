@@ -1,20 +1,26 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Post } from "./Post";
+// import {
+//   BaseEntity,
+//   Column,
+//   Entity,
+//   JoinColumn,
+//   ManyToOne,
+//   PrimaryGeneratedColumn,
+// } from "typeorm";
+// import { Organization } from "./Organization";
 
-@Entity()
-export class Services extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+// @Entity("service")
+// export class Service extends BaseEntity {
+//   @PrimaryGeneratedColumn()
+//   id: number;
 
-  @Column()
-  type: number;
+//   @Column()
+//   type: number;
 
-  @ManyToOne(() => Post)
-  post: Post;
-}
+//   @ManyToOne(() => Organization, (organization) => organization.service, {
+//     onDelete: "CASCADE",
+//   })
+//   @JoinColumn({
+//     name: "organization_id",
+//   })
+//   organization: Organization;
+// }
