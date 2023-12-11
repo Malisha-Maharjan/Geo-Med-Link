@@ -96,7 +96,8 @@ getPostRouter.get("/api/post/get/:id", async (req, res) => {
   });
 });
 
-getPostOfUserRouter.get("/api/post/get/:userName", async (req, res) => {
+getPostOfUserRouter.get("/api/post/:userName", async (req, res) => {
+  console.log("getting post");
   const data = { userName: req.params.userName };
   userNameSchema.parse(data);
   const user = await userRepository.findOne({
@@ -220,4 +221,6 @@ export {
   getAllPostRouter as getAllPost,
   getPostRouter as getPost,
   reportPostRouter as reportPost,
+  sharedPostRouter as sharedPost,
+  getPostOfUserRouter as userPost,
 };

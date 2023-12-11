@@ -17,8 +17,14 @@ import {
   getAllPost,
   getPost,
   reportPost,
+  userPost,
 } from "./routes/post_routes/post";
 import { scrapGet, scrapPost } from "./routes/scrap_routes/post";
+import { send } from "./routes/scratch/emails";
+import {
+  getOrganizations,
+  getServices,
+} from "./routes/services_routes/organization_services";
 import {
   activateDonor,
   deactivateDonor,
@@ -59,6 +65,7 @@ export const routes =
   app.use(createPost),
   app.use(deletePost),
   app.use(getAllPost),
+  app.use(userPost),
   app.use(getPost),
   app.use(deleteComment),
   app.use(getComment),
@@ -67,4 +74,7 @@ export const routes =
   app.use(updateComment),
   app.use(reportPost),
   app.use(spamPost),
-  app.use(unverifiedDoctor));
+  app.use(unverifiedDoctor),
+  app.use(getServices),
+  app.use(getOrganizations),
+  app.use(send));

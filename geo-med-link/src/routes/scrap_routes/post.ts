@@ -1,8 +1,8 @@
 import { bsToAd } from "@sbmdkl/nepali-date-converter";
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import { Scrap } from "../../entity/scrapNews";
 import { scrapNewsRepository } from "../../repository";
+import { paginated } from "../../types/paginated";
 import { createResponse } from "../../utils/response";
 
 const scrapDataPostRouter = express.Router();
@@ -43,16 +43,33 @@ scrapDataPostRouter.post("/api/post/scrap", async (req, res) => {
 });
 
 scrapDataGetRouter.get("/api/post/scrap", async (req, res) => {
-  const news = await scrapNewsRepository.find();
+  const page = (req.query.pageNumber as string) || "0";
+  const limit = 10;
+  const skip = parseInt(page) * limit;
+  const news = await scrapNewsRepository.find({
+    order: { date: "DESC" },
+    take: limit,
+    skip: skip,
+  });
   console.log(news);
   if (news.length === 0)
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["Bad Request"] },
     });
-  return createResponse<Scrap[]>(res, StatusCodes.OK, {
-    status: "success",
+  const previous_link = `/api/post/scrap?pageNumber=${page}`;
+  const next_link = `/api/post/scrap?pageNumber=${parseInt(page) + 1}`;
+  const result: paginated = {
+    current_page: parseInt(page),
+    take: limit,
+    next_page: parseInt(page) + 1,
+    previous_link: previous_link,
+    next_link: next_link,
     data: news,
+  };
+  return createResponse(res, StatusCodes.OK, {
+    status: "success",
+    data: result,
   });
 });
 

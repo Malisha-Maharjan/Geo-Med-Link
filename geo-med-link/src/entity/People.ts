@@ -39,6 +39,9 @@ export class People extends BaseEntity {
   @Column({ default: false })
   is_doctor: Boolean;
 
+  @Column({ nullable: true })
+  gender: string;
+
   @OneToOne(() => User, { eager: true, onDelete: "CASCADE" })
   @JoinColumn()
   user: User;

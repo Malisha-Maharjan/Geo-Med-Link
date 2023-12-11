@@ -6,13 +6,13 @@ import { AppDataSource } from "./data-source";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { StatusCodes } from "http-status-codes";
+import { pagination } from "typeorm-pagination";
 import { errorMiddleware } from "./middleware/error";
 import { routes } from "./routes";
 import { createResponse } from "./utils/response";
-
 const app = express();
 
-const hostname = "192.168.100.87";
+const hostname = "192.168.1.71";
 
 async function main() {
   AppDataSource.initialize()
@@ -50,18 +50,7 @@ async function main() {
   // app.use(token);
 
   app.use(errorMiddleware);
-
-  app.use(
-    cors({
-      origin: "* ",
-    })
-  );
-
-  app.use(
-    cors({
-      origin: "* ",
-    })
-  );
+  app.use(pagination);
 
   const server = http.createServer(app);
   const port = 3000;

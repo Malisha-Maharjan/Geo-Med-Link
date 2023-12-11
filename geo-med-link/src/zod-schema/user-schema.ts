@@ -11,12 +11,14 @@ export const createUserSchema = z.object({
     .regex(/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/, "Password is invalid"),
   phoneNumber: z.number().nullable(),
   type: z.number(),
+  photo: z.string().nullable(),
 });
 
 export const createPersonSchema = z.object({
   firstName: z.string({ invalid_type_error: "Must be a string" }),
   middleName: z.string({ invalid_type_error: "Must be a string" }).nullable(),
   lastName: z.string({ invalid_type_error: "Must be a string" }),
+  gender: z.string(),
 });
 
 export const createOrganizationSchema = z.object({

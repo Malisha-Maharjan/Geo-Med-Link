@@ -29,6 +29,7 @@ createRouter.post("/api/user", async (req, res) => {
     password: req.body["password"],
     phoneNumber: req.body["phoneNumber"],
     type: req.body["type"],
+    photo: req.body["photo"],
   };
   const existingUser = await userRepository.findOne({
     where: {
@@ -47,6 +48,7 @@ createRouter.post("/api/user", async (req, res) => {
       firstName: req.body["firstName"],
       middleName: req.body["middleName"],
       lastName: req.body["lastName"],
+      gender: req.body["gender"],
     };
     createPersonSchema.parse(person);
     const user = await userRepository.save(userData);

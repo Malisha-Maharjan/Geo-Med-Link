@@ -5,6 +5,7 @@ import {
   postRepository,
   userRepository,
 } from "../../repository";
+import { paginated } from "../../types/paginated";
 import { createResponse } from "../../utils/response";
 import { commentSchema } from "../../zod-schema/comment-schema";
 import { IdSchema } from "../../zod-schema/id-schema";
@@ -54,6 +55,10 @@ postCommentRouter.post("/api/comment", async (req, res) => {
 });
 
 getCommentRouter.get("/api/comment/:postId", async (req, res) => {
+  const page = (req.query.pageNumber as string) || "0";
+  const limit = 10;
+  const skip = parseInt(page) * limit;
+
   const data = { id: parseInt(req.params.postId) };
   IdSchema.parse(data);
 
@@ -74,13 +79,27 @@ getCommentRouter.get("/api/comment/:postId", async (req, res) => {
       post: { id: post.id },
     },
     order: { date: "DESC" },
-    take: 10,
+    take: limit,
+    skip: skip,
   });
+  const previous_link = `/api/comment/${data["id"]}?pageNumber=${page}`;
+  const next_link = `/api/comment/${data["id"]}?pageNumber=${
+    parseInt(page) + 1
+  }`;
   if (!comment) {
     return res.send("not found");
   }
 
-  return res.send(comment);
+  const result: paginated = {
+    current_page: parseInt(page),
+    take: limit,
+    next_page: parseInt(page) + 1,
+    previous_link: previous_link,
+    next_link: next_link,
+    data: comment,
+  };
+
+  return res.send(result);
 });
 
 likeCommentRouter.put("/api/comment/like/:id", async (req, res) => {
