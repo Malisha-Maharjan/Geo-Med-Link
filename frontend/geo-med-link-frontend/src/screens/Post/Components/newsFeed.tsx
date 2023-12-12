@@ -1,23 +1,50 @@
-import { View } from "react-native";
-import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { useState } from "react";
+import { FlatList, View } from "react-native";
+import { Divider, Text } from "react-native-paper";
+import { Loader } from "../../../helper/loader";
 import { useFetchPost } from "../../../hooks/post/usePostApi";
 import { Post } from "../post";
 
 export const NewsFeed = () => {
-  const { data: response, isLoading } = useFetchPost();
-  const data = response?.data;
-  console.log("this is data");
-  console.log(data);
-  console.log(isLoading);
-  if (isLoading)
-    return (
-      <View>
-        <ActivityIndicator animating={true} color={MD2Colors.blue200} />
-      </View>
-    );
+  const [value, setValue] = useState({});
+  const {
+    data: response,
+    isLoading,
+    fetchNextPage,
+    isFetching,
+    hasNextPage,
+    isStale,
+    refetch,
+  } = useFetchPost();
+  console.log(response?.pageParams);
+  const data = response?.pages.flatMap((item) => item.data.data);
+  console.log(hasNextPage);
+  if (isLoading) return <Loader />;
+  console.log({ isStale });
+  if (!data || data.length === 0) return <Text>No Data</Text>;
+
   return (
-    <>
-      <Post value={data} />
-    </>
+    <View>
+      <FlatList
+        data={data}
+        renderItem={({ item }) => <Post value={item} />}
+        ItemSeparatorComponent={() => <Divider bold />}
+        ListEmptyComponent={() => <Text>No Data</Text>}
+        keyExtractor={(item) => item.id}
+        ListFooterComponent={() => <Loader />}
+        refreshing={!isStale}
+        onRefresh={() => {
+          refetch();
+        }}
+        onEndReached={() => {
+          if (!isFetching) {
+            // if (!hasNextPage) return <Text>No data available</Text>;
+            fetchNextPage();
+          }
+        }}
+        // onEndReachedThreshold={0}
+      />
+      {!hasNextPage && <Text>nono</Text>}
+    </View>
   );
 };
