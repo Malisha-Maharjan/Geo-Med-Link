@@ -1,11 +1,24 @@
 import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Avatar, Divider, Surface, Text } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Avatar,
+  Divider,
+  MD2Colors,
+  Surface,
+  Text,
+} from "react-native-paper";
+import { useFetchUser } from "../hooks/user/useUserApi";
 import { UserFeed } from "./Post/Components/userFeed";
 
 export const Profile = () => {
-  const [isMyPost, setIsMyPost] = useState("true");
+  const { data: response, isLoading } = useFetchUser();
+  const data = response?.data;
+  console.log({ data });
+  if (isLoading)
+    <View>
+      <ActivityIndicator animating={true} color={MD2Colors.blue200} />
+    </View>;
 
   return (
     <View style={{ backgroundColor: "white" }}>
@@ -17,11 +30,14 @@ export const Profile = () => {
           size={120}
         ></Avatar.Image>
         <View style={style.informationSection}>
-          <Text style={{ margin: 5 }}>Name</Text>
-          <Text>Username</Text>
+          <Text style={{ margin: 5 }}>
+            {data.firstName} {data.middleName !== null && data.middleName}{" "}
+            {data.lastName}
+          </Text>
+          <Text>{data.user.userName}</Text>
           <View style={{ flexDirection: "row", margin: 5 }}>
             <EvilIcons name="location" size={20} color="blue" />
-            <Text>Address</Text>
+            <Text>{data.user.address}</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <MaterialCommunityIcons
@@ -29,7 +45,7 @@ export const Profile = () => {
               size={18}
               color="blue"
             />
-            <Text>Email</Text>
+            <Text>{data.user.email}</Text>
           </View>
           <Divider horizontalInset={true} bold={true} />
         </View>
@@ -66,6 +82,6 @@ const style = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
     height: 40,
-    marginBottom: 10,
+    marginBottom: 5,
   },
 });

@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+const BASEURL = process.env.EXPO_PUBLIC_API_URL;
 
-export const useFetchNews = () => {
-  console.log("This is fetching apo");
+export const useFetchUser = () => {
+  console.log("This is fetching user");
   return useQuery({
-    queryKey: ["news", "username"],
+    queryKey: ["user", ""],
     queryFn: async () => {
-      const data = await fetch(`http://192.168.1.41:3000/api/post/scrap`, {
+      const data = await fetch(`${BASEURL}/api/user/user1`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

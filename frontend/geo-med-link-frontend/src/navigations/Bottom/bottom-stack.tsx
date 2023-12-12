@@ -18,16 +18,6 @@ export const BottomTabNavigator = () => {
     <>
       <Navigator>
         <Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="person-circle-outline" size={24} color="black" />
-            ),
-            title: "Profile",
-          }}
-        ></Screen>
-        <Screen
           name="Post"
           component={NewsFeed}
           options={{
@@ -45,6 +35,16 @@ export const BottomTabNavigator = () => {
               <FontAwesome name="newspaper-o" size={24} color="black" />
             ),
             title: "News",
+          }}
+        ></Screen>
+        <Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="person-circle-outline" size={24} color="black" />
+            ),
+            title: "Profile",
           }}
         ></Screen>
       </Navigator>
