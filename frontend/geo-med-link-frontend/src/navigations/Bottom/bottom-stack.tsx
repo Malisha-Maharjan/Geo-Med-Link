@@ -5,8 +5,8 @@ import {
 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { News } from "../../screens/News/news";
-import { NewsFeed } from "../../screens/Post/Components/newsFeed";
-import { Profile } from "../../screens/profile";
+import { NewsFeedStackNavigator } from "../Stack/NewsFeed/newsFeed-stack";
+import { ProfileStackNavigator } from "../Stack/Profile/profile-stack";
 import { BottomTabParamsList } from "./bottom-stack.types";
 
 const Tab = createBottomTabNavigator<BottomTabParamsList>();
@@ -18,8 +18,8 @@ export const BottomTabNavigator = () => {
     <>
       <Navigator>
         <Screen
-          name="Post"
-          component={NewsFeed}
+          name="Feed"
+          component={NewsFeedStackNavigator}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="post" size={24} color="black" />
@@ -38,13 +38,14 @@ export const BottomTabNavigator = () => {
           }}
         ></Screen>
         <Screen
-          name="Profile"
-          component={Profile}
+          name="ProfileStack"
+          component={ProfileStackNavigator}
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="person-circle-outline" size={24} color="black" />
             ),
             title: "Profile",
+            headerShown: false,
           }}
         ></Screen>
       </Navigator>

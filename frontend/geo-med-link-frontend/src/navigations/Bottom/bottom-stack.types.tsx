@@ -1,8 +1,8 @@
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 export type BottomTabParamsList = {
-  Profile: undefined;
-  Post: undefined;
+  ProfileStack: undefined;
+  Feed: undefined;
   News: undefined;
 };
 
