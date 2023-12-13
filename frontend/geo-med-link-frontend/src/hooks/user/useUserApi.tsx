@@ -4,7 +4,7 @@ const BASEURL = process.env.EXPO_PUBLIC_API_URL;
 export const useFetchUser = () => {
   console.log("This is fetching user");
   return useQuery({
-    queryKey: ["user", "username"],
+    queryKey: ["user"],
     queryFn: async () => {
       console.log(`${BASEURL}/api/user/user1`);
       const data = await fetch(`${BASEURL}/api/user/user1`, {
