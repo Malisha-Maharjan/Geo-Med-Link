@@ -7,5 +7,7 @@ type RowParams = {
 };
 
 export const Row = ({ children, style }: RowParams) => {
-  return <View style={[{ flexDirection: "row" }, style]}>{children}</View>;
+  return (
+    <View style={[{ flexDirection: "row", gap: 5 }, style]}>{children}</View>
+  );
 };
