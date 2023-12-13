@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { Post } from "../../entity/Post";
 import { postRepository, userRepository } from "../../repository";
 
+import { paginated } from "../../types/paginated";
 import { createResponse } from "../../utils/response";
 import { createPostSchema } from "../../zod-schema/post-post";
 import { sharedPostSchema } from "../../zod-schema/shared-post-schema";
@@ -98,6 +99,10 @@ getPostRouter.get("/api/post/get/:id", async (req, res) => {
 
 getPostOfUserRouter.get("/api/post/:userName", async (req, res) => {
   console.log("getting post");
+  console.log(req.query.pageNumber);
+  const page = parseInt((req.query.pageNumber as string) || "0");
+  const limit = parseInt((req.query.take as string) || "5");
+  const skip = page * limit;
   const data = { userName: req.params.userName };
   userNameSchema.parse(data);
   const user = await userRepository.findOne({
@@ -105,6 +110,7 @@ getPostOfUserRouter.get("/api/post/:userName", async (req, res) => {
       userName: data["userName"],
     },
   });
+
   if (!user) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
@@ -112,30 +118,70 @@ getPostOfUserRouter.get("/api/post/:userName", async (req, res) => {
     });
   }
 
-  const post = await postRepository.findBy({ user: { id: user.id } });
+  const post = await postRepository.find({
+    where: {
+      user: { id: user.id },
+    },
+    order: { date: "DESC" },
+    take: limit,
+    skip: skip,
+  });
+  console.log(post.length !== limit);
+  const previous_link = `/api/post/${data["userName"]}?pageNumber=${page}`;
+  const next_link = `/api/post/${data["userName"]}?pageNumber=${
+    post.length !== limit ? undefined : page + 1
+  }`;
+  const result: paginated = {
+    current_page: page,
+    take: post.length,
+    next_page: post.length !== limit ? undefined : page + 1,
+    previous_link: previous_link,
+    next_link: next_link,
+    data: post,
+  };
+  console.log(post);
   if (post === null) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["Post not available"] },
     });
   }
-  return createResponse<Post[]>(res, StatusCodes.OK, {
+  return createResponse(res, StatusCodes.OK, {
     status: "success",
-    data: post,
+    data: result,
   });
 });
 
 getAllPostRouter.get("/api/post/all", async (req, res) => {
-  const post = await postRepository.find();
+  const page = parseInt((req.query.pageNumber as string) || "0");
+  const limit = parseInt((req.query.take as string) || "5");
+  const skip = page * limit;
+  const post = await postRepository.find({
+    order: { date: "DESC" },
+    take: limit,
+    skip: skip,
+  });
   if (post === null) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
       error: { message: ["Post not available"] },
     });
   }
-  return createResponse<Post[]>(res, StatusCodes.OK, {
-    status: "success",
+  const previous_link = `/api/post/all?pageNumber=${page}`;
+  const next_link = `/api/post/all?pageNumber=${
+    post.length !== limit ? undefined : page + 1
+  }`;
+  const result: paginated = {
+    current_page: page,
+    take: post.length,
+    next_page: post.length !== limit ? undefined : page + 1,
+    previous_link: previous_link,
+    next_link: next_link,
     data: post,
+  };
+  return createResponse(res, StatusCodes.OK, {
+    status: "success",
+    data: result,
   });
 });
 

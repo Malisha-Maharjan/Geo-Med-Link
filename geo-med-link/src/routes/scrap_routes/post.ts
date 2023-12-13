@@ -43,9 +43,9 @@ scrapDataPostRouter.post("/api/post/scrap", async (req, res) => {
 });
 
 scrapDataGetRouter.get("/api/post/scrap", async (req, res) => {
-  const page = (req.query.pageNumber as string) || "0";
-  const limit = 10;
-  const skip = parseInt(page) * limit;
+  const page = parseInt((req.query.pageNumber as string) || "0");
+  const limit = parseInt((req.query.take as string) || "5");
+  const skip = page * limit;
   const news = await scrapNewsRepository.find({
     order: { date: "DESC" },
     take: limit,
@@ -58,11 +58,13 @@ scrapDataGetRouter.get("/api/post/scrap", async (req, res) => {
       error: { message: ["Bad Request"] },
     });
   const previous_link = `/api/post/scrap?pageNumber=${page}`;
-  const next_link = `/api/post/scrap?pageNumber=${parseInt(page) + 1}`;
+  const next_link = `/api/post/scrap?pageNumber=${
+    news.length !== limit ? undefined : page + 1
+  }`;
   const result: paginated = {
-    current_page: parseInt(page),
-    take: limit,
-    next_page: parseInt(page) + 1,
+    current_page: page,
+    take: news.length,
+    next_page: news.length !== limit ? undefined : page + 1,
     previous_link: previous_link,
     next_link: next_link,
     data: news,
