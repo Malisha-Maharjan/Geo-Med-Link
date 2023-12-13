@@ -4,8 +4,8 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { News } from "../../screens/News/news";
 import { NewsFeed } from "../../screens/Post/Components/newsFeed";
-import { News } from "../../screens/news";
 import { Profile } from "../../screens/profile";
 import { BottomTabParamsList } from "./bottom-stack.types";
 
