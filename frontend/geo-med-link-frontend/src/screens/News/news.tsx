@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { FlatList, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import { useFetchUserPost } from "~/hooks/post/usePostApi";
-import { Loader } from "../../../helper/loader";
-import { Post } from "../post";
+import { Loader } from "~/helper/loader";
+import { useFetchNews } from "~/hooks/news/useNewsApi";
+import { NewsViews } from "./Component/newsView";
 
-export const UserFeed = () => {
+export const News = () => {
   const [value, setValue] = useState({});
   const {
     data: response,
@@ -15,7 +15,7 @@ export const UserFeed = () => {
     hasNextPage,
     isStale,
     refetch,
-  } = useFetchUserPost();
+  } = useFetchNews();
   console.log(response?.pageParams);
   const data = response?.pages.flatMap((item) => item.data.data);
   console.log(hasNextPage);
@@ -27,7 +27,7 @@ export const UserFeed = () => {
     <View>
       <FlatList
         data={data}
-        renderItem={({ item }) => <Post value={item} />}
+        renderItem={({ item }) => <NewsViews value={item} />}
         ItemSeparatorComponent={() => <Divider bold />}
         ListEmptyComponent={() => <Text>No Data</Text>}
         keyExtractor={(item) => item.id}

@@ -1,24 +1,17 @@
 import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
-import {
-  ActivityIndicator,
-  Avatar,
-  Divider,
-  MD2Colors,
-  Surface,
-  Text,
-} from "react-native-paper";
+import { Avatar, Divider, Surface, Text } from "react-native-paper";
+import { Loader } from "~/helper/loader";
 import { useFetchUser } from "../hooks/user/useUserApi";
 import { UserFeed } from "./Post/Components/userFeed";
 
 export const Profile = () => {
   const { data: response, isLoading } = useFetchUser();
   const data = response?.data;
-  console.log({ data });
-  if (isLoading)
-    <View>
-      <ActivityIndicator animating={true} color={MD2Colors.blue200} />
-    </View>;
+  console.log({ data: data?.user?.username });
+  if (isLoading) return <Loader />;
+
+  if (!data) return <Text> No data</Text>;
 
   return (
     <View style={{ backgroundColor: "white" }}>
