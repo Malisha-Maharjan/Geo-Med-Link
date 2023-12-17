@@ -1,8 +1,4 @@
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -10,13 +6,14 @@ import { IconButton, Text, TouchableRipple } from "react-native-paper";
 import Iconll from "react-native-vector-icons/AntDesign";
 import { Header } from "~/components";
 import { Loader } from "~/helper/loader";
-import { ProfileStackNavigationProps } from "~/navigations/Stack/Profile/profile-stack.types";
+// import { ProfileStackNavigationProps } from "~/navigations/Stack/Profile/profile-stack.types";
+import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
 import { useFetchUser } from "../../hooks/user/useUserApi";
 import { UserFeed } from "./userFeed";
 
 export const Profile = () => {
   const { data: response, isLoading } = useFetchUser();
-  const navigation = useNavigation<ProfileStackNavigationProps>();
+  const navigation = useNavigation<RootStackNavigationProps>();
   const [isVisible, setIsVisible] = useState(false);
   const data = response?.data;
   console.log({ data: data?.user?.username });
@@ -24,11 +21,12 @@ export const Profile = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   // bottomSheetModalRef.current?.close();
   const handlePress = () => {
-    if (!isVisible) bottomSheetModalRef.current?.present();
-    else bottomSheetModalRef.current?.close();
-    setIsVisible(!isVisible);
+    if (isVisible) bottomSheetModalRef.current?.dismiss();
+    else bottomSheetModalRef.current?.present();
+    setIsVisible((isVisible) => !isVisible);
     // bottomSheetModalRef.current?.present();
   };
+
   if (isLoading) return <Loader />;
 
   if (!data) return <Text> No data</Text>;
@@ -51,37 +49,43 @@ export const Profile = () => {
       </Header>
 
       {<UserFeed />}
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          enableDynamicSizing
-          enablePanDownToClose
-          enableOverDrag={false}
-          handleStyle={{
-            backgroundColor: "#FAF7F0",
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-          }}
+
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        onDismiss={() => setIsVisible(false)}
+        enableDynamicSizing
+        enablePanDownToClose
+        enableOverDrag={false}
+        handleStyle={{
+          backgroundColor: "#FAF7F0",
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+        }}
+      >
+        <BottomSheetScrollView
+          bounces={false}
+          style={{ flex: 1, backgroundColor: "#FAF7F0" }}
         >
-          <BottomSheetScrollView
-            bounces={false}
-            style={{ flex: 1, backgroundColor: "#FAF7F0" }}
+          <TouchableRipple
+            style={style.bottomSheetContent}
+            onPress={() => {
+              bottomSheetModalRef.current?.dismiss(),
+                navigation.navigate("ChangePassword");
+            }}
           >
-            <TouchableRipple
-              style={style.bottomSheetContent}
-              onPress={() => navigation.navigate("ChangePassword")}
-            >
-              <Text style={style.bottomSheetContentText}>Change Password</Text>
-            </TouchableRipple>
-            <TouchableRipple
-              style={style.bottomSheetContent}
-              onPress={() => navigation.navigate("EditProfile")}
-            >
-              <Text style={style.bottomSheetContentText}>Edit Profile</Text>
-            </TouchableRipple>
-          </BottomSheetScrollView>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
+            <Text style={style.bottomSheetContentText}>Change Password</Text>
+          </TouchableRipple>
+          <TouchableRipple
+            style={style.bottomSheetContent}
+            onPress={() => {
+              bottomSheetModalRef.current?.dismiss(),
+                navigation.navigate("EditProfile");
+            }}
+          >
+            <Text style={style.bottomSheetContentText}>Edit Profile</Text>
+          </TouchableRipple>
+        </BottomSheetScrollView>
+      </BottomSheetModal>
     </View>
   );
 };
