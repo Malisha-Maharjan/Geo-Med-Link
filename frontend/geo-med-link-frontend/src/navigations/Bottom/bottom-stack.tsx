@@ -1,12 +1,15 @@
 import {
+  AntDesign,
   FontAwesome,
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { UploadPost } from "~/screens/Post/uploadPost";
 import { News } from "../../screens/News/news";
 import { NewsFeedStackNavigator } from "../Stack/NewsFeed/newsFeed-stack";
-import { ProfileStackNavigator } from "../Stack/Profile/profile-stack";
+// import { ProfileStackNavigator } from "../Stack/Profile/profile-stack";
+import { Profile } from "~/screens/User/profile";
 import { BottomTabParamsList } from "./bottom-stack.types";
 
 const Tab = createBottomTabNavigator<BottomTabParamsList>();
@@ -38,8 +41,18 @@ export const BottomTabNavigator = () => {
           }}
         ></Screen>
         <Screen
+          name="Upload"
+          component={UploadPost}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="plussquareo" size={24} color="black" />
+            ),
+            title: "Upload Post",
+          }}
+        ></Screen>
+        <Screen
           name="ProfileStack"
-          component={ProfileStackNavigator}
+          component={Profile}
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="person-circle-outline" size={24} color="black" />
