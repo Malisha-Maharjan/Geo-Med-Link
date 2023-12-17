@@ -1,5 +1,6 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useUserContext } from "~/context/userContext";
 const BASEURL = process.env.EXPO_PUBLIC_API_URL;
 
 export const useFetchPost = () => {
@@ -35,13 +36,14 @@ export const useFetchPost = () => {
 
 export const useFetchUserPost = () => {
   console.log("This is fetching apo");
+  const { username } = useUserContext();
   const [take, setValue] = useState(5);
   // console.log({ url: `${BASEURL}/api/post/organization1?pageNumber=${page}` });
   return useInfiniteQuery({
-    queryKey: ["post", "username"],
+    queryKey: ["post", username],
     queryFn: async ({ pageParam }) => {
       const data = await fetch(
-        `${BASEURL}/api/post/organization1?pageNumber=${pageParam}?take=${take}`,
+        `${BASEURL}/api/post/${username}?pageNumber=${pageParam}?take=${take}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -60,6 +62,45 @@ export const useFetchUserPost = () => {
     },
     select: (data) => {
       return data;
+    },
+  });
+};
+
+export type PostParams = {
+  post?: string | undefined;
+  photo?: string | undefined;
+  username: string;
+};
+
+export const usePost = () => {
+  return useMutation({
+    mutationFn: async ({ post, photo, username }: PostParams) => {
+      const data = await fetch(`${BASEURL}/api/post/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ post, photo, userName: username }),
+      });
+      const response = await data.json();
+      return response;
+    },
+  });
+};
+
+export const useFetchPostById = (postId: number) => {
+  const { username } = useUserContext();
+  const id = useState(postId);
+  console.log({ id });
+
+  return useQuery({
+    queryKey: ["postID", postId],
+    queryFn: async () => {
+      console.log("getting api");
+      const data = await fetch(`${BASEURL}/api/post/get/${id[0]}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const response = await data.json();
+      return response;
     },
   });
 };
