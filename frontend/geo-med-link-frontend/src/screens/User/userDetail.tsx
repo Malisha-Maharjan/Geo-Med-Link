@@ -47,9 +47,6 @@ export const UserDetail = () => {
         <Surface style={style.surface}>
           <Text>MyPost</Text>
         </Surface>
-        <Surface style={style.surface}>
-          <Text>Shared Post</Text>
-        </Surface>
       </View>
     </>
   );

@@ -74,7 +74,7 @@ getCommentRouter.get("/api/comment/:postId", async (req, res) => {
     });
   }
 
-  const comment = await commentRepository.findAndCount({
+  const comment = await commentRepository.find({
     where: {
       post: { id: post.id },
     },
@@ -99,7 +99,10 @@ getCommentRouter.get("/api/comment/:postId", async (req, res) => {
     data: comment,
   };
 
-  return res.send(result);
+  return createResponse(res, StatusCodes.OK, {
+    status: "success",
+    data: result,
+  });
 });
 
 likeCommentRouter.put("/api/comment/like/:id", async (req, res) => {

@@ -90,7 +90,7 @@ getPostRouter.get("/api/post/get/:id", async (req, res) => {
       error: { message: ["Post not available"] },
     });
   }
-  console.log(post);
+  // console.log(post);
   return createResponse<Post>(res, StatusCodes.OK, {
     status: "success",
     data: post,

@@ -8,6 +8,10 @@ import { loginSchema } from "../../zod-schema/user-schema";
 import { createToken } from "./jwt";
 
 const router = express.Router();
+type LoginParams = {
+  token: string;
+  username: string;
+};
 
 router.post("/api/login", async (req, res) => {
   console.log("Login");
@@ -49,9 +53,10 @@ router.post("/api/login", async (req, res) => {
       });
     }
     const token = createToken(user.id, user.userName);
+    const result: LoginParams = { token, username: data["userName"] };
     return createResponse(res, StatusCodes.OK, {
       status: "success",
-      data: token,
+      data: result,
     });
   }
 });

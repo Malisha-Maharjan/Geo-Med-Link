@@ -7,12 +7,14 @@ import Iconll from "react-native-vector-icons/AntDesign";
 import { Header } from "~/components";
 import { Loader } from "~/helper/loader";
 // import { ProfileStackNavigationProps } from "~/navigations/Stack/Profile/profile-stack.types";
+import { useUserContext } from "~/context/userContext";
 import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
 import { useFetchUser } from "../../hooks/user/useUserApi";
 import { UserFeed } from "./userFeed";
 
 export const Profile = () => {
   const { data: response, isLoading } = useFetchUser();
+  const { setUsername, setToken } = useUserContext();
   const navigation = useNavigation<RootStackNavigationProps>();
   const [isVisible, setIsVisible] = useState(false);
   const data = response?.data;
@@ -83,6 +85,17 @@ export const Profile = () => {
             }}
           >
             <Text style={style.bottomSheetContentText}>Edit Profile</Text>
+          </TouchableRipple>
+          <TouchableRipple
+            style={style.bottomSheetContent}
+            onPress={() => {
+              bottomSheetModalRef.current?.dismiss(),
+                setToken(""),
+                setUsername(""),
+                navigation.navigate("Login");
+            }}
+          >
+            <Text style={style.bottomSheetContentText}>Logout</Text>
           </TouchableRipple>
         </BottomSheetScrollView>
       </BottomSheetModal>
