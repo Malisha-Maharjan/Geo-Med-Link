@@ -7,8 +7,8 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { UploadPost } from "~/screens/Post/uploadPost";
 import { News } from "../../screens/News/news";
-import { NewsFeedStackNavigator } from "../Stack/NewsFeed/newsFeed-stack";
 // import { ProfileStackNavigator } from "../Stack/Profile/profile-stack";
+import { NewsFeed } from "~/screens/Post/Components/newsFeed";
 import { Profile } from "~/screens/User/profile";
 import { BottomTabParamsList } from "./bottom-stack.types";
 
@@ -22,7 +22,7 @@ export const BottomTabNavigator = () => {
       <Navigator>
         <Screen
           name="Feed"
-          component={NewsFeedStackNavigator}
+          component={NewsFeed}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="post" size={24} color="black" />
@@ -48,6 +48,7 @@ export const BottomTabNavigator = () => {
               <AntDesign name="plussquareo" size={24} color="black" />
             ),
             title: "Upload Post",
+            headerShown: false,
           }}
         ></Screen>
         <Screen

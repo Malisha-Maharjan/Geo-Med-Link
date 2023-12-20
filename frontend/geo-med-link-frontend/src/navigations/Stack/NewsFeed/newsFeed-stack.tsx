@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { NewsFeed } from "~/screens/Post/Components/newsFeed";
+// import { PostStackNavigator } from "../Post/post-stack";
 import { PostStackNavigator } from "../Post/post-stack";
 import { NewsFeedStackParamsList } from "./newsFeed-stack.types";
 
