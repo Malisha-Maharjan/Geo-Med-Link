@@ -2,25 +2,32 @@ import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { Avatar, Text, TextInput } from "react-native-paper";
 import { Loader } from "~/helper/loader";
+import { useFetchComment, usePostComment } from "~/hooks/post/useCommentApi";
 import { useFetchPostById } from "~/hooks/post/usePostApi";
 import { CommentProps } from "~/navigations/Root/root-stack.types";
 import { Post } from "../post";
 
 export const Comment = ({ route, navigation }: CommentProps) => {
+  const [comment, setComment] = useState("");
   const { postId } = route.params;
-  console.log({ postId });
   const { data: response, isLoading } = useFetchPostById(postId);
-  console.log({ response });
-
+  const { mutate: postComment } = usePostComment();
+  const { data: commentResponse, isLoading: isCommentLoading } =
+    useFetchComment(postId);
+  const data = commentResponse?.pages.flatMap((item: any) => item.data.data);
+  console.log({ commentdata: data });
   const [reportModalVisible, setReportModalVisible] = useState(false);
   const toggleReportModal = () => {
     setReportModalVisible(!reportModalVisible);
   };
+  const onPostComment = () => {
+    postComment({ comment, postId });
+    setComment("");
+  };
 
   // State to hold the comment
-  const [comment, setComment] = useState("");
 
-  if (isLoading)
+  if (isLoading && isCommentLoading)
     return (
       <>
         <Loader />
@@ -33,55 +40,10 @@ export const Comment = ({ route, navigation }: CommentProps) => {
         <Text>No data</Text>
       </>
     );
+  if (!data || data.length === 0) return <Text>No Data</Text>;
   return (
     <>
       <ScrollView contentContainerStyle={styles.PostContainer}>
-        {/* <Card style={styles.Post}>
-          <View style={styles.postTop}>
-            <View style={styles.dpName}>
-              <Avatar.Image size={40} source={require("../../mydp.png")} />
-              <Text style={styles.Name}>Hobart Romain Alex</Text>
-            </View>
-            <Pressable onPress={toggleReportModal} style={styles.optionIcon}>
-              <Iconlll name="report" size={18} color="grey" />
-            </Pressable>
-          </View>
-          <Card.Content>
-            <Text variant="titleLarge" style={styles.caption}>
-              Lately, it feels like I've been in a never-ending tango with this
-              stubborn bug! The constant sniffles, sneezing symphonies, and
-              feeling like a marathon runner with a cough have been my daily
-              companions. Slowly pacing through each day, holding out hope for
-              the day this bug decides to bid adieu! 🤒🌧️{" "}
-            </Text>
-          </Card.Content>
-          <View style={styles.ImageBox}>
-            {/* <Card.Cover
-              source={{
-                uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzJRDYPQYpItOt9krno_-3JLQ32qQMDfEwUQ&usqp=CAU",
-              }}
-              style={styles.Image}
-            /> */}
-        {/* </View>
-          <Card.Actions>
-            <View style={styles.Interactive}>
-              <Iconll name="like2" size={18} style={styles.reactionIcon}>
-                <Text style={{ fontSize: 14 }}> Like</Text>
-              </Iconll>
-              <Icon name="comment-alt" size={18} style={styles.reactionIcon}>
-                <Text
-                  style={{ fontSize: 14, fontWeight: "bold", color: "black" }}
-                >
-                  {" "}
-                  Comment
-                </Text>
-              </Icon>
-              <Icon name="share-square" size={18} style={styles.reactionIcon}>
-                <Text style={{ fontSize: 14 }}> Share</Text>
-              </Icon>
-            </View>
-          </Card.Actions>
-        </Card> */}
         <Post value={response.data} />
 
         <View style={styles.CommentBox}>
@@ -91,14 +53,12 @@ export const Comment = ({ route, navigation }: CommentProps) => {
               style={styles.ipComment}
               placeholder="Leave you comment here"
               multiline={true}
-
-              /*-------------------Uncomment this us use API----------------- */
-              // value={comment}
-              // onChangeText={text => setComment(text)} // Update the comment state
+              value={comment}
+              onChangeText={(text) => setComment(text)}
             />
           </View>
           <View style={styles.CommentAction}>
-            <Pressable onPress={() => {}} style={styles.PostCmnt}>
+            <Pressable onPress={onPostComment} style={styles.PostCmnt}>
               <Text style={{ fontWeight: "bold" }}>Comment</Text>
             </Pressable>
           </View>
@@ -108,9 +68,7 @@ export const Comment = ({ route, navigation }: CommentProps) => {
         <View style={styles.CommentBox}>
           <View style={styles.cmnt}>
             <Avatar.Image size={30} source={require("../../mydp.png")} />
-            <Text style={styles.ipComment}>
-              This is the comment related to this post
-            </Text>
+            <Text style={styles.ipComment}>{data[0].comment}</Text>
           </View>
         </View>
       </ScrollView>
