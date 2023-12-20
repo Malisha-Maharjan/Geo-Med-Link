@@ -179,27 +179,27 @@ export const Post = (value: any) => {
       <ScrollView contentContainerStyle={styles.PostContainer}>
         <Card style={styles.Post}>
           <View style={styles.postTop}>
-            <View style={styles.postUser}>
+            <Pressable style={styles.postUser} onPress={() => {}}>
               <Avatar.Image size={40} source={require("../mydp.png")} />
               <Text style={styles.userName}>{data.user.userName}</Text>
-            </View>
+            </Pressable>
             <Pressable onPress={toggleReportModal} style={styles.reportIcon}>
               <Iconlll name="report" size={18} color="grey" />
             </Pressable>
           </View>
-          {data.post !== "" && (
-            <Card.Content>
+          <Card.Content>
+            {data.post !== "" && (
               <Text variant="bodyLarge" style={styles.caption}>
                 {data.post}
               </Text>
-              <Text variant="bodySmall">
-                {dayjs(data.date).format("MMM D, YYYY")}
-              </Text>
-            </Card.Content>
-          )}
+            )}
+            <Text variant="bodySmall">
+              {dayjs(data.date).format("MMM D, YYYY")}
+            </Text>
+          </Card.Content>
 
           <View style={styles.ImageBox}>
-            {data.photo !== null && (
+            {data.photo !== null && data.photo !== "" && (
               <Card.Cover
                 source={{
                   uri: `data:image/png;base64,${data.photo}`,

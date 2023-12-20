@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { Avatar, TextInput } from "react-native-paper";
+import { Avatar, Text, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { Row } from "~/components";
+import { Header } from "~/components";
+import { Loader } from "~/helper/loader";
 import { usePost } from "~/hooks/post/usePostApi";
+import { useFetchUser } from "~/hooks/user/useUserApi";
+import { TabNavigationProps } from "~/navigations/Bottom/bottom-stack.types";
 
 export const UploadPost = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [postText, setPostText] = useState("");
+  const navigation = useNavigation<TabNavigationProps>();
   const { mutate: postApi } = usePost();
+  const { data: response, isLoading } = useFetchUser();
+  const data = response?.data;
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -36,22 +36,41 @@ export const UploadPost = () => {
   };
   const upload = () => {
     console.log("post post");
-    // postApi({ post: postText, photo: selectedImage });
+    navigation.navigate("Feed");
+    setSelectedImage("");
+    setPostText("");
+    postApi({ post: postText, photo: selectedImage });
   };
-
+  if (isLoading)
+    return (
+      <>
+        <Loader />
+      </>
+    );
   return (
     <View style={styles.container}>
-      <Row style={styles.firstView}>
+      <Header>
+        <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+          <Avatar.Image size={32} source={require("../mydp.png")} />
+          <Text variant="headlineSmall" style={{ fontWeight: "bold" }}>
+            {data.user.userName}
+          </Text>
+        </View>
+        <Pressable style={styles.PostBtn} onPress={upload}>
+          <Text style={styles.PostText}>Post</Text>
+        </Pressable>
+      </Header>
+      {/* <Row style={styles.firstView}>
         <Avatar.Image size={32} source={require("../mydp.png")} />
         <Pressable style={styles.PostBtn} onPress={upload}>
           <Text style={styles.PostText}>Post</Text>
         </Pressable>
-      </Row>
+      </Row> */}
       <ScrollView>
         <TextInput
           style={styles.secondView}
           multiline={true}
-          mode="outlined"
+          mode="flat"
           placeholder="Input your text here."
           value={postText}
           onChangeText={(text) => setPostText(text)}
@@ -98,7 +117,7 @@ const styles = StyleSheet.create({
     minHeight: 190,
     maxHeight: 800,
     paddingBottom: 10,
-    marginTop: 20,
+    // marginTop: 20,
   },
 
   thirdView: {
