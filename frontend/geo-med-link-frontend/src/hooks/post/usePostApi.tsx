@@ -1,14 +1,20 @@
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+} from "@tanstack/react-query";
 import { useState } from "react";
 import { useUserContext } from "~/context/userContext";
 const BASEURL = process.env.EXPO_PUBLIC_API_URL;
 
+const queryClient = new QueryClient();
 export const useFetchPost = () => {
   console.log("This is fetching apo");
   const [take, setValue] = useState(5);
   // console.log({ url: `${BASEURL}/api/post/organization1?pageNumber=${page}` });
   return useInfiniteQuery({
-    queryKey: ["post"],
+    queryKey: ["all post"],
     queryFn: async ({ pageParam }) => {
       const data = await fetch(
         `${BASEURL}/api/post/all?pageNumber=${pageParam}?take=${take}`,
@@ -67,21 +73,26 @@ export const useFetchUserPost = () => {
 };
 
 export type PostParams = {
-  post?: string | undefined;
+  post?: string | undefined | null;
   photo?: string | undefined;
-  username: string;
+  // username: string;
 };
 
 export const usePost = () => {
+  const { username } = useUserContext();
   return useMutation({
-    mutationFn: async ({ post, photo, username }: PostParams) => {
+    mutationFn: async ({ post, photo }: PostParams) => {
       const data = await fetch(`${BASEURL}/api/post/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ post, photo, userName: username }),
       });
       const response = await data.json();
+
       return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all post"] });
     },
   });
 };
@@ -90,7 +101,7 @@ export const useFetchPostById = (postId: number) => {
   const { username } = useUserContext();
   const id = useState(postId);
   console.log({ id });
-
+  console.log("hihi");
   return useQuery({
     queryKey: ["postID", postId],
     queryFn: async () => {
@@ -100,6 +111,7 @@ export const useFetchPostById = (postId: number) => {
         headers: { "Content-Type": "application/json" },
       });
       const response = await data.json();
+      // console.log({ response });
       return response;
     },
   });
