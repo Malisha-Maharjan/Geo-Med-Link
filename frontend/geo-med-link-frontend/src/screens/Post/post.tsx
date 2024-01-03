@@ -99,9 +99,6 @@ export const Post = (value: any) => {
                   style={styles.reactionIcon}
                 />
               )}
-              // onPress={() =>
-              //   navigation.navigate("Comment", { postId: data.id })
-              // }
               onPress={toggleComment}
             >
               Comment
@@ -111,7 +108,6 @@ export const Post = (value: any) => {
       </ScrollView>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        // onDismiss={() => setIsVisible(false)}
         enableDynamicSizing
         enablePanDownToClose
         enableOverDrag={false}
@@ -125,17 +121,22 @@ export const Post = (value: any) => {
           bounces={false}
           style={{ flex: 1, backgroundColor: "#FAF7F0" }}
         >
-          <TouchableRipple
-            style={styles.bottomSheetContent}
-            onPress={() => {
-              bottomSheetModalRef.current?.dismiss(), toggleIsDialogVisible();
-            }}
-          >
-            <Row style={{ alignItems: "center" }}>
-              <Feather name="flag" size={20} color="red" />
-              <Text style={{ color: "red" }}>Report</Text>
-            </Row>
-          </TouchableRipple>
+          {!(
+            (data.user.userName && data.user.userName === currentUsername) ||
+            !data.user.userName
+          ) && (
+            <TouchableRipple
+              style={styles.bottomSheetContent}
+              onPress={() => {
+                bottomSheetModalRef.current?.dismiss(), toggleIsDialogVisible();
+              }}
+            >
+              <Row style={{ alignItems: "center" }}>
+                <Feather name="flag" size={20} color="red" />
+                <Text style={{ color: "red" }}>Report</Text>
+              </Row>
+            </TouchableRipple>
+          )}
           {((data.user.userName && data.user.userName === currentUsername) ||
             !data.user.userName) && (
             <TouchableRipple
