@@ -96,8 +96,8 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
         onClose={toggleComment}
         footerComponent={renderFooter}
         handleComponent={handler}
-        handleStyle={{ backgroundColor: "red" }}
-        style={{ backgroundColor: "red" }}
+        handleStyle={{ backgroundColor: "#FAF7F0" }}
+        style={{ backgroundColor: "#FAF7F0" }}
       >
         <BottomSheetFlatList
           data={data}
@@ -105,7 +105,7 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
           ItemSeparatorComponent={() => <Divider bold />}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={<Text>Empty Comment</Text>}
-          style={{ backgroundColor: "red" }}
+          style={{ backgroundColor: "#FAF7F0" }}
         />
       </BottomSheet>
     </Portal>
@@ -114,7 +114,7 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
 
 const styles = StyleSheet.create({
   CommentBox: {
-    // backgroundColor: "white",
+    backgroundColor: "white",
     paddingLeft: 10,
     borderWidth: 1,
     borderBottomColor: "black",
