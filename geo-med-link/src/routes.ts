@@ -8,8 +8,9 @@ import {
   postComment,
   updateComment,
 } from "./routes/comment_routes/comment";
-import { forgetPassword } from "./routes/login_routes/forget-password";
 import { login } from "./routes/login_routes/login";
+import { changePassword } from "./routes/password_routes/change-password";
+import { forgetPassword } from "./routes/password_routes/forget-password";
 import {
   LikePost,
   createPost,
@@ -77,4 +78,5 @@ export const routes =
   app.use(unverifiedDoctor),
   app.use(getServices),
   app.use(getOrganizations),
-  app.use(send));
+  app.use(send),
+  app.use(changePassword));

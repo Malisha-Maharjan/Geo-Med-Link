@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { UserContextProvider } from "~/context/userContext";
 import { useUser } from "~/hooks/user/useUser";
@@ -13,17 +14,19 @@ export default function App() {
   const user = useUser();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <BottomSheetModalProvider>
-        <QueryClientProvider client={queryClient}>
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <UserContextProvider value={user}>
-                <RootStackNavigator />
-              </UserContextProvider>
-            </NavigationContainer>
-          </SafeAreaProvider>
-        </QueryClientProvider>
-      </BottomSheetModalProvider>
+      <PaperProvider>
+        <BottomSheetModalProvider>
+          <QueryClientProvider client={queryClient}>
+            <SafeAreaProvider>
+              <NavigationContainer>
+                <UserContextProvider value={user}>
+                  <RootStackNavigator />
+                </UserContextProvider>
+              </NavigationContainer>
+            </SafeAreaProvider>
+          </QueryClientProvider>
+        </BottomSheetModalProvider>
+      </PaperProvider>
     </GestureHandlerRootView>
   );
 }

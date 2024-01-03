@@ -40,11 +40,11 @@ export const useFetchPost = () => {
   });
 };
 
-export const useFetchUserPost = () => {
-  console.log("This is fetching apo");
-  const { username } = useUserContext();
+export const useFetchUserPost = (username: string) => {
+  console.log("This is fetching post");
+  console.log({ username });
+  // const { username } = useUserContext();
   const [take, setValue] = useState(5);
-  // console.log({ url: `${BASEURL}/api/post/organization1?pageNumber=${page}` });
   return useInfiniteQuery({
     queryKey: ["post", username],
     queryFn: async ({ pageParam }) => {
@@ -56,7 +56,6 @@ export const useFetchUserPost = () => {
         }
       );
       console.log("fetfaf");
-      // console.log(data);
       const response = await data.json();
       console.log({ response: response?.data?.take });
       setValue(response?.data?.take);
@@ -75,7 +74,6 @@ export const useFetchUserPost = () => {
 export type PostParams = {
   post?: string | undefined | null;
   photo?: string | undefined;
-  // username: string;
 };
 
 export const usePost = () => {

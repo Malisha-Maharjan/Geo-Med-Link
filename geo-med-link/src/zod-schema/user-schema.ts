@@ -43,3 +43,9 @@ export const loginSchema = z.object({
 export const userNameSchema = z.object({
   userName: z.string(),
 });
+
+export const passwordSchema = z.object({
+  password: z
+    .string()
+    .regex(/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/, "Password is invalid"),
+});

@@ -3,7 +3,7 @@ import { Image, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { Avatar, Text, TextInput } from "react-native-paper";
+import { Avatar, Button, Text, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Header } from "~/components";
 import { Loader } from "~/helper/loader";
@@ -34,6 +34,11 @@ export const UploadPost = () => {
       if (result.assets[0].base64) setSelectedImage(result.assets[0].base64);
     }
   };
+
+  const canPost = () => {
+    return postText !== "" || selectedImage !== "";
+  };
+
   const upload = () => {
     console.log("post post");
     navigation.navigate("Feed");
@@ -56,9 +61,12 @@ export const UploadPost = () => {
             {data.user.userName}
           </Text>
         </View>
-        <Pressable style={styles.PostBtn} onPress={upload}>
+        {/* <Pressable style={styles.PostBtn} onPress={upload} disabled={true}>
           <Text style={styles.PostText}>Post</Text>
-        </Pressable>
+        </Pressable> */}
+        <Button mode="elevated" disabled={!canPost()} onPress={upload}>
+          Post
+        </Button>
       </Header>
       {/* <Row style={styles.firstView}>
         <Avatar.Image size={32} source={require("../mydp.png")} />
@@ -71,7 +79,7 @@ export const UploadPost = () => {
           style={styles.secondView}
           multiline={true}
           mode="flat"
-          placeholder="Input your text here."
+          placeholder="What do you want to talk about"
           value={postText}
           onChangeText={(text) => setPostText(text)}
         />
@@ -82,11 +90,15 @@ export const UploadPost = () => {
               style={styles.selectedImage}
             />
           )}
-          <Pressable style={styles.media} onPress={pickImage}>
-            <Icon name="image" size={30}>
-              {" "}
-              Add Photo
-            </Icon>
+          <Pressable onPress={pickImage}>
+            <View style={styles.imageUpload}>
+              <Icon name="image" size={30} color="rgb(124, 117, 126)"></Icon>
+              {!selectedImage ? (
+                <Text variant="bodyMedium"> Add Photo</Text>
+              ) : (
+                <Text variant="bodyMedium">Change Photo</Text>
+              )}
+            </View>
           </Pressable>
         </View>
       </ScrollView>
@@ -128,12 +140,14 @@ const styles = StyleSheet.create({
     // backgroundColor: "#5FBDFF",
     justifyContent: "center",
   },
-  media: {
-    width: "100%",
-    // height: 90,
+  imageUpload: {
+    flexDirection: "row",
+    gap: 5,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "red"
+    borderRadius: 20,
+    backgroundColor: "rgb(237, 221, 246)",
+    padding: 10,
   },
   selectedImage: {
     height: 150,

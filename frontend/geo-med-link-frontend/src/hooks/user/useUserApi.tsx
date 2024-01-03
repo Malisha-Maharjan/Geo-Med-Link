@@ -2,14 +2,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useUserContext } from "~/context/userContext";
 const BASEURL = process.env.EXPO_PUBLIC_API_URL;
 
-export const useFetchUser = () => {
-  console.log("This is fetching user");
-  const { username } = useUserContext();
-  console.log({ username });
+export const useFetchUser = (usernameParam?: string | undefined) => {
+  const { username: currentUserName } = useUserContext();
+
+  const username = usernameParam ?? currentUserName!;
+
+  console.log("Print username: ", { username });
+
   return useQuery({
     queryKey: ["user", username],
     queryFn: async () => {
-      console.log(`${BASEURL}/api/user/user1`);
       const data = await fetch(`${BASEURL}/api/user/${username}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },

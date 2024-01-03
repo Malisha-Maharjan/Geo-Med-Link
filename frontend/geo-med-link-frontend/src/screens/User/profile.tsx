@@ -5,28 +5,30 @@ import { StyleSheet, View } from "react-native";
 import { IconButton, Text, TouchableRipple } from "react-native-paper";
 import Iconll from "react-native-vector-icons/AntDesign";
 import { Header } from "~/components";
-import { Loader } from "~/helper/loader";
-// import { ProfileStackNavigationProps } from "~/navigations/Stack/Profile/profile-stack.types";
 import { useUserContext } from "~/context/userContext";
-import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
+import { Loader } from "~/helper/loader";
+import { ProfileStackProps } from "~/navigations/Bottom/bottom-stack.types";
+import {
+  ProfileProps,
+  RootStackNavigationProps,
+} from "~/navigations/Root/root-stack.types";
 import { useFetchUser } from "../../hooks/user/useUserApi";
 import { UserFeed } from "./userFeed";
 
-export const Profile = () => {
-  const { data: response, isLoading } = useFetchUser();
-  const { setUsername, setToken } = useUserContext();
+export const Profile = ({ route }: ProfileProps | ProfileStackProps) => {
+  const { username: usernameParam } = route.params ?? { username: undefined };
+  const { username: currentUsername, setUsername, setToken } = useUserContext();
+  const { data: response, isLoading } = useFetchUser(usernameParam);
+
   const navigation = useNavigation<RootStackNavigationProps>();
   const [isVisible, setIsVisible] = useState(false);
   const data = response?.data;
-  console.log({ data: data?.user?.username });
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  // bottomSheetModalRef.current?.close();
   const handlePress = () => {
     if (isVisible) bottomSheetModalRef.current?.dismiss();
     else bottomSheetModalRef.current?.present();
     setIsVisible((isVisible) => !isVisible);
-    // bottomSheetModalRef.current?.present();
   };
 
   if (isLoading) return <Loader />;
@@ -37,20 +39,23 @@ export const Profile = () => {
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <Header>
         <Text style={{ fontSize: 25, fontWeight: "bold" }}>Profile</Text>
-        <IconButton
-          icon={() => (
-            <Iconll
-              name="menuunfold"
-              size={20}
-              style={{ transform: [{ rotate: "180deg" }] }}
-            />
-          )}
-          style={{ margin: 0 }}
-          onPress={() => bottomSheetModalRef.current?.present()}
-        />
+        {((usernameParam && usernameParam === currentUsername) ||
+          !usernameParam) && (
+          <IconButton
+            icon={() => (
+              <Iconll
+                name="menuunfold"
+                size={20}
+                style={{ transform: [{ rotate: "180deg" }] }}
+              />
+            )}
+            style={{ margin: 0 }}
+            onPress={() => bottomSheetModalRef.current?.present()}
+          />
+        )}
       </Header>
 
-      {<UserFeed />}
+      {<UserFeed userData={data} />}
 
       <BottomSheetModal
         ref={bottomSheetModalRef}

@@ -252,6 +252,7 @@ reportPostRouter.put("/api/post/report/:id", async (req, res) => {
       error: { message: ["Post not available"] },
     });
   }
+  console.log("spam spam");
   post.reported_spam = post.reported_spam + 1;
   post.save();
   return createResponse(res, StatusCodes.OK, {

@@ -22,3 +22,16 @@ export const AppDataSource = new DataSource({
   migrations: [env.MIGRATION_URL],
   subscribers: [],
 });
+
+// export const AppDataSource = new DataSource({
+//   type: "mysql",
+//   host: "MYSQL5048.site4now.net",
+//   // port: 3306,
+//   username: "aa2d65_geomed",
+//   password: "Malisha01",
+//   database: "db_aa2d65_geomed",
+//   // logging: env.DATABASE_LOGGING,
+//   entities: [User, People, Organization, Doctor, Scrap, Post, Comment],
+//   migrations: [env.MIGRATION_URL],
+//   subscribers: [],
+// });

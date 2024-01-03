@@ -1,16 +1,11 @@
 import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Divider, Surface, Text } from "react-native-paper";
-import { Loader } from "~/helper/loader";
-import { useFetchUser } from "~/hooks/user/useUserApi";
 
-export const UserDetail = () => {
-  const { data: response, isLoading } = useFetchUser();
-  const data = response?.data;
-  console.log({ data: data?.user?.username });
-  if (isLoading) return <Loader />;
+export const UserDetail = (userData: any) => {
+  const data = userData.userData.userData;
+  console.log({ data });
 
-  if (!data) return <Text> No data</Text>;
   return (
     <>
       <View style={style.topSection}>

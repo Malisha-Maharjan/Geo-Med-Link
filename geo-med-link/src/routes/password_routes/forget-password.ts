@@ -1,6 +1,5 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import { User } from "../../entity/User";
 import { userRepository } from "../../repository";
 import { sendEmail } from "../../utils/email";
 import { createResponse } from "../../utils/response";
@@ -20,7 +19,7 @@ router.post("/api/forget/password", async (req, res) => {
   });
   console.log(user);
   if (!user) {
-    return createResponse<User>(res, StatusCodes.UNAUTHORIZED, {
+    return createResponse(res, StatusCodes.UNAUTHORIZED, {
       status: "error",
       error: { message: ["Invalid Username or email."] },
     });

@@ -16,11 +16,7 @@ export const LoginScreen = () => {
   const { mutateAsync: login, error } = useLogin();
 
   const onLoginClick = async () => {
-    console.log({ username });
     const response = await login({ username, password });
-    console.log({ response });
-    console.log({ token: response.data.token });
-    console.log({ response });
     setContextUsername(response.data.username);
     setContextToken(response.data.token);
   };

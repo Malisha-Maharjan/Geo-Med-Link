@@ -6,7 +6,9 @@ import { UserDetail } from "~/screens/User/userDetail";
 import { Loader } from "../../helper/loader";
 import { Post } from "../Post/post";
 
-export const UserFeed = () => {
+export const UserFeed = (userData: any) => {
+  const user = userData.userData;
+  console.log({ userFeedUser: user });
   const [value, setValue] = useState({});
   const {
     data: response,
@@ -16,7 +18,7 @@ export const UserFeed = () => {
     hasNextPage,
     isStale,
     refetch,
-  } = useFetchUserPost();
+  } = useFetchUserPost(user.user.userName);
   console.log(response?.pageParams);
   const data = response?.pages.flatMap((item) => item.data.data);
   console.log(hasNextPage);
@@ -29,7 +31,7 @@ export const UserFeed = () => {
       data={data}
       renderItem={({ item }) => <Post value={item} />}
       ItemSeparatorComponent={() => <Divider bold />}
-      ListHeaderComponent={() => <UserDetail />}
+      ListHeaderComponent={() => <UserDetail userData={userData} />}
       ListEmptyComponent={() => <Text>No Data</Text>}
       keyExtractor={(item) => item.id}
       ListFooterComponent={() => <Loader />}
@@ -37,11 +39,9 @@ export const UserFeed = () => {
       onRefresh={refetch}
       onEndReached={() => {
         if (!isFetching) {
-          // if (!hasNextPage) return <Text>No data available</Text>;
           fetchNextPage();
         }
       }}
-      // onEndReachedThreshold={0}
     />
   );
 };
