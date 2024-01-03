@@ -19,7 +19,7 @@ export const NewsFeed = () => {
   // console.log(response?.pageParams);
   const data = response?.pages.flatMap((item) => item.data.data);
   console.log({ data: data });
-  console.log(hasNextPage);
+  console.log({ hasNextPage });
   if (isLoading) return <Loader />;
   console.log({ isStale });
   if (!data || data.length === 0) return <Text>No Data</Text>;
@@ -31,7 +31,7 @@ export const NewsFeed = () => {
       ItemSeparatorComponent={() => <Divider bold />}
       ListEmptyComponent={() => <Text>No Data</Text>}
       keyExtractor={(item) => item.id}
-      ListFooterComponent={() => <Loader />}
+      ListFooterComponent={() => hasNextPage && <Loader />}
       refreshing={!isStale}
       onRefresh={() => {
         refetch();

@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { useUserContext } from "~/context/userContext";
 import { LoginScreen } from "~/screens/Login/login";
-import { Comment } from "~/screens/Post/Comment/comment";
+// import { Comment } from "~/screens/Post/Comment/comment";
 import { EditProfile } from "~/screens/User/EditProfile";
 import { ChangePassword } from "~/screens/User/changePassword";
 import { Profile } from "~/screens/User/profile";
@@ -25,7 +25,7 @@ export const RootStackNavigator = () => {
             component={BottomTabNavigator}
             options={{ headerShown: false }}
           />
-          <Screen name="Comment" component={Comment} />
+          {/* <Screen name="Comment" component={Comment} /> */}
           <Screen name="ChangePassword" component={ChangePassword} />
           <Screen name="EditProfile" component={EditProfile} />
           <Screen

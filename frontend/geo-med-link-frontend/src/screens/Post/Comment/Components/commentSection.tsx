@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { FlatList, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
 import { Loader } from "~/helper/loader";
@@ -7,10 +7,9 @@ import { ViewComment } from "./viewComment";
 
 export type commentSectionProps = {
   postId: number;
-  header: ReactElement;
 };
 
-export const CommentSection = ({ postId, header }: commentSectionProps) => {
+export const CommentSection = ({ postId }: commentSectionProps) => {
   console.log(postId);
   const {
     data: response,
@@ -37,7 +36,6 @@ export const CommentSection = ({ postId, header }: commentSectionProps) => {
       contentContainerStyle={{ flexGrow: 1, backgroundColor: "#FAF7F0" }}
       data={data}
       renderItem={({ item }) => <ViewComment value={item} />}
-      ListHeaderComponent={header}
       ItemSeparatorComponent={() => <Divider bold />}
       keyExtractor={(item) => item.id}
       // refreshing={!isStale}

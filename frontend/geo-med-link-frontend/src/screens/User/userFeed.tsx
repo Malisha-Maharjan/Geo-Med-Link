@@ -34,7 +34,7 @@ export const UserFeed = (userData: any) => {
       ListHeaderComponent={() => <UserDetail userData={userData} />}
       ListEmptyComponent={() => <Text>No Data</Text>}
       keyExtractor={(item) => item.id}
-      ListFooterComponent={() => <Loader />}
+      // ListFooterComponent={() => <Loader />}
       refreshing={!isStale}
       onRefresh={refetch}
       onEndReached={() => {

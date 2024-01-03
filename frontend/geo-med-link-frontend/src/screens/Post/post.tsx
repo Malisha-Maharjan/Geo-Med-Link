@@ -19,6 +19,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { Row } from "~/components";
 import { useUserContext } from "~/context/userContext";
 import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
+import { Comment } from "./Comment/comment";
 import { Report } from "./report";
 
 export const Post = (value: any) => {
@@ -32,6 +33,10 @@ export const Post = (value: any) => {
     setIsDialogVisible(!isDialogVisible);
   };
   const data = value.value;
+
+  const toggleComment = () => {
+    setIsVisible(!isVisible);
+  };
 
   return (
     <>
@@ -94,9 +99,10 @@ export const Post = (value: any) => {
                   style={styles.reactionIcon}
                 />
               )}
-              onPress={() =>
-                navigation.navigate("Comment", { postId: data.id })
-              }
+              // onPress={() =>
+              //   navigation.navigate("Comment", { postId: data.id })
+              // }
+              onPress={toggleComment}
             >
               Comment
             </Button>
@@ -105,7 +111,7 @@ export const Post = (value: any) => {
       </ScrollView>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        onDismiss={() => setIsVisible(false)}
+        // onDismiss={() => setIsVisible(false)}
         enableDynamicSizing
         enablePanDownToClose
         enableOverDrag={false}
@@ -153,6 +159,14 @@ export const Post = (value: any) => {
           />
         </Dialog>
       </Portal>
+
+      {isVisible && (
+        <Comment
+          isVisible={isVisible}
+          toggleComment={toggleComment}
+          postId={data.id}
+        />
+      )}
     </>
   );
 };

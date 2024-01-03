@@ -3,15 +3,15 @@ import { StackNavigationProp } from "@react-navigation/stack";
 export type RootStackParamList = {
   Login: undefined;
   BottomTab: undefined;
-  Comment: { postId: number };
+  // Comment: { postId: number };
   ChangePassword: undefined;
   EditProfile: undefined;
   Profile: { username: string };
 };
-export type CommentProps = NativeStackScreenProps<
-  RootStackParamList,
-  "Comment"
->;
+// export type CommentProps = NativeStackScreenProps<
+//   RootStackParamList,
+//   "Comment"
+// >;
 
 export type ProfileProps = NativeStackScreenProps<
   RootStackParamList,

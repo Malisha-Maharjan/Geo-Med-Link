@@ -13,10 +13,10 @@ const queryClient = new QueryClient();
 export default function App() {
   const user = useUser();
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <PaperProvider>
-        <BottomSheetModalProvider>
-          <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <PaperProvider>
+          <BottomSheetModalProvider>
             <SafeAreaProvider>
               <NavigationContainer>
                 <UserContextProvider value={user}>
@@ -24,10 +24,10 @@ export default function App() {
                 </UserContextProvider>
               </NavigationContainer>
             </SafeAreaProvider>
-          </QueryClientProvider>
-        </BottomSheetModalProvider>
-      </PaperProvider>
-    </GestureHandlerRootView>
+          </BottomSheetModalProvider>
+        </PaperProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 }
 
