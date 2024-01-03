@@ -34,7 +34,7 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
       <BottomSheetFooter {...props} bottomInset={20}>
         <View style={styles.CommentBox}>
           <View style={styles.comment}>
-            <Avatar.Image size={30} source={require("../mydp.png")} />
+            <Avatar.Image size={30} source={require("../../mydp.png")} />
             <TextInput
               style={styles.commentSection}
               placeholder="Comment"
