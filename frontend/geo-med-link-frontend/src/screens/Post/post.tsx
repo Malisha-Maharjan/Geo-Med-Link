@@ -133,7 +133,21 @@ export const Post = (value: any) => {
             >
               <Row style={{ alignItems: "center" }}>
                 <Feather name="flag" size={20} color="red" />
-                <Text style={{ color: "red" }}>Report</Text>
+                <Text
+                  style={{ color: "red" }}
+                  onPress={() => {
+                    toggleIsDialogVisible(),
+                      (
+                        <Report
+                          isVisible={isVisible}
+                          toggleIsVisible={toggleIsDialogVisible}
+                          postId={data.id}
+                        />
+                      );
+                  }}
+                >
+                  Report
+                </Text>
               </Row>
             </TouchableRipple>
           )}
