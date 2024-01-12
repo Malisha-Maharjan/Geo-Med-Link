@@ -10,15 +10,18 @@ export const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProps>();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { setUsername: setContextUsername, setToken: setContextToken } =
-    useUserContext();
-
+  const {
+    setUsername: setContextUsername,
+    setToken: setContextToken,
+    setUserType: setUserType,
+  } = useUserContext();
   const { mutateAsync: login, error } = useLogin();
 
   const onLoginClick = async () => {
     const response = await login({ username, password });
     setContextUsername(response.data.username);
     setContextToken(response.data.token);
+    setUserType(response.data.userType);
   };
 
   return (

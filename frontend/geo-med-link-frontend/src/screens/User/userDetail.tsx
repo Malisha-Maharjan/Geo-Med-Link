@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Divider, Surface, Text } from "react-native-paper";
 
@@ -18,15 +18,25 @@ export const UserDetail = (userData: any) => {
           />
         </View>
         <View style={style.informationSection}>
-          <Text style={style.fullName}>
-            {data.firstName} {data.middleName !== null && data.middleName}{" "}
-            {data.lastName}
-          </Text>
-          {/* <Text>{data.user.userName}</Text>
-          <View style={{ flexDirection: "row", margin: 5 }}>
-            <EvilIcons name="location" size={20} color="blue" />
-            <Text>{data.user.address}</Text>
-          </View> */}
+          {data.user.type === 1 ? (
+            <Text style={style.fullName}>
+              {data.firstName} {data.middleName !== null && data.middleName}{" "}
+              {data.lastName}
+            </Text>
+          ) : (
+            <Text style={style.fullName}>{data.name}</Text>
+          )}
+          <Text variant="bodySmall">{data.user.userName}</Text>
+          {data.user.type === 2 && (
+            <>
+              <Text variant="bodyMedium">{data.user.phoneNumber}</Text>
+              <View style={{ flexDirection: "row", margin: 5 }}>
+                <EvilIcons name="location" size={20} color="blue" />
+                <Text>{data.user.address}</Text>
+              </View>
+            </>
+          )}
+
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <MaterialCommunityIcons
               name="email-outline"

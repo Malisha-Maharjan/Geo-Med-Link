@@ -20,17 +20,23 @@ import { Row } from "~/components";
 import { useUserContext } from "~/context/userContext";
 import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
 import { Comment } from "./Comment/comment";
+import { Delete } from "./delete";
 import { Report } from "./report";
 
 export const Post = (value: any) => {
   const navigation = useNavigation<RootStackNavigationProps>();
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [isReportDialogVisible, setIsReportDialogVisible] = useState(false);
+  const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const { username: currentUsername } = useUserContext();
 
-  const toggleIsDialogVisible = () => {
-    setIsDialogVisible(!isDialogVisible);
+  const toggleIsReportDialogVisible = () => {
+    setIsReportDialogVisible(!isReportDialogVisible);
+  };
+
+  const toggleIsDeleteDialogVisible = () => {
+    setIsDeleteDialogVisible(!isDeleteDialogVisible);
   };
   const data = value.value;
 
@@ -128,26 +134,13 @@ export const Post = (value: any) => {
             <TouchableRipple
               style={styles.bottomSheetContent}
               onPress={() => {
-                bottomSheetModalRef.current?.dismiss(), toggleIsDialogVisible();
+                bottomSheetModalRef.current?.dismiss(),
+                  toggleIsReportDialogVisible();
               }}
             >
               <Row style={{ alignItems: "center" }}>
                 <Feather name="flag" size={20} color="red" />
-                <Text
-                  style={{ color: "red" }}
-                  onPress={() => {
-                    toggleIsDialogVisible(),
-                      (
-                        <Report
-                          isVisible={isVisible}
-                          toggleIsVisible={toggleIsDialogVisible}
-                          postId={data.id}
-                        />
-                      );
-                  }}
-                >
-                  Report
-                </Text>
+                <Text style={{ color: "red" }}>Report</Text>
               </Row>
             </TouchableRipple>
           )}
@@ -155,7 +148,10 @@ export const Post = (value: any) => {
             !data.user.userName) && (
             <TouchableRipple
               style={styles.bottomSheetContent}
-              onPress={() => {}}
+              onPress={() => {
+                bottomSheetModalRef.current?.dismiss(),
+                  toggleIsDeleteDialogVisible();
+              }}
             >
               <Row style={{ alignItems: "center" }}>
                 <MaterialIcons name="delete-outline" size={20} color="black" />
@@ -166,10 +162,26 @@ export const Post = (value: any) => {
         </BottomSheetScrollView>
       </BottomSheetModal>
       <Portal>
-        <Dialog visible={isDialogVisible} onDismiss={toggleIsDialogVisible}>
+        <Dialog
+          visible={isReportDialogVisible}
+          onDismiss={toggleIsReportDialogVisible}
+        >
           <Report
-            isVisible={isDialogVisible}
-            toggleIsVisible={toggleIsDialogVisible}
+            isVisible={isReportDialogVisible}
+            toggleIsVisible={toggleIsReportDialogVisible}
+            postId={data.id}
+          />
+        </Dialog>
+      </Portal>
+
+      <Portal>
+        <Dialog
+          visible={isDeleteDialogVisible}
+          onDismiss={toggleIsDeleteDialogVisible}
+        >
+          <Delete
+            isVisible={isDeleteDialogVisible}
+            toggleIsVisible={toggleIsDeleteDialogVisible}
             postId={data.id}
           />
         </Dialog>
