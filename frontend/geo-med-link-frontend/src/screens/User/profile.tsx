@@ -36,9 +36,11 @@ export const Profile = ({ route }: ProfileProps | ProfileStackProps) => {
   if (!data) return <Text> No data</Text>;
 
   return (
-    <View style={{ backgroundColor: "white", flex: 1 }}>
-      <Header>
-        <Text style={{ fontSize: 25, fontWeight: "bold" }}>Profile</Text>
+    <View style={{ backgroundColor: "#80BCBD", flex: 1 }}>
+      <Header style={{ backgroundColor: "#80BCBD" }}>
+        <Text style={{ fontSize: 25, fontWeight: "bold", color: "white" }}>
+          Profile
+        </Text>
         {((usernameParam && usernameParam === currentUsername) ||
           !usernameParam) && (
           <IconButton
@@ -113,8 +115,10 @@ const style = StyleSheet.create({
     paddingTop: 10,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "red",
   },
   informationSection: {
+    backgroundColor: "red",
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -130,12 +134,14 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: "grey",
+    // backgroundColor: "grey",
+    backgroundColor: "red",
   },
   bottomSheetContent: {
     padding: 10,
   },
   bottomSheetContentText: {
+    // backgroundColor:'red', // yo chai tyo option kholda aaune wala ko list ko bg color
     fontSize: 15,
     fontWeight: "600",
   },
