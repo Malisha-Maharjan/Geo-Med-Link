@@ -3,18 +3,13 @@ import BottomSheet, {
   BottomSheetFooter,
   BottomSheetHandle,
 } from "@gorhom/bottom-sheet";
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import {
-  Avatar,
-  Button,
-  Divider,
-  Portal,
-  Text,
-  TextInput,
-} from "react-native-paper";
+import React, { useCallback, useMemo, useRef } from "react";
+import { StyleSheet } from "react-native";
+import { Divider, Portal, Text } from "react-native-paper";
+import { useUserContext } from "~/context/userContext";
 import { Loader } from "~/helper/loader";
 import { useFetchComment } from "~/hooks/post/useCommentApi";
+import { AddComment } from "./Components/addComment";
 import { ViewComment } from "./Components/viewComment";
 
 type CommentProps = {
@@ -23,36 +18,11 @@ type CommentProps = {
   postId: number;
 };
 export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
-  const [comment, setComment] = useState("");
   const commentBottomSheetModalRef = useRef<BottomSheet>(null);
+  const { username } = useUserContext();
+  console.log("this is comment");
+  console.log({ username });
   const snapPoints = useMemo(() => ["25%", "50%", "70%"], []);
-  const onPostComment = () => {
-    setComment("");
-  };
-  const renderFooter = useCallback(
-    (props: any) => (
-      <BottomSheetFooter {...props} bottomInset={20}>
-        <View style={styles.CommentBox}>
-          <View style={styles.comment}>
-            <Avatar.Image size={30} source={require("../../mydp.png")} />
-            <TextInput
-              style={styles.commentSection}
-              placeholder="Comment"
-              multiline={true}
-              value={comment}
-              onChangeText={(comment) => setComment(comment)}
-            />
-          </View>
-          <View style={styles.CommentAction}>
-            <Button onPress={onPostComment} mode="contained-tonal">
-              <Text style={{ fontWeight: "bold" }}>Comment</Text>
-            </Button>
-          </View>
-        </View>
-      </BottomSheetFooter>
-    ),
-    []
-  );
   const handler = useCallback(
     (props: any) => (
       <BottomSheetHandle {...props} bottomInset={20}>
@@ -63,7 +33,7 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
             textAlign: "center",
           }}
         >
-          Comment
+          Comments
         </Text>
       </BottomSheetHandle>
     ),
@@ -94,18 +64,26 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
         index={1}
         enablePanDownToClose
         onClose={toggleComment}
-        footerComponent={renderFooter}
+        footerComponent={(props) => (
+          <BottomSheetFooter {...props} bottomInset={20}>
+            <AddComment postId={postId} />
+          </BottomSheetFooter>
+        )}
         handleComponent={handler}
         handleStyle={{ backgroundColor: "#FAF7F0" }}
-        style={{ backgroundColor: "#FAF7F0" }}
+        style={{ backgroundColor: "blue" }}
       >
         <BottomSheetFlatList
           data={data}
           renderItem={({ item }) => <ViewComment value={item} />}
           ItemSeparatorComponent={() => <Divider bold />}
           keyExtractor={(item) => item.id}
-          ListEmptyComponent={<Text>Empty Comment</Text>}
-          style={{ backgroundColor: "#FAF7F0" }}
+          ListEmptyComponent={
+            <Text style={{ paddingLeft: 40 }}>No Comments</Text>
+          }
+          refreshing={!isStale}
+          onRefresh={refetch}
+          style={{ backgroundColor: "red" }}
         />
       </BottomSheet>
     </Portal>
@@ -114,24 +92,28 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
 
 const styles = StyleSheet.create({
   CommentBox: {
-    backgroundColor: "white",
+    backgroundColor: "#176B87",
     paddingLeft: 10,
     borderWidth: 1,
     borderBottomColor: "black",
     paddingTop: 10,
+    bottom: -20,
   },
   comment: {
     flexDirection: "row",
     alignItems: "center",
+    // backgroundColor: 'tan',
   },
   commentSection: {
     // backgroundColor: "transparent",
     width: "85%",
+    // backgroundColor: 'orange',
     fontSize: 14,
   },
   CommentAction: {
     alignItems: "center",
     paddingTop: 5,
     margin: 10,
+    // backgroundColor: 'aqua',
   },
 });

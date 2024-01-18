@@ -1,12 +1,12 @@
 import {
-  QueryClient,
   useInfiniteQuery,
   useMutation,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { useUserContext } from "~/context/userContext";
 
 const BASEURL = process.env.EXPO_PUBLIC_API_URL;
-const queryClient = new QueryClient();
+
 type PostCommentParams = {
   comment: string;
   postId: number;
@@ -14,6 +14,9 @@ type PostCommentParams = {
 
 export const usePostComment = () => {
   const { username } = useUserContext();
+  const queryClient = useQueryClient();
+  console.log("this is posting");
+  console.log({ username });
   return useMutation({
     mutationFn: async ({ comment, postId }: PostCommentParams) => {
       const data = await fetch(`${BASEURL}/api/comment`, {
@@ -31,7 +34,7 @@ export const usePostComment = () => {
 };
 
 export const useFetchComment = (postId: number) => {
-  console.log("fetching comment");
+  // console.log("fetching comment");
   return useInfiniteQuery({
     queryKey: ["comment", postId],
     queryFn: async () => {

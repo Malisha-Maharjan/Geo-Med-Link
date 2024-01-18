@@ -7,7 +7,7 @@ import { Avatar, Button, Text, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Header } from "~/components";
 import { Loader } from "~/helper/loader";
-import { usePost } from "~/hooks/post/usePostApi";
+import { useAddPost } from "~/hooks/post/usePostApi";
 import { useFetchUser } from "~/hooks/user/useUserApi";
 import { TabNavigationProps } from "~/navigations/Bottom/bottom-stack.types";
 
@@ -15,7 +15,7 @@ export const UploadPost = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [postText, setPostText] = useState("");
   const navigation = useNavigation<TabNavigationProps>();
-  const { mutate: postApi } = usePost();
+  const { mutate: postApi } = useAddPost();
   const { data: response, isLoading } = useFetchUser();
   const data = response?.data;
 
@@ -56,14 +56,15 @@ export const UploadPost = () => {
     <View style={styles.container}>
       <Header>
         <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-          <Avatar.Image size={32} source={require("../mydp.png")} />
+          <Avatar.Image
+            size={40}
+            source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+          />
           <Text variant="headlineSmall" style={{ fontWeight: "bold" }}>
             {data.user.userName}
           </Text>
         </View>
-        {/* <Pressable style={styles.PostBtn} onPress={upload} disabled={true}>
-          <Text style={styles.PostText}>Post</Text>
-        </Pressable> */}
+
         <Button mode="elevated" disabled={!canPost()} onPress={upload}>
           Post
         </Button>

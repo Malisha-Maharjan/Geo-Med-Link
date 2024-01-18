@@ -17,12 +17,14 @@ export const NewsFeed = () => {
     refetch,
   } = useFetchPost();
   // console.log(response?.pageParams);
+  // console.log(data);
   const data = response?.pages.flatMap((item) => item.data.data);
-  console.log({ data: data });
+  // console.log({ data: data });
   console.log({ hasNextPage });
   if (isLoading) return <Loader />;
   console.log({ isStale });
-  if (!data || data.length === 0) return <Text>No Data</Text>;
+  if (!data || data.length === 0 || data === undefined)
+    return <Text>No Data</Text>;
 
   return (
     <FlatList

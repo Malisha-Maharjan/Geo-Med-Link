@@ -23,6 +23,8 @@ export const Profile = ({ route }: ProfileProps | ProfileStackProps) => {
   const navigation = useNavigation<RootStackNavigationProps>();
   const [isVisible, setIsVisible] = useState(false);
   const data = response?.data;
+  console.log("This is profile");
+  console.log({ data });
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePress = () => {
@@ -33,7 +35,7 @@ export const Profile = ({ route }: ProfileProps | ProfileStackProps) => {
 
   if (isLoading) return <Loader />;
 
-  if (!data) return <Text> No data</Text>;
+  // if (!data) return <Text> No data</Text>;
 
   return (
     <View style={{ backgroundColor: "#80BCBD", flex: 1 }}>

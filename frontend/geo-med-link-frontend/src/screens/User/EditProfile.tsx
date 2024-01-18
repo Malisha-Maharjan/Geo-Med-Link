@@ -30,33 +30,76 @@ export const EditProfile = () => {
           </Pressable>
         </View>
         <View style={style.inputBox}>
-          <View style={{ marginBottom: 10 }}>
-            <Text style={{ marginBottom: 8, fontSize: 14 }}>First Name</Text>
-            <TextInput
-              placeholder={data.firstName}
-              mode="outlined"
-              style={style.textInput}
-              value={""}
-            />
-          </View>
-          <View style={{ marginBottom: 10 }}>
-            <Text style={{ marginBottom: 8, fontSize: 14 }}>Middle Name</Text>
-            <TextInput
-              placeholder={data.middleName === null ? "" : data.middleName}
-              mode="outlined"
-              style={style.textInput}
-              value={""}
-            />
-          </View>
-          <View style={{ marginBottom: 10 }}>
-            <Text style={{ marginBottom: 8, fontSize: 14 }}>Last Name</Text>
-            <TextInput
-              placeholder={data.lastName}
-              mode="outlined"
-              style={style.textInput}
-              value={""}
-            />
-          </View>
+          {data.user.type === 1 ? (
+            <>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ marginBottom: 8, fontSize: 14 }}>
+                  First Name
+                </Text>
+                <TextInput
+                  placeholder={data.firstName}
+                  mode="outlined"
+                  style={style.textInput}
+                  value={""}
+                />
+              </View>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ marginBottom: 8, fontSize: 14 }}>
+                  Middle Name
+                </Text>
+                <TextInput
+                  placeholder={data.middleName === null ? "" : data.middleName}
+                  mode="outlined"
+                  style={style.textInput}
+                  value={""}
+                />
+              </View>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ marginBottom: 8, fontSize: 14 }}>Last Name</Text>
+                <TextInput
+                  placeholder={data.lastName}
+                  mode="outlined"
+                  style={style.textInput}
+                  value={""}
+                />
+              </View>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ marginBottom: 8, fontSize: 14 }}>
+                  Blood Group
+                </Text>
+                <TextInput
+                  placeholder={
+                    data.blood_Group === null ? "" : data.blood_Group
+                  }
+                  mode="outlined"
+                  style={style.textInput}
+                  value={""}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ marginBottom: 8, fontSize: 14 }}>Name</Text>
+                <TextInput
+                  placeholder={data.name}
+                  mode="outlined"
+                  style={style.textInput}
+                  value={""}
+                />
+              </View>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ marginBottom: 8, fontSize: 14 }}>Bio</Text>
+                <TextInput
+                  placeholder={data.bio}
+                  mode="outlined"
+                  style={style.textInput}
+                  value={""}
+                />
+              </View>
+            </>
+          )}
+
           <View style={{ marginBottom: 10 }}>
             <Text style={{ marginBottom: 8, fontSize: 14 }}>
               Contact Number
@@ -77,15 +120,7 @@ export const EditProfile = () => {
               value={""}
             />
           </View>
-          <View style={{ marginBottom: 10 }}>
-            <Text style={{ marginBottom: 8, fontSize: 14 }}>Blood Group</Text>
-            <TextInput
-              placeholder={data.blood_Group === null ? "" : data.blood_Group}
-              mode="outlined"
-              style={style.textInput}
-              value={""}
-            />
-          </View>
+
           <View style={{ marginBottom: 10 }}>
             <Text style={{ marginBottom: 8, fontSize: 14 }}>Email</Text>
             <TextInput

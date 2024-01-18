@@ -1,14 +1,13 @@
 import {
-  QueryClient,
   useInfiniteQuery,
   useMutation,
   useQuery,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { useState } from "react";
 import { useUserContext } from "~/context/userContext";
 const BASEURL = process.env.EXPO_PUBLIC_API_URL;
 
-const queryClient = new QueryClient();
 export const useFetchPost = () => {
   console.log("This is fetching apo");
   const [take, setValue] = useState(5);
@@ -76,8 +75,9 @@ export type PostParams = {
   photo?: string | undefined;
 };
 
-export const usePost = () => {
+export const useAddPost = () => {
   const { username } = useUserContext();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ post, photo }: PostParams) => {
       const data = await fetch(`${BASEURL}/api/post/create`, {
@@ -86,11 +86,13 @@ export const usePost = () => {
         body: JSON.stringify({ post, photo, userName: username }),
       });
       const response = await data.json();
-
+      console.log("This is uploaded post");
       return response;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log({ onSucessData: data });
       queryClient.invalidateQueries({ queryKey: ["all post"] });
+      queryClient.invalidateQueries({ queryKey: ["post"] });
     },
   });
 };

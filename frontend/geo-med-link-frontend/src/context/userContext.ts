@@ -4,7 +4,7 @@ import { UserData } from "~/hooks/user/useUser";
 const UserContext = createContext<UserData>({
   setUsername: () => {},
   setToken: () => {},
-  setUserType: () => {},
+  setImage: () => {},
 });
 
 export const UserContextProvider = UserContext.Provider;

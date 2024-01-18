@@ -31,7 +31,7 @@ export const News = () => {
         ItemSeparatorComponent={() => <Divider bold />}
         ListEmptyComponent={() => <Text>No Data</Text>}
         keyExtractor={(item) => item.id}
-        ListFooterComponent={() => <Loader />}
+        ListFooterComponent={() => hasNextPage && <Loader />}
         refreshing={!isStale}
         onRefresh={() => {
           refetch();

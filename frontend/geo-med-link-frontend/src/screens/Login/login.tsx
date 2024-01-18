@@ -13,7 +13,7 @@ export const LoginScreen = () => {
   const {
     setUsername: setContextUsername,
     setToken: setContextToken,
-    setUserType: setUserType,
+    setImage: setImage,
   } = useUserContext();
   const { mutateAsync: login, error } = useLogin();
 
@@ -21,7 +21,7 @@ export const LoginScreen = () => {
     const response = await login({ username, password });
     setContextUsername(response.data.username);
     setContextToken(response.data.token);
-    setUserType(response.data.userType);
+    setImage(response.data.image);
   };
 
   return (

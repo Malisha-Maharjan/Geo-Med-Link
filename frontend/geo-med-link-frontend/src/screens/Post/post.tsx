@@ -55,12 +55,27 @@ export const Post = (value: any) => {
                 navigation.navigate("Profile", { username: data.user.userName })
               }
             >
-              <Avatar.Image size={40} source={require("../mydp.png")} />
-              <Text style={styles.userName}>{data.user.userName}</Text>
+              {data.user.photo === "" || data.user.photo === null ? (
+                <View style={styles.defaultPicture}>
+                  <Avatar.Image size={40} source={require("../mydp.png")} />
+                </View>
+              ) : (
+                <Avatar.Image
+                  size={40}
+                  source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+                />
+              )}
+
+              <View style={styles.nameAndDateWrapper}>
+                <Text style={styles.userName}>{data.user.userName}</Text>
+                <Text variant="bodySmall">
+                  {dayjs(data.date).format("MMM D, YYYY")}
+                </Text>
+              </View>
             </Pressable>
             <IconButton
               icon={() => (
-                <Entypo name="dots-three-vertical" size={24} color="black" />
+                <Entypo name="dots-three-vertical" size={18} color="black" />
               )}
               onPress={() => bottomSheetModalRef.current?.present()}
               style={styles.reportIcon}
@@ -72,9 +87,6 @@ export const Post = (value: any) => {
                 {data.post}
               </Text>
             )}
-            <Text variant="bodySmall">
-              {dayjs(data.date).format("MMM D, YYYY")}
-            </Text>
           </Card.Content>
 
           <View style={styles.ImageBox}>
@@ -91,11 +103,14 @@ export const Post = (value: any) => {
           <View style={styles.Interactive}>
             <Button
               icon={() => (
-                <Iconll name="like2" size={18} style={styles.reactionIcon} />
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                  <Iconll name="like2" size={18} style={styles.reactionIcon} />
+                  <Iconll name="like1" size={18} style={styles.reactionIcon} />
+                </View>
               )}
               onPress={() => {}}
             >
-              Like
+              <Text style={styles.InteractiveFont}>Like</Text>
             </Button>
             <Button
               icon={() => (
@@ -107,7 +122,7 @@ export const Post = (value: any) => {
               )}
               onPress={toggleComment}
             >
-              Comment
+              <Text style={styles.InteractiveFont}>Comment</Text>
             </Button>
           </View>
         </Card>
@@ -201,44 +216,42 @@ export const Post = (value: any) => {
 const styles = StyleSheet.create({
   PostContainer: {
     width: "100%",
-    backgroundColor: "white",
-    // padding: 5,
+    backgroundColor: "#FBF9F1",
     flexDirection: "column",
     justifyContent: "center",
+    paddingTop: 3,
   },
   Post: {
-    paddingBottom: 5,
-    paddingTop: 5,
     width: "100%",
     borderRadius: 0,
     backgroundColor: "white",
-    justifyContent: "center",
   },
   postTop: {
     marginTop: 5,
     height: 40,
     marginBottom: 10,
     paddingLeft: 10,
-    paddingRight: 10,
+    paddingRight: 5,
     justifyContent: "space-between",
     flexDirection: "row",
   },
   postUser: {
     flexDirection: "row",
     alignItems: "center",
+    // backgroundColor:"#AAD7D9"
   },
   caption: {
     textAlign: "justify",
     color: "black",
     marginBottom: 8,
+    fontSize: 15,
+    // backgroundColor:'aqua',
+    lineHeight: 18,
   },
   userName: {
     color: "black",
     fontWeight: "bold",
-    textAlign: "left",
     fontSize: 16,
-    paddingLeft: 10,
-    height: 30,
   },
 
   Interactive: {
@@ -246,14 +259,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
+    // backgroundColor:"#92C7CF",
+    borderTopWidth: 1,
+    borderTopColor: "#d9d9d9",
+  },
+  InteractiveFont: {
+    fontSize: 12,
   },
 
   ImageBox: {
     width: "100%",
     justifyContent: "center",
-    marginTop: 10,
-    paddingRight: 15,
-    paddingLeft: 15,
+    marginTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   reportIcon: {
     margin: 0,
@@ -267,5 +286,13 @@ const styles = StyleSheet.create({
   bottomSheetContentText: {
     fontSize: 15,
     fontWeight: "600",
+  },
+  defaultPicture: {
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 25,
+  },
+  nameAndDateWrapper: {
+    paddingLeft: 10,
   },
 });

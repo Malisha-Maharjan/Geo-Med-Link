@@ -24,8 +24,6 @@ export const UserFeed = (userData: any) => {
   console.log(hasNextPage);
   if (isLoading) return <Loader />;
   console.log({ isStale });
-  if (!data || data.length === 0) return <Text>No Data</Text>;
-
   return (
     <FlatList
       data={data}
@@ -34,7 +32,7 @@ export const UserFeed = (userData: any) => {
       ListHeaderComponent={() => <UserDetail userData={userData} />}
       ListEmptyComponent={() => <Text>No Data</Text>}
       keyExtractor={(item) => item.id}
-      // ListFooterComponent={() => <Loader />}
+      ListFooterComponent={() => hasNextPage && <Loader />}
       refreshing={!isStale}
       onRefresh={refetch}
       onEndReached={() => {

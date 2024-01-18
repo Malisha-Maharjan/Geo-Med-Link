@@ -1,6 +1,15 @@
 import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Divider, Surface, Text } from "react-native-paper";
+export enum services {
+  MRI = 1,
+  CT_SCAN = 2,
+  ULTRA_SOUND = 3,
+  BLOOD_BANKS = 4,
+  DIALYSIS = 5,
+  AMBULANCE = 6,
+  PHYSIOTHERAPY = 7,
+}
 
 export const UserDetail = (userData: any) => {
   const data = userData.userData.userData;
@@ -11,9 +20,7 @@ export const UserDetail = (userData: any) => {
       <View style={style.topSection}>
         <View style={style.imageBox}>
           <Avatar.Image
-            source={{
-              uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-jw3DYEpt3FiWbJ2o9LFCU_J4oHfFCXNFVg&usqp=CAU",
-            }}
+            source={{ uri: `data:image/png;base64,${data.user.photo}` }}
             size={120}
           />
         </View>
@@ -34,6 +41,7 @@ export const UserDetail = (userData: any) => {
                 <EvilIcons name="location" size={20} color="blue" />
                 <Text>{data.user.address}</Text>
               </View>
+              <Text>{data.services}</Text>
             </>
           )}
 
