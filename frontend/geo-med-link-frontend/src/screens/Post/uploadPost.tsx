@@ -56,10 +56,15 @@ export const UploadPost = () => {
     <View style={styles.container}>
       <Header>
         <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-          <Avatar.Image
-            size={40}
-            source={{ uri: `data:image/png;base64,${data.user.photo}` }}
-          />
+          {!data.user.photo ? (
+            <Avatar.Image size={40} source={require("../mydp.png")} />
+          ) : (
+            <Avatar.Image
+              size={40}
+              source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+            />
+          )}
+
           <Text variant="headlineSmall" style={{ fontWeight: "bold" }}>
             {data.user.userName}
           </Text>

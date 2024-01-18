@@ -18,12 +18,14 @@ export const EditProfile = () => {
       <ScrollView>
         <View style={style.topSection}>
           <View style={style.imageBox}>
-            <Avatar.Image
-              source={{
-                uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-jw3DYEpt3FiWbJ2o9LFCU_J4oHfFCXNFVg&usqp=CAU",
-              }}
-              size={120}
-            />
+            {!data.user.photo ? (
+              <Avatar.Image size={120} source={require("../mydp.png")} />
+            ) : (
+              <Avatar.Image
+                size={120}
+                source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+              />
+            )}
           </View>
           <Pressable style={style.changePicture}>
             <Text>Change Picture</Text>

@@ -20,11 +20,15 @@ export const AddComment = ({ postId }: AddCommentProps) => {
   return (
     <View style={styles.CommentBox}>
       <View style={styles.comment}>
-        <Avatar.Image
-          size={30}
-          // source={{ uri: `data:image/png;base64,${image}` }}
-          source={require("../../../mydp.png")}
-        />
+        {!image ? (
+          <Avatar.Image size={30} source={require("../../../mydp.png")} />
+        ) : (
+          <Avatar.Image
+            size={30}
+            source={{ uri: `data:image/png;base64,${image}` }}
+          />
+        )}
+
         <TextInput
           style={styles.commentSection}
           placeholder="Comment"

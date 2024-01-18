@@ -19,10 +19,14 @@ export const UserDetail = (userData: any) => {
     <>
       <View style={style.topSection}>
         <View style={style.imageBox}>
-          <Avatar.Image
-            source={{ uri: `data:image/png;base64,${data.user.photo}` }}
-            size={120}
-          />
+          {!data.user.photo ? (
+            <Avatar.Image size={120} source={require("../mydp.png")} />
+          ) : (
+            <Avatar.Image
+              size={120}
+              source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+            />
+          )}
         </View>
         <View style={style.informationSection}>
           {data.user.type === 1 ? (

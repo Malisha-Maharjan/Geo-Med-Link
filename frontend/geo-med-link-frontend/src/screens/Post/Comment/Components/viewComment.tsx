@@ -6,14 +6,22 @@ export const ViewComment = (value: any) => {
   const data = value.value;
 
   console.log("Data testing", data);
-
   return (
     <View style={styles.comment}>
-      <Avatar.Image
-        size={30}
-        source={{ uri: `data:image/png;base64,${data.user.photo}` }}
-        style={styles.avatarStyle}
-      />
+      {!data.user.photo ? (
+        <Avatar.Image
+          size={30}
+          source={require("../../../mydp.png")}
+          style={styles.avatarStyle}
+        />
+      ) : (
+        <Avatar.Image
+          size={30}
+          source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+          style={styles.avatarStyle}
+        />
+      )}
+
       <View style={styles.viewCommentContent}>
         <View>
           <Text style={styles.userName}>{data.user.userName}</Text>

@@ -14,19 +14,19 @@ export default function App() {
   const user = useUser();
   return (
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <PaperProvider>
-          <BottomSheetModalProvider>
-            <SafeAreaProvider>
-              <NavigationContainer>
-                <UserContextProvider value={user}>
+      <UserContextProvider value={user}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <PaperProvider>
+            <BottomSheetModalProvider>
+              <SafeAreaProvider>
+                <NavigationContainer>
                   <RootStackNavigator />
-                </UserContextProvider>
-              </NavigationContainer>
-            </SafeAreaProvider>
-          </BottomSheetModalProvider>
-        </PaperProvider>
-      </GestureHandlerRootView>
+                </NavigationContainer>
+              </SafeAreaProvider>
+            </BottomSheetModalProvider>
+          </PaperProvider>
+        </GestureHandlerRootView>
+      </UserContextProvider>
     </QueryClientProvider>
   );
 }
