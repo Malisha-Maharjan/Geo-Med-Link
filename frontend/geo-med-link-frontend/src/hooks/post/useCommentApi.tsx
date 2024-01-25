@@ -3,6 +3,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useState } from "react";
 import { useUserContext } from "~/context/userContext";
 
 const BASEURL = process.env.EXPO_PUBLIC_API_URL;
@@ -15,6 +16,7 @@ type PostCommentParams = {
 export const usePostComment = () => {
   const { username } = useUserContext();
   const queryClient = useQueryClient();
+  const [id, setId] = useState(0);
   console.log("this is posting");
   console.log({ username });
   return useMutation({
@@ -24,11 +26,19 @@ export const usePostComment = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ comment, userName: username, postId }),
       });
+      setId(postId);
       const response = await data.json();
       return response;
     },
+    // onMutate: async({ comment, postId }: PostCommentParams)=> {
+    //   await queryClient.cancelQueries({ queryKey: ['comment', id] })
+    //   const previousComments = queryClient.getQueryData(['comment', id])
+    //   queryClient.setQueryData(['comment', id], (old:any) => { return {...old, data:[...old.data, {id:}]}})
+    // },
+    // onError: ()=> {},
+    // onSettled: ()=> {}
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comment"] });
+      queryClient.invalidateQueries({ queryKey: ["comment", id] });
     },
   });
 };
