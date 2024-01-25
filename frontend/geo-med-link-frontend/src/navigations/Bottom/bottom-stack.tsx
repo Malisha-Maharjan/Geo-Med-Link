@@ -30,6 +30,7 @@ export const BottomTabNavigator = () => {
               <MaterialCommunityIcons name="post" size={24} color="black" />
             ),
             title: "Post",
+            headerShown: false,
           }}
         ></Screen>
         <Screen

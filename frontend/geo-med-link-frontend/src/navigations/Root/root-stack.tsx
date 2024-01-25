@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useUserContext } from "~/context/userContext";
 import { LoginScreen } from "~/screens/Login/login";
 // import { Comment } from "~/screens/Post/Comment/comment";
+import { Search } from "~/screens/Search/search";
 import { EditProfile } from "~/screens/User/EditProfile";
 import { ChangePassword } from "~/screens/User/changePassword";
 import { Profile } from "~/screens/User/profile";
@@ -31,6 +32,11 @@ export const RootStackNavigator = () => {
           <Screen
             name="Profile"
             component={Profile}
+            options={{ headerShown: false }}
+          />
+          <Screen
+            name="Search"
+            component={Search}
             options={{ headerShown: false }}
           />
         </>

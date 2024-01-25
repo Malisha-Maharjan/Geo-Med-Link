@@ -7,6 +7,7 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   EditProfile: undefined;
   Profile: { username: string };
+  Search: undefined;
 };
 // export type CommentProps = NativeStackScreenProps<
 //   RootStackParamList,
