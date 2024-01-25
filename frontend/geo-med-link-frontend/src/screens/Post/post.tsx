@@ -13,11 +13,13 @@ import {
   Portal,
   Text,
   TouchableRipple,
+  useTheme,
 } from "react-native-paper";
 import Iconll from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Row } from "~/components";
 import { useUserContext } from "~/context/userContext";
+import { useToggleLike } from "~/hooks/post/useLikeApi";
 import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
 import { Comment } from "./Comment/comment";
 import { Delete } from "./delete";
@@ -29,7 +31,9 @@ export const Post = (value: any) => {
   const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const { mutate: toggleLike } = useToggleLike();
   const { username: currentUsername } = useUserContext();
+  const theme = useTheme();
 
   const toggleIsReportDialogVisible = () => {
     setIsReportDialogVisible(!isReportDialogVisible);
@@ -39,9 +43,14 @@ export const Post = (value: any) => {
     setIsDeleteDialogVisible(!isDeleteDialogVisible);
   };
   const data = value.value;
+  // console.log({ data });
 
   const toggleComment = () => {
     setIsVisible(!isVisible);
+  };
+
+  const likePost = (postId: number) => {
+    toggleLike(postId);
   };
 
   return (
@@ -52,24 +61,24 @@ export const Post = (value: any) => {
             <Pressable
               style={styles.postUser}
               onPress={() =>
-                navigation.navigate("Profile", { username: data.user.userName })
+                navigation.navigate("Profile", { username: data.userName })
               }
             >
-              {data.user.photo === "" || data.user.photo === null ? (
+              {data.user_photo === "" || data.user_photo === null ? (
                 <View style={styles.defaultPicture}>
                   <Avatar.Image size={40} source={require("../mydp.png")} />
                 </View>
               ) : (
                 <Avatar.Image
                   size={40}
-                  source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+                  source={{ uri: `data:image/png;base64,${data.photo}` }}
                 />
               )}
 
               <View style={styles.nameAndDateWrapper}>
-                <Text style={styles.userName}>{data.user.userName}</Text>
+                <Text style={styles.userName}>{data.userName}</Text>
                 <Text variant="bodySmall">
-                  {dayjs(data.date).format("MMM D, YYYY")}
+                  {dayjs(data.post_date).format("MMM D, YYYY")}
                 </Text>
               </View>
             </Pressable>
@@ -84,16 +93,16 @@ export const Post = (value: any) => {
           <Card.Content>
             {data.post !== "" && (
               <Text variant="bodyLarge" style={styles.caption}>
-                {data.post}
+                {data.post_post}
               </Text>
             )}
           </Card.Content>
 
           <View style={styles.ImageBox}>
-            {data.photo !== null && data.photo !== "" && (
+            {data.post_photo !== null && data.post_photo !== "" && (
               <Card.Cover
                 source={{
-                  uri: `data:image/png;base64,${data.photo}`,
+                  uri: `data:image/png;base64,${data.post_photo}`,
                 }}
                 style={{ borderRadius: 0 }}
               />
@@ -104,13 +113,18 @@ export const Post = (value: any) => {
             <Button
               icon={() => (
                 <View style={{ display: "flex", flexDirection: "row" }}>
-                  <Iconll name="like2" size={18} style={styles.reactionIcon} />
-                  <Iconll name="like1" size={18} style={styles.reactionIcon} />
+                  <Iconll
+                    name={data.isLiked ? "like1" : "like2"}
+                    size={18}
+                    style={data.isLiked && { color: theme.colors.primary }}
+                  />
                 </View>
               )}
-              onPress={() => {}}
+              onPress={() => likePost(data.post_id)}
             >
-              <Text style={styles.InteractiveFont}>Like</Text>
+              <Text style={data.isLiked && { color: theme.colors.primary }}>
+                Like
+              </Text>
             </Button>
             <Button
               icon={() => (
@@ -122,7 +136,7 @@ export const Post = (value: any) => {
               )}
               onPress={toggleComment}
             >
-              <Text style={styles.InteractiveFont}>Comment</Text>
+              <Text>Comment</Text>
             </Button>
           </View>
         </Card>
@@ -143,8 +157,8 @@ export const Post = (value: any) => {
           style={{ flex: 1, backgroundColor: "#FAF7F0" }}
         >
           {!(
-            (data.user.userName && data.user.userName === currentUsername) ||
-            !data.user.userName
+            (data.userName && data.userName === currentUsername) ||
+            !data.userName
           ) && (
             <TouchableRipple
               style={styles.bottomSheetContent}
@@ -159,8 +173,8 @@ export const Post = (value: any) => {
               </Row>
             </TouchableRipple>
           )}
-          {((data.user.userName && data.user.userName === currentUsername) ||
-            !data.user.userName) && (
+          {((data.userName && data.userName === currentUsername) ||
+            !data.userName) && (
             <TouchableRipple
               style={styles.bottomSheetContent}
               onPress={() => {
@@ -197,7 +211,7 @@ export const Post = (value: any) => {
           <Delete
             isVisible={isDeleteDialogVisible}
             toggleIsVisible={toggleIsDeleteDialogVisible}
-            postId={data.id}
+            postId={data.post_id}
           />
         </Dialog>
       </Portal>
@@ -206,7 +220,7 @@ export const Post = (value: any) => {
         <Comment
           isVisible={isVisible}
           toggleComment={toggleComment}
-          postId={data.id}
+          postId={data.post_id}
         />
       )}
     </>
