@@ -28,13 +28,31 @@ export const Report = ({
   return (
     <View>
       {/* <Dialog visible={isVisible} onDismiss={toggleIsVisible}> */}
-      <Dialog.Title>Report</Dialog.Title>
+      <Dialog.Title
+        style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
+      >
+        Report Post
+      </Dialog.Title>
       <Dialog.Content>
-        <Text variant="bodyMedium">Do you want to report this post?</Text>
+        <Text variant="bodyMedium" style={{ textAlign: "center" }}>
+          Are you sure you want to report this post?
+        </Text>
       </Dialog.Content>
-      <Dialog.Actions>
-        <Button onPress={onPressYes}>Yes</Button>
-        <Button onPress={onPressNo}>No</Button>
+      <Dialog.Actions
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
+        <Button
+          onPress={onPressNo}
+          style={{ backgroundColor: "#f4f4f7", width: "45%" }}
+        >
+          <Text style={{ color: "black", fontWeight: "700" }}>Cancel</Text>
+        </Button>
+        <Button
+          onPress={onPressYes}
+          style={{ backgroundColor: "#ff3f56", width: "45%" }}
+        >
+          <Text style={{ color: "white", fontWeight: "700" }}>Report</Text>
+        </Button>
       </Dialog.Actions>
       {/* </Dialog> */}
     </View>

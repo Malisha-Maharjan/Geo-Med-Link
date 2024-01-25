@@ -10,7 +10,7 @@ export const ViewComment = (value: any) => {
     <View style={styles.comment}>
       {!data.user.photo ? (
         <Avatar.Image
-          size={30}
+          size={32}
           source={require("../../../mydp.png")}
           style={styles.avatarStyle}
         />
@@ -23,8 +23,11 @@ export const ViewComment = (value: any) => {
       )}
 
       <View style={styles.viewCommentContent}>
-        <View>
+        <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
           <Text style={styles.userName}>{data.user.userName}</Text>
+          <Text style={styles.date}>
+            {dayjs(data.date).format("MMM D, YYYY")}
+          </Text>
         </View>
         <View style={styles.commentAndLikeWrapper}>
           <View style={styles.actualCommentBox}>
@@ -37,15 +40,7 @@ export const ViewComment = (value: any) => {
             flexDirection: "row",
             justifyContent: "space-between",
           }}
-        >
-          <View
-            style={{
-              marginTop: 8,
-            }}
-          >
-            <Text>{dayjs(data.date).format("MMM D, YYYY")}</Text>
-          </View>
-        </View>
+        ></View>
       </View>
     </View>
   );
@@ -53,10 +48,11 @@ export const ViewComment = (value: any) => {
 
 const styles = StyleSheet.create({
   comment: {
-    padding: 4,
+    padding: 8,
     height: "auto",
     flexDirection: "row",
-    backgroundColor: "#B4D4FF",
+    // backgroundColor: '#B4D4FF',
+    backgroundColor: "#232322",
     gap: 10,
   },
   avatarStyle: {
@@ -66,21 +62,29 @@ const styles = StyleSheet.create({
     width: "85%",
   },
   userName: {
-    fontSize: 18,
+    fontSize: 12,
+    color: "white",
+    fontWeight: "700",
+    // fontWeight: 'bold',
+  },
+  date: {
+    fontSize: 12,
+    color: "white",
   },
   commentAndLikeWrapper: {
     display: "flex",
     flexDirection: "row",
+    color: "white",
   },
   actualCommentBox: {
     width: "100%",
-    backgroundColor: "#EEF5FF",
-    padding: 5,
     borderRadius: 10,
     marginTop: 8,
   },
   actualCommentBoxText: {
     textAlign: "justify",
+    fontSize: 12,
+    color: "white",
   },
   likeWrapper: {
     display: "flex",

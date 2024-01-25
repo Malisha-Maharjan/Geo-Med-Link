@@ -24,7 +24,7 @@ export const Profile = ({ route }: ProfileProps | ProfileStackProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const data = response?.data;
   console.log("This is profile");
-  console.log({ data });
+  // console.log({ data });
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePress = () => {

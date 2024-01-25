@@ -19,11 +19,11 @@ export const UserFeed = (userData: any) => {
     isStale,
     refetch,
   } = useFetchUserPost(user.user.userName);
-  console.log(response?.pageParams);
+  // console.log(response?.pageParams);
   const data = response?.pages.flatMap((item) => item.data.data);
-  console.log(hasNextPage);
+  // console.log(hasNextPage);
   if (isLoading) return <Loader />;
-  console.log({ isStale });
+  // console.log({ isStale });
   return (
     <FlatList
       data={data}

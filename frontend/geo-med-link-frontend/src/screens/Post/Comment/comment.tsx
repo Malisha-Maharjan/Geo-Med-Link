@@ -5,7 +5,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef } from "react";
 import { StyleSheet } from "react-native";
-import { Divider, Portal, Text } from "react-native-paper";
+import { Portal, Text } from "react-native-paper";
 import { useUserContext } from "~/context/userContext";
 import { Loader } from "~/helper/loader";
 import { useFetchComment } from "~/hooks/post/useCommentApi";
@@ -25,12 +25,23 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
   const snapPoints = useMemo(() => ["25%", "50%", "70%"], []);
   const handler = useCallback(
     (props: any) => (
-      <BottomSheetHandle {...props} bottomInset={20}>
+      <BottomSheetHandle
+        {...props}
+        style={{
+          backgroundColor: "#232322",
+          borderTopLeftRadius: 15,
+          borderTopRightRadius: 15,
+        }}
+        bottomInset={20}
+      >
         <Text
           variant="headlineSmall"
           style={{
+            backgroundColor: "#232322",
             fontWeight: "bold",
+            color: "white",
             textAlign: "center",
+            fontSize: 12,
           }}
         >
           Comments
@@ -71,19 +82,19 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
         )}
         handleComponent={handler}
         handleStyle={{ backgroundColor: "#FAF7F0" }}
-        style={{ backgroundColor: "blue" }}
+        // style={{ backgroundColor: 'blue' }}
       >
         <BottomSheetFlatList
           data={data}
           renderItem={({ item }) => <ViewComment value={item} />}
-          ItemSeparatorComponent={() => <Divider bold />}
+          // ItemSeparatorComponent={() => <Divider bold />}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={
             <Text style={{ paddingLeft: 40 }}>No Comments</Text>
           }
           refreshing={!isStale}
           onRefresh={refetch}
-          style={{ backgroundColor: "red" }}
+          style={{ backgroundColor: "#232322", marginBottom: 65 }}
         />
       </BottomSheet>
     </Portal>
@@ -92,7 +103,7 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
 
 const styles = StyleSheet.create({
   CommentBox: {
-    backgroundColor: "#176B87",
+    // backgroundColor: "#176B87",
     paddingLeft: 10,
     borderWidth: 1,
     borderBottomColor: "black",

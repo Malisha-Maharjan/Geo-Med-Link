@@ -13,7 +13,7 @@ export enum services {
 
 export const UserDetail = (userData: any) => {
   const data = userData.userData.userData;
-  console.log({ data });
+  // console.log({ data });
 
   return (
     <>

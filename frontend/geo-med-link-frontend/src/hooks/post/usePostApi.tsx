@@ -9,24 +9,27 @@ import { useUserContext } from "~/context/userContext";
 const BASEURL = process.env.EXPO_PUBLIC_API_URL;
 
 export const useFetchPost = () => {
-  console.log("This is fetching apo");
-  const [take, setValue] = useState(5);
+  console.log("This is fetching api");
+  const { token } = useUserContext();
+  console.log({ token });
   // console.log({ url: `${BASEURL}/api/post/organization1?pageNumber=${page}` });
   return useInfiniteQuery({
     queryKey: ["all post"],
     queryFn: async ({ pageParam }) => {
       const data = await fetch(
-        `${BASEURL}/api/post/all?pageNumber=${pageParam}?take=${take}`,
+        `${BASEURL}/api/post/all?pageNumber=${pageParam}`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
         }
       );
       console.log("fetfaf");
       // console.log(data);
       const response = await data.json();
-      console.log({ response: response?.data?.take });
-      setValue(response?.data?.take);
+      // console.log({ response: response?.data?.take });
       return response;
     },
     initialPageParam: 0,
@@ -56,7 +59,7 @@ export const useFetchUserPost = (username: string) => {
       );
       console.log("fetfaf");
       const response = await data.json();
-      console.log({ response: response?.data?.take });
+      // console.log({ response: response?.data?.take });
       setValue(response?.data?.take);
       return response;
     },
