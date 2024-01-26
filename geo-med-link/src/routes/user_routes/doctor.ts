@@ -18,6 +18,7 @@ const verifiedRouter = express.Router();
 const DoctorUpdateRouter = express.Router();
 const getDoctorRouter = express.Router();
 registerRouter.post("/api/register/doctor", async (req, res) => {
+  console.log(req.body);
   const data = req.body;
   DoctorSchema.parse(data);
   const user = await userRepository.findOne({
@@ -60,7 +61,7 @@ registerRouter.post("/api/register/doctor", async (req, res) => {
   await sendEmail(
     [user.email],
     "Registration Successful",
-    `<h>You have been successfully Registered.</h><br/><p>Following is your NMC number</p><br/><br/><p><b>User Name: ${doctor.NMC}</b><br/></p><b>"Please update if you NMC number is incorrect. You will be shortly verified my our teams"</b><p></p></br></br><p><i>Best Regards,</i></p><p>GeoMedLink</p>`
+    `<h>You have been successfully registered as doctor.</h><br/><$>Your NMC number is ${doctor.NMC}</b><br/></p><b>"You will be shortly verified."</b><p></p></br></br><p><i>Best Regards,</i></p><p>GeoMedLink</p>`
   );
 
   return createResponse<Doctor>(res, StatusCodes.OK, {

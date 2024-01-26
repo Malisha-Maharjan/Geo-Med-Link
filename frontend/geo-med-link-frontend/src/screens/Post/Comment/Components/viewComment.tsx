@@ -5,10 +5,10 @@ import { Avatar, Text } from "react-native-paper";
 export const ViewComment = (value: any) => {
   const data = value.value;
 
-  console.log("Data testing", data);
+  // console.log("Data testing", data);
   return (
     <View style={styles.comment}>
-      {!data.user.photo ? (
+      {!data.user_photo ? (
         <Avatar.Image
           size={32}
           source={require("../../../mydp.png")}
@@ -17,14 +17,14 @@ export const ViewComment = (value: any) => {
       ) : (
         <Avatar.Image
           size={30}
-          source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+          source={{ uri: `data:image/png;base64,${data.user_photo}` }}
           style={styles.avatarStyle}
         />
       )}
 
       <View style={styles.viewCommentContent}>
         <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-          <Text style={styles.userName}>{data.user.userName}</Text>
+          <Text style={styles.userName}>{data.userName}</Text>
           <Text style={styles.date}>
             {dayjs(data.date).format("MMM D, YYYY")}
           </Text>

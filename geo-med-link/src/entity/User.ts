@@ -1,8 +1,14 @@
 import { Length, Matches } from "class-validator";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Like } from "./Like";
 
 @Entity()
-// @Check("password", "^(?=.*[A-Z])(?=.*[a-z]).{8,}$")
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -35,6 +41,21 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   phoneNumber: string;
 
-  @Column({ nullable: true })
-  photo: string;
+  @Column({ nullable: true, type: "longtext" })
+  user_photo: string;
+
+  @Column({ nullable: false })
+  longitude: number;
+
+  @Column({ nullable: false })
+  latitude: number;
+
+  @Column({ nullable: false })
+  deviceId: string;
+
+  @Column({ default: false })
+  is_active: boolean;
+
+  @OneToMany(() => Like, (like) => like.user)
+  like: Like[];
 }

@@ -9,9 +9,12 @@ export const createUserSchema = z.object({
   password: z
     .string()
     .regex(/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/, "Password is invalid"),
+  image: z.string({ invalid_type_error: "Must be a string" }).nullable(),
   phoneNumber: z.number().nullable(),
   type: z.number(),
-  photo: z.string().nullable(),
+  longitude: z.number(),
+  latitude: z.number(),
+  deviceId: z.string(),
 });
 
 export const createPersonSchema = z.object({

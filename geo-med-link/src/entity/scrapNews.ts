@@ -17,6 +17,6 @@ export class Scrap extends BaseEntity {
   @Column()
   image_url: string;
 
-  @Column()
+  @Column({ type: "longtext" })
   paragraph: string;
 }

@@ -22,6 +22,7 @@ const getRouter = express.Router();
 const updateRouter = express.Router();
 
 createRouter.post("/api/user", async (req, res) => {
+  console.log(req.body);
   const userData = {
     userName: req.body["userName"],
     address: req.body["address"],
@@ -29,7 +30,10 @@ createRouter.post("/api/user", async (req, res) => {
     password: req.body["password"],
     phoneNumber: req.body["phoneNumber"],
     type: req.body["type"],
-    photo: req.body["photo"],
+    image: req.body["image"],
+    longitude: req.body["longitude"],
+    latitude: req.body["latitude"],
+    deviceId: req.body["deviceId"],
   };
   const existingUser = await userRepository.findOne({
     where: {
@@ -39,7 +43,7 @@ createRouter.post("/api/user", async (req, res) => {
   if (existingUser) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
-      error: { message: ["User name already existed"] },
+      error: { message: ["User name already exist"] },
     });
   }
   createUserSchema.parse(userData);
@@ -246,13 +250,6 @@ updateRouter.put("/api/user", async (req, res) => {
   });
 });
 
-// export {
-//   createRouter as createUser,
-//   deleteRouter as deleteUser,
-//   getAllRouter as getAllUser,
-//   getRouter as getUser,
-//   updateRouter as updateUser,
-// };
 export {
   createRouter as createUser,
   deleteRouter as deleteUser,

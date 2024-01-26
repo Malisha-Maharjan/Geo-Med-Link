@@ -94,6 +94,12 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
           }
           refreshing={!isStale}
           onRefresh={refetch}
+          onEndReached={() => {
+            if (!isFetching) {
+              // if (!hasNextPage) return <Text>No data available</Text>;
+              fetchNextPage();
+            }
+          }}
           style={{ backgroundColor: "#232322", marginBottom: 65 }}
         />
       </BottomSheet>

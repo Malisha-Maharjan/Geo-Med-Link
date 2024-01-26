@@ -1,5 +1,6 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
+import { AppDataSource } from "../../data-source";
 import {
   commentRepository,
   postRepository,
@@ -18,6 +19,7 @@ const updateCommentRouter = express.Router();
 
 postCommentRouter.post("/api/comment", async (req, res) => {
   const data = req.body;
+  console.log(data);
   commentSchema.parse(data);
   const user = await userRepository.findOne({
     where: {
@@ -55,9 +57,9 @@ postCommentRouter.post("/api/comment", async (req, res) => {
 });
 
 getCommentRouter.get("/api/comment/:postId", async (req, res) => {
-  const page = (req.query.pageNumber as string) || "0";
-  const limit = 10;
-  const skip = parseInt(page) * limit;
+  const page = parseInt((req.query.pageNumber as string) || "0");
+  const limit = 8;
+  const skip = page * limit;
 
   const data = { id: parseInt(req.params.postId) };
   IdSchema.parse(data);
@@ -74,29 +76,31 @@ getCommentRouter.get("/api/comment/:postId", async (req, res) => {
     });
   }
 
-  const comment = await commentRepository.find({
-    where: {
-      post: { id: post.id },
-    },
-    order: { date: "DESC" },
-    take: limit,
-    skip: skip,
-  });
+  // const comments = await commentRepository.find({
+  //   where: {
+  //     post: { id: post.id },
+  //   },
+
+  //   order: { date: "DESC" },
+  //   take: limit,
+  //   skip: skip,
+  // });
+  const comments = await AppDataSource.query(
+    `Select c.comment, c.date, u.userName, u.user_photo from comment as c left join user as u on u.id = c.userId where c.postId=${post.id} order by c.date desc Limit ${limit} offset ${skip} `
+  );
   const previous_link = `/api/comment/${data["id"]}?pageNumber=${page}`;
-  const next_link = `/api/comment/${data["id"]}?pageNumber=${
-    parseInt(page) + 1
-  }`;
-  if (!comment) {
+  const next_link = `/api/comment/${data["id"]}?pageNumber=${page + 1}`;
+  if (!comments) {
     return res.send("not found");
   }
 
   const result: paginated = {
-    current_page: parseInt(page),
+    current_page: page,
     take: limit,
-    next_page: parseInt(page) + 1,
+    next_page: comments.length !== limit ? undefined : page + 1,
     previous_link: previous_link,
     next_link: next_link,
-    data: comment,
+    data: comments,
   };
 
   return createResponse(res, StatusCodes.OK, {

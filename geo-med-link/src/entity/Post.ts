@@ -3,8 +3,10 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Like } from "./Like";
 import { User } from "./User";
 
 @Entity()
@@ -24,7 +26,7 @@ export class Post extends BaseEntity {
   photo: string;
 
   @Column({ default: 0 })
-  likes: number;
+  count_likes: number;
 
   @Column({ default: false })
   is_shared: Boolean;
@@ -37,4 +39,7 @@ export class Post extends BaseEntity {
 
   @ManyToOne(() => User, { eager: true, onDelete: "CASCADE" })
   user: User;
+
+  @OneToMany(() => Like, (like) => like.post)
+  like: Like[];
 }

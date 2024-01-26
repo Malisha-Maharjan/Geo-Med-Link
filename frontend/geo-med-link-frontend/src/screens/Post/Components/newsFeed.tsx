@@ -23,7 +23,8 @@ export const NewsFeed = () => {
   } = useFetchPost();
   const navigation = useNavigation<RootStackNavigationProps>();
   const { image } = useUserContext();
-  const data = response?.pages.flatMap((item) => item.data.data);
+  // console.log(JSON.stringify(response, null, 2));
+  const data = response?.pages?.flatMap((item) => item.data.data);
   const [searchValue, setSearchValue] = useState("");
 
   if (isLoading) return <Loader />;

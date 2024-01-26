@@ -39,7 +39,7 @@ export const useLogin = () => {
         body: JSON.stringify({ userName: username, password: password }),
       });
       const response = await data.json();
-      console.log({ response });
+      // console.log({ response });
       return response;
     },
   });

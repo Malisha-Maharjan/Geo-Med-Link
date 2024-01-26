@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { Post } from "../../entity/Post";
 import { postRepository, userRepository } from "../../repository";
 
+import { AppDataSource } from "../../data-source";
 import { paginated } from "../../types/paginated";
 import { createResponse } from "../../utils/response";
 import { createPostSchema } from "../../zod-schema/post-post";
@@ -10,7 +11,7 @@ import { sharedPostSchema } from "../../zod-schema/shared-post-schema";
 import { userNameSchema } from "../../zod-schema/user-schema";
 
 const createPostRouter = express.Router();
-const likePostRouter = express.Router();
+// const likePostRouter = express.Router();
 const getPostRouter = express.Router();
 const getPostOfUserRouter = express.Router();
 const getAllPostRouter = express.Router();
@@ -27,7 +28,7 @@ createPostRouter.post("/api/post/create", async (req, res) => {
       userName: data["userName"],
     },
   });
-  console.log(user);
+  // console.log(user);
 
   if (!user) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
@@ -55,26 +56,26 @@ createPostRouter.post("/api/post/create", async (req, res) => {
   });
 });
 
-likePostRouter.put("/api/post/like/:id", async (req, res) => {
-  const postId = { id: parseInt(req.params.id) };
-  const post = await postRepository.findOne({
-    where: {
-      id: postId["id"],
-    },
-  });
-  if (!post) {
-    return createResponse(res, StatusCodes.BAD_REQUEST, {
-      status: "error",
-      error: { message: ["Post not available"] },
-    });
-  }
-  post.likes = post.likes + 1;
-  post.save();
-  return createResponse(res, StatusCodes.OK, {
-    status: "success",
-    data: "Like Updated",
-  });
-});
+// likePostRouter.put("/api/post/like/:id", async (req, res) => {
+//   const postId = { id: parseInt(req.params.id) };
+//   const post = await postRepository.findOne({
+//     where: {
+//       id: postId["id"],
+//     },
+//   });
+//   if (!post) {
+//     return createResponse(res, StatusCodes.BAD_REQUEST, {
+//       status: "error",
+//       error: { message: ["Post not available"] },
+//     });
+//   }
+//   post.likes = post.likes + 1;
+//   post.save();
+//   return createResponse(res, StatusCodes.OK, {
+//     status: "success",
+//     data: "Like Updated",
+//   });
+// });
 
 getPostRouter.get("/api/post/get/:id", async (req, res) => {
   const postId = { id: parseInt(req.params.id) };
@@ -118,15 +119,27 @@ getPostOfUserRouter.get("/api/post/:userName", async (req, res) => {
     });
   }
 
-  const post = await postRepository.find({
-    where: {
-      user: { id: user.id },
-    },
-    order: { date: "DESC" },
-    take: limit,
-    skip: skip,
-  });
-  console.log(post.length !== limit);
+  // const post = await postRepository
+  //   .createQueryBuilder("post")
+  //   .leftJoinAndSelect("post.like", "like")
+  //   .leftJoin("post.user", "user")
+  //   .select(["post", "user.userName, user.photo"])
+  //   .where("post.userId = :id", { id: user.id })
+  //   .addSelect([
+  //     `CASE WHEN like.userId =${user.id}  THEN true ELSE false END AS isLiked`,
+  //   ])
+  //   .orderBy({ date: "DESC" })
+  //   .limit(limit)
+  //   .offset(skip)
+  //   .getRawMany();
+  const post = await AppDataSource.query(`
+    SELECT u.userName, p.post, p.date, u.user_photo, p.photo, p.id, 
+      (SELECT COUNT(*) FROM \`like\` WHERE userId = 17 AND postId = p.Id) > 0 AS isLiked
+    FROM post AS p
+    LEFT JOIN user AS u ON u.id = p.userId where p.userId = ${user.id}
+    ORDER BY p.date desc
+    LIMIT ${limit} OFFSET ${skip};
+  `);
   const previous_link = `/api/post/${data["userName"]}?pageNumber=${page}`;
   const next_link = `/api/post/${data["userName"]}?pageNumber=${
     post.length !== limit ? undefined : page + 1
@@ -139,7 +152,6 @@ getPostOfUserRouter.get("/api/post/:userName", async (req, res) => {
     next_link: next_link,
     data: post,
   };
-  console.log(post);
   if (post === null) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
@@ -153,14 +165,23 @@ getPostOfUserRouter.get("/api/post/:userName", async (req, res) => {
 });
 
 getAllPostRouter.get("/api/post/all", async (req, res) => {
+  const token = req.headers["authorization"];
+  const token_payload = JSON.parse(
+    Buffer.from(token!.split(".")[1], "base64").toString()
+  );
+
   const page = parseInt((req.query.pageNumber as string) || "0");
-  const limit = parseInt((req.query.take as string) || "5");
+  const limit = 5;
   const skip = page * limit;
-  const post = await postRepository.find({
-    order: { date: "DESC" },
-    take: limit,
-    skip: skip,
-  });
+  const post = await AppDataSource.query(`
+  SELECT u.userName, p.post, p.date, u.user_photo, p.photo, p.id, 
+    (SELECT COUNT(*) FROM \`like\` WHERE userId = 17 AND postId = p.Id) > 0 AS isLiked
+  FROM post AS p
+  LEFT JOIN user AS u ON u.id = p.userId
+  ORDER BY p.date desc
+  LIMIT ${limit} OFFSET ${skip};
+`);
+
   if (post === null) {
     return createResponse(res, StatusCodes.BAD_REQUEST, {
       status: "error",
@@ -219,7 +240,7 @@ sharedPostRouter.post("/api/post/shared", async (req, res) => {
   });
 });
 
-deletePostRouter.delete("/api/delete/post/:id", async (req, res) => {
+deletePostRouter.delete("/api/post/delete/:id", async (req, res) => {
   const postId = { id: parseInt(req.params.id) };
   const post = await postRepository.findOne({
     where: {
@@ -233,6 +254,7 @@ deletePostRouter.delete("/api/delete/post/:id", async (req, res) => {
     });
   }
   await postRepository.delete({ id: postId["id"] });
+  console.log("deleted");
   return createResponse(res, StatusCodes.OK, {
     status: "success",
     data: { message: "successfully deleted" },
@@ -262,7 +284,7 @@ reportPostRouter.put("/api/post/report/:id", async (req, res) => {
 });
 
 export {
-  likePostRouter as LikePost,
+  // likePostRouter as LikePost,
   createPostRouter as createPost,
   deletePostRouter as deletePost,
   getAllPostRouter as getAllPost,

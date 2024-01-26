@@ -43,7 +43,7 @@ export const Post = (value: any) => {
     setIsDeleteDialogVisible(!isDeleteDialogVisible);
   };
   const data = value.value;
-  // console.log({ data });
+  console.log({ like1231: data.isLiked, postId: data.post });
 
   const toggleComment = () => {
     setIsVisible(!isVisible);
@@ -71,14 +71,16 @@ export const Post = (value: any) => {
               ) : (
                 <Avatar.Image
                   size={40}
-                  source={{ uri: `data:image/png;base64,${data.photo}` }}
+                  source={{ uri: `data:image/png;base64,${data.user_photo}` }}
                 />
               )}
 
               <View style={styles.nameAndDateWrapper}>
-                <Text style={styles.userName}>{data.userName}</Text>
+                <Text style={styles.userName}>
+                  {data.userName} {data.id}
+                </Text>
                 <Text variant="bodySmall">
-                  {dayjs(data.post_date).format("MMM D, YYYY")}
+                  {dayjs(data.date).format("MMM D, YYYY")}
                 </Text>
               </View>
             </Pressable>
@@ -93,16 +95,16 @@ export const Post = (value: any) => {
           <Card.Content>
             {data.post !== "" && (
               <Text variant="bodyLarge" style={styles.caption}>
-                {data.post_post}
+                {data.post}
               </Text>
             )}
           </Card.Content>
 
           <View style={styles.ImageBox}>
-            {data.post_photo !== null && data.post_photo !== "" && (
+            {data.photo !== null && data.photo !== "" && (
               <Card.Cover
                 source={{
-                  uri: `data:image/png;base64,${data.post_photo}`,
+                  uri: `data:image/png;base64,${data.photo}`,
                 }}
                 style={{ borderRadius: 0 }}
               />
@@ -114,13 +116,13 @@ export const Post = (value: any) => {
               icon={() => (
                 <View style={{ display: "flex", flexDirection: "row" }}>
                   <Iconll
-                    name={data.isLiked ? "like1" : "like2"}
+                    name={data.isLiked === "1" ? "like1" : "like2"}
                     size={18}
                     style={data.isLiked && { color: theme.colors.primary }}
                   />
                 </View>
               )}
-              onPress={() => likePost(data.post_id)}
+              onPress={() => likePost(data.id)}
             >
               <Text style={data.isLiked && { color: theme.colors.primary }}>
                 Like
@@ -220,7 +222,7 @@ export const Post = (value: any) => {
         <Comment
           isVisible={isVisible}
           toggleComment={toggleComment}
-          postId={data.post_id}
+          postId={data.id}
         />
       )}
     </>

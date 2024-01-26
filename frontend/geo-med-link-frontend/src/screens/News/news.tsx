@@ -21,7 +21,7 @@ export const News = () => {
   console.log(hasNextPage);
   if (isLoading) return <Loader />;
   console.log({ isStale });
-  if (!data || data.length === 0) return <Text>No Data</Text>;
+  // if (!data || data.length === 0) return <Text>No Data</Text>;
 
   return (
     <View>

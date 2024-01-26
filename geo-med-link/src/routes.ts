@@ -9,10 +9,12 @@ import {
   updateComment,
 } from "./routes/comment_routes/comment";
 import { login } from "./routes/login_routes/login";
+import { activeDonor } from "./routes/map_routes/active_bloodDonar";
+import { bloodFilter } from "./routes/map_routes/blood";
 import { changePassword } from "./routes/password_routes/change-password";
 import { forgetPassword } from "./routes/password_routes/forget-password";
+import { LikeRouter } from "./routes/post_routes/like";
 import {
-  LikePost,
   createPost,
   deletePost,
   getAllPost,
@@ -20,6 +22,7 @@ import {
   reportPost,
   userPost,
 } from "./routes/post_routes/post";
+import { query } from "./routes/post_routes/query";
 import { scrapGet, scrapPost } from "./routes/scrap_routes/post";
 import { send } from "./routes/scratch/emails";
 import {
@@ -36,6 +39,7 @@ import {
   registerDoctor,
   verifyDoctor,
 } from "./routes/user_routes/doctor";
+import { searchRoute } from "./routes/user_routes/search_user";
 import {
   createUser,
   deleteUser,
@@ -43,6 +47,7 @@ import {
   getUser,
   updateUser,
 } from "./routes/user_routes/user";
+import { notification } from "./utils/notification";
 
 const app = express();
 
@@ -62,7 +67,7 @@ export const routes =
   app.use(scrapPost),
   app.use(login),
   app.use(forgetPassword),
-  app.use(LikePost),
+  app.use(LikeRouter),
   app.use(createPost),
   app.use(deletePost),
   app.use(getAllPost),
@@ -79,4 +84,9 @@ export const routes =
   app.use(getServices),
   app.use(getOrganizations),
   app.use(send),
-  app.use(changePassword));
+  app.use(changePassword),
+  app.use(notification),
+  app.use(activeDonor),
+  app.use(bloodFilter),
+  app.use(searchRoute),
+  app.use(query));
