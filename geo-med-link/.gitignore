@@ -7,4 +7,3 @@ temp/
 migration/
 migrate/
 .env
-enum/
