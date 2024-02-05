@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { Text } from "react-native-paper";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import { TabNavigationProps } from "~/navigations/Bottom/bottom-stack.types";
 
 export const ChangeProfilePicture = () => {
   const [selectedImage, setSelectedImage] = useState("");
-  const [postText, setPostText] = useState("");
-  const navigation = useNavigation<TabNavigationProps>();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -21,22 +15,11 @@ export const ChangeProfilePicture = () => {
       base64: true,
     });
 
-    // console.log(result);
-
     if (!result.canceled) {
       if (result.assets[0].base64) setSelectedImage(result.assets[0].base64);
     }
   };
 
-  const canPost = () => {
-    return postText !== "" || selectedImage !== "";
-  };
-
-  const upload = () => {
-    console.log("post post");
-    navigation.navigate("Feed");
-    setSelectedImage("");
-  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -46,16 +29,6 @@ export const ChangeProfilePicture = () => {
             style={styles.selectedImage}
           />
         )}
-        <Pressable onPress={pickImage}>
-          <View style={styles.imageUpload}>
-            <Icon name="image" size={30} color="rgb(124, 117, 126)"></Icon>
-            {!selectedImage ? (
-              <Text variant="bodyMedium"> Add Photo</Text>
-            ) : (
-              <Text variant="bodyMedium">Change Photo</Text>
-            )}
-          </View>
-        </Pressable>
       </ScrollView>
     </View>
   );

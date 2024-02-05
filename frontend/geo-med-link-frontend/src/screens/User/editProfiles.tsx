@@ -1,3 +1,5 @@
+import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Avatar, Button, Text, TextInput } from "react-native-paper";
@@ -9,6 +11,20 @@ export const EditProfile = () => {
   const { username } = useUserContext();
   const { data: response, isLoading } = useFetchUser(username);
   const data = response?.data;
+  const [selectedImage, setSelectedImage] = useState("");
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      if (result.assets[0].base64) setSelectedImage(result.assets[0].base64);
+    }
+  };
   // console.log({ data });
   if (isLoading) return <Loader />;
 
@@ -18,17 +34,26 @@ export const EditProfile = () => {
       <ScrollView>
         <View style={style.topSection}>
           <View style={style.imageBox}>
-            {!data.user.photo ? (
-              <Avatar.Image size={120} source={require("../mydp.png")} />
+            {!selectedImage ? (
+              <>
+                {!data.user.photo ? (
+                  <Avatar.Image size={120} source={require("../mydp.png")} />
+                ) : (
+                  <Avatar.Image
+                    size={120}
+                    source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+                  />
+                )}
+              </>
             ) : (
               <Avatar.Image
                 size={120}
-                source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+                source={{ uri: `data:image/png;base64,${selectedImage}` }}
               />
             )}
           </View>
           <Pressable style={style.changePicture}>
-            <Text>Change Picture</Text>
+            <Button onPress={pickImage}>Change Picture</Button>
           </Pressable>
         </View>
         <View style={style.inputBox}>
