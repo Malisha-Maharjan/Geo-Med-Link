@@ -21,7 +21,7 @@ export const ChangeProfilePicture = () => {
       base64: true,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
       if (result.assets[0].base64) setSelectedImage(result.assets[0].base64);

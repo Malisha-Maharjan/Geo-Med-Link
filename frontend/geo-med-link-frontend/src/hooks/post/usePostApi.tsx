@@ -14,7 +14,7 @@ export const useFetchPost = () => {
   console.log({ token });
   // console.log({ url: `${BASEURL}/api/post/organization1?pageNumber=${page}` });
   return useInfiniteQuery({
-    queryKey: ["all post"],
+    queryKey: ["post"],
     queryFn: async ({ pageParam }) => {
       const data = await fetch(
         `${BASEURL}/api/post/all?pageNumber=${pageParam}`,
@@ -93,7 +93,7 @@ export const useAddPost = () => {
       return response;
     },
     onSuccess: (data) => {
-      console.log({ onSucessData: data });
+      // console.log({ onSucessData: data });
       queryClient.invalidateQueries({ queryKey: ["all post"] });
       queryClient.invalidateQueries({ queryKey: ["post"] });
     },

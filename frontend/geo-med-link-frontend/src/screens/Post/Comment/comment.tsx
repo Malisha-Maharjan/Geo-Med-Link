@@ -90,7 +90,16 @@ export const Comment = ({ isVisible, toggleComment, postId }: CommentProps) => {
           // ItemSeparatorComponent={() => <Divider bold />}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={
-            <Text style={{ paddingLeft: 40 }}>No Comments</Text>
+            <Text
+              style={{
+                color: "white",
+                textAlign: "center",
+                marginTop: 40,
+                fontSize: 18,
+              }}
+            >
+              No Comments Yet
+            </Text>
           }
           refreshing={!isStale}
           onRefresh={refetch}

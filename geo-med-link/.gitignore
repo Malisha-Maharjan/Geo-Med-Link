@@ -8,3 +8,4 @@ migration/
 migrate/
 .env
 spam-model/
+.sql

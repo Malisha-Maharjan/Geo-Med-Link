@@ -28,7 +28,7 @@ export const UploadPost = () => {
       base64: true,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
       if (result.assets[0].base64) setSelectedImage(result.assets[0].base64);
@@ -56,12 +56,12 @@ export const UploadPost = () => {
     <View style={styles.container}>
       <Header>
         <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-          {!data.user.photo ? (
+          {!data.user.user_photo ? (
             <Avatar.Image size={40} source={require("../mydp.png")} />
           ) : (
             <Avatar.Image
               size={40}
-              source={{ uri: `data:image/png;base64,${data.user.photo}` }}
+              source={{ uri: `data:image/png;base64,${data.user.user_photo}` }}
             />
           )}
 

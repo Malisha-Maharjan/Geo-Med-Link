@@ -9,7 +9,7 @@ export const EditProfile = () => {
   const { username } = useUserContext();
   const { data: response, isLoading } = useFetchUser(username);
   const data = response?.data;
-  console.log({ data });
+  // console.log({ data });
   if (isLoading) return <Loader />;
 
   if (!data) return <Text> No data</Text>;

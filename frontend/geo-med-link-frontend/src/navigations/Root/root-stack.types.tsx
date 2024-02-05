@@ -8,6 +8,8 @@ export type RootStackParamList = {
   EditProfile: undefined;
   Profile: { username: string };
   Search: undefined;
+  EditDonor: undefined;
+  EditDoctor: undefined;
 };
 // export type CommentProps = NativeStackScreenProps<
 //   RootStackParamList,

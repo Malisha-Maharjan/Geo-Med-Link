@@ -12,8 +12,24 @@ export enum services {
 }
 
 export const UserDetail = (userData: any) => {
-  const data = userData.userData.userData;
-  // console.log({ data });
+  const data = userData?.userData?.userData;
+  const services = data?.services;
+  if (services) {
+    const mapServiceToLetter = (service: string): string => {
+      switch (service) {
+        case "1":
+          return "a ";
+        case "2":
+          return "b";
+        default:
+          return ""; // or throw an error for unexpected values
+      }
+    };
+    const mappedServices = services.map((service: any) =>
+      mapServiceToLetter(service)
+    );
+  }
+  // console.log(mappedServices);
 
   return (
     <>
@@ -45,7 +61,13 @@ export const UserDetail = (userData: any) => {
                 <EvilIcons name="location" size={20} color="blue" />
                 <Text>{data.user.address}</Text>
               </View>
-              <Text>{data.services}</Text>
+              <>
+                {data.services.map((a: any) => (
+                  <Text>
+                    {(a === "1" && "MRI") || (a === "2" && "Ambulance")}
+                  </Text>
+                ))}
+              </>
             </>
           )}
 

@@ -7,6 +7,7 @@ export const useDeletePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (postId: number) => {
+      console.log({ postId });
       const data = await fetch(`${BASEURL}/api/post/delete/${postId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -15,8 +16,11 @@ export const useDeletePost = () => {
       if (data.status !== 200) throw new Error(response.error.message[0]);
       return response;
     },
+    onError: (e) => {
+      console.log(e);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["all post"] });
+      queryClient.invalidateQueries({ queryKey: ["post"] });
       queryClient.invalidateQueries({ queryKey: ["post", username] });
     },
   });

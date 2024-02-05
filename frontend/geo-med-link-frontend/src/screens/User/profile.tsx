@@ -95,6 +95,31 @@ export const Profile = ({ route }: ProfileProps | ProfileStackProps) => {
           >
             <Text style={style.bottomSheetContentText}>Edit Profile</Text>
           </TouchableRipple>
+          {data.user.type === 1 && (
+            <>
+              <TouchableRipple
+                style={style.bottomSheetContent}
+                onPress={() => {
+                  bottomSheetModalRef.current?.dismiss(),
+                    navigation.navigate("EditDonor");
+                }}
+              >
+                <Text style={style.bottomSheetContentText}>
+                  Update Blood Donor
+                </Text>
+              </TouchableRipple>
+              <TouchableRipple
+                style={style.bottomSheetContent}
+                onPress={() => {
+                  bottomSheetModalRef.current?.dismiss(),
+                    navigation.navigate("EditDoctor");
+                }}
+              >
+                <Text style={style.bottomSheetContentText}>Update Doctor</Text>
+              </TouchableRipple>
+            </>
+          )}
+
           <TouchableRipple
             style={style.bottomSheetContent}
             onPress={() => {

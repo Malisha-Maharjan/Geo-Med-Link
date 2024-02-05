@@ -30,13 +30,7 @@ export const usePostComment = () => {
       const response = await data.json();
       return response;
     },
-    // onMutate: async({ comment, postId }: PostCommentParams)=> {
-    //   await queryClient.cancelQueries({ queryKey: ['comment', id] })
-    //   const previousComments = queryClient.getQueryData(['comment', id])
-    //   queryClient.setQueryData(['comment', id], (old:any) => { return {...old, data:[...old.data, {id:}]}})
-    // },
-    // onError: ()=> {},
-    // onSettled: ()=> {}
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comment", id] });
     },
@@ -47,11 +41,14 @@ export const useFetchComment = (postId: number) => {
   // console.log("fetching comment");
   return useInfiniteQuery({
     queryKey: ["comment", postId],
-    queryFn: async () => {
-      const data = await fetch(`${BASEURL}/api/comment/${postId}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+    queryFn: async ({ pageParam }) => {
+      const data = await fetch(
+        `${BASEURL}/api/comment/${postId}?pageNumber=${pageParam}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       const response = await data.json();
       // console.log({ response });
       return response;

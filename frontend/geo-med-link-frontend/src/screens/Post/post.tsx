@@ -213,7 +213,7 @@ export const Post = (value: any) => {
           <Delete
             isVisible={isDeleteDialogVisible}
             toggleIsVisible={toggleIsDeleteDialogVisible}
-            postId={data.post_id}
+            postId={data.id}
           />
         </Dialog>
       </Portal>

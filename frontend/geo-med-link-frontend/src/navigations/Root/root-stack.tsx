@@ -3,8 +3,10 @@ import { useUserContext } from "~/context/userContext";
 import { LoginScreen } from "~/screens/Login/login";
 // import { Comment } from "~/screens/Post/Comment/comment";
 import { Search } from "~/screens/Search/search";
-import { EditProfile } from "~/screens/User/EditProfile";
 import { ChangePassword } from "~/screens/User/changePassword";
+import { EditDoctor } from "~/screens/User/editDoctor";
+import { EditDonor } from "~/screens/User/editDonor";
+import { EditProfile } from "~/screens/User/editProfiles";
 import { Profile } from "~/screens/User/profile";
 import { BottomTabNavigator } from "../Bottom/bottom-stack";
 import { RootStackParamList } from "./root-stack.types";
@@ -29,6 +31,8 @@ export const RootStackNavigator = () => {
           {/* <Screen name="Comment" component={Comment} /> */}
           <Screen name="ChangePassword" component={ChangePassword} />
           <Screen name="EditProfile" component={EditProfile} />
+          <Screen name="EditDonor" component={EditDonor} />
+          <Screen name="EditDoctor" component={EditDoctor} />
           <Screen
             name="Profile"
             component={Profile}

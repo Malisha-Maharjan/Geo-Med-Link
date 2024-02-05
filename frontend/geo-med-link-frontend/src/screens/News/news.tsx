@@ -16,7 +16,7 @@ export const News = () => {
     isStale,
     refetch,
   } = useFetchNews();
-  console.log(response?.pageParams);
+  // console.log(response?.pageParams);
   const data = response?.pages.flatMap((item) => item.data.data);
   console.log(hasNextPage);
   if (isLoading) return <Loader />;
