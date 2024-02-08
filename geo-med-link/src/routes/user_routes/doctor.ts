@@ -10,7 +10,6 @@ import {
 import { sendEmail } from "../../utils/email";
 import { createResponse } from "../../utils/response";
 import { DoctorSchema } from "../../zod-schema/doctor-schema";
-import { IdSchema } from "../../zod-schema/id-schema";
 import { userNameSchema } from "../../zod-schema/user-schema";
 
 const registerRouter = express.Router();
@@ -44,6 +43,7 @@ registerRouter.post("/api/register/doctor", async (req, res) => {
       },
     });
   }
+
   const doctor = new Doctor();
   doctor.NMC = data["NMC"];
   doctor.degree = data["degree"];
@@ -56,7 +56,6 @@ registerRouter.post("/api/register/doctor", async (req, res) => {
       status: "error",
       error: { message: ["This doctor is already registered"] },
     });
-  console.log(doctor);
   await doctor.save();
   await sendEmail(
     [user.email],
@@ -118,7 +117,7 @@ verifiedRouter.put("/api/verify/doctor", async (req, res) => {
     "Verified Successful",
     `<h>You have been successfully verified.</h><br/><br/><br/><p><b>User Name: ${doctor.NMC}</b><br/></p><p><i>Best Regards,</i></p><p>GeoMedLink</p>`
   );
-  await user.save();
+  await person.save();
   await doctor.save();
   return createResponse(res, StatusCodes.OK, {
     status: "success",
@@ -160,19 +159,24 @@ DoctorUpdateRouter.put("/api/doctor/update", async (req, res) => {
   });
 
   if (doctor === null) {
+    const doctor = new Doctor();
+    doctor.NMC = data["NMC"];
+    doctor.degree = data["degree"];
+    doctor.person = person;
+    doctor.save();
+    await sendEmail(
+      [user.email],
+      "Registration Successful",
+      `<h>You have been successfully registered as doctor.</h><br/><$>Your NMC number is ${doctor.NMC}</b><br/></p><b>"You will be shortly verified."</b><p></p></br></br><p><i>Best Regards,</i></p><p>GeoMedLink</p>`
+    );
     return createResponse(res, StatusCodes.BAD_REQUEST, {
-      status: "error",
-      error: { message: ["User Not Found"] },
+      status: "success",
+      data: { message: ["Doctor added"] },
     });
   }
   doctor.degree = data["degree"];
-  if (doctor.NMC === data["NMC"]) {
-    return createResponse(res, StatusCodes.OK, {
-      status: "success",
-      data: { message: "Updated" },
-    });
-  }
   doctor.NMC = data["NMC"];
+  doctor.save();
   await sendEmail(
     [user.email],
     "Update Successful",
@@ -184,20 +188,27 @@ DoctorUpdateRouter.put("/api/doctor/update", async (req, res) => {
   });
 });
 
-getDoctorRouter.get("/api/get/doctor/:id", async (req, res) => {
-  const data = {
-    id: parseInt(req.params.id),
-  };
-  IdSchema.parse(data);
-  const doctor = await doctorRepository.findOne({
+getDoctorRouter.get("/api/get/doctor/:username", async (req, res) => {
+  const user = await userRepository.findOne({
     where: {
-      id: data["id"],
+      userName: req.params.username,
     },
   });
-  if (!doctor) {
+  if (!user) {
     return res.send("nono");
   }
-
+  const person = await personRepository.findOne({
+    where: {
+      user: { id: user.id },
+    },
+  });
+  if (!person) return res.send("nono");
+  const doctor = await doctorRepository.findOne({
+    where: {
+      person: { id: person.id },
+    },
+  });
+  console.log(doctor);
   return createResponse(res, StatusCodes.OK, {
     status: "success",
     data: doctor,
