@@ -29,7 +29,7 @@ export class Post extends BaseEntity {
   count_likes: number;
 
   @Column({ default: false })
-  is_shared: Boolean;
+  is_spam: Boolean;
 
   @Column({ nullable: true })
   sharedPID: number;

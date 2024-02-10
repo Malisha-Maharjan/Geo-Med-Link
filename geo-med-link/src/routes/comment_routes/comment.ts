@@ -44,16 +44,27 @@ postCommentRouter.post("/api/comment", async (req, res) => {
       error: { message: ["Post not found"] },
     });
   }
+
+  const response = await fetch("http://127.0.0.1:8000/api/spam/detection", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ comment: data["comment"] }),
+  });
+  const result = await response.json();
+  console.log({ result: result.data });
   const comment = commentRepository.create();
   comment.comment = data["comment"];
+
   comment.user = user;
   comment.post = post;
   comment.date = new Date();
+  comment.is_spam = result.data;
 
   return createResponse(res, StatusCodes.OK, {
     status: "success",
     data: await comment.save(),
   });
+  // return res.send("ok");
 });
 
 getCommentRouter.get("/api/comment/:postId", async (req, res) => {

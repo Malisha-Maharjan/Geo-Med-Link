@@ -56,92 +56,94 @@ export const Post = (value: any) => {
   return (
     <>
       <ScrollView contentContainerStyle={styles.PostContainer}>
-        <Card style={styles.Post}>
-          <View style={styles.postTop}>
-            <Pressable
-              style={styles.postUser}
-              onPress={() =>
-                navigation.navigate("Profile", { username: data.userName })
-              }
-            >
-              {data.user_photo === "" || data.user_photo === null ? (
-                <View style={styles.defaultPicture}>
-                  <Avatar.Image size={40} source={require("../mydp.png")} />
-                </View>
-              ) : (
-                <Avatar.Image
-                  size={40}
-                  source={{ uri: `data:image/png;base64,${data.user_photo}` }}
-                />
-              )}
-
-              <View style={styles.nameAndDateWrapper}>
-                <Text style={styles.userName}>
-                  {data.userName} {data.id}
-                </Text>
-                <Text variant="bodySmall">
-                  {dayjs(data.date).format("MMM D, YYYY")}
-                </Text>
-              </View>
-            </Pressable>
-            <IconButton
-              icon={() => (
-                <Entypo name="dots-three-vertical" size={18} color="black" />
-              )}
-              onPress={() => bottomSheetModalRef.current?.present()}
-              style={styles.reportIcon}
-            />
-          </View>
-          <Card.Content>
-            {data.post !== "" && (
-              <Text variant="bodyLarge" style={styles.caption}>
-                {data.post}
-              </Text>
-            )}
-          </Card.Content>
-
-          <View style={styles.ImageBox}>
-            {data.photo !== null && data.photo !== "" && (
-              <Card.Cover
-                source={{
-                  uri: `data:image/png;base64,${data.photo}`,
-                }}
-                style={{ borderRadius: 0 }}
-              />
-            )}
-          </View>
-
-          <View style={styles.Interactive}>
-            <Button
-              icon={() => (
-                <View style={{ display: "flex", flexDirection: "row" }}>
-                  <Iconll
-                    name={data.isLiked === "1" ? "like1" : "like2"}
-                    size={18}
-                    style={data.isLiked && { color: theme.colors.primary }}
+        {!data.is_spam && (
+          <Card style={styles.Post}>
+            <View style={styles.postTop}>
+              <Pressable
+                style={styles.postUser}
+                onPress={() =>
+                  navigation.navigate("Profile", { username: data.userName })
+                }
+              >
+                {data.user_photo === "" || data.user_photo === null ? (
+                  <View style={styles.defaultPicture}>
+                    <Avatar.Image size={40} source={require("../mydp.png")} />
+                  </View>
+                ) : (
+                  <Avatar.Image
+                    size={40}
+                    source={{ uri: `data:image/png;base64,${data.user_photo}` }}
                   />
+                )}
+
+                <View style={styles.nameAndDateWrapper}>
+                  <Text style={styles.userName}>
+                    {data.userName} {data.id}
+                  </Text>
+                  <Text variant="bodySmall">
+                    {dayjs(data.date).format("MMM D, YYYY")}
+                  </Text>
                 </View>
+              </Pressable>
+              <IconButton
+                icon={() => (
+                  <Entypo name="dots-three-vertical" size={18} color="black" />
+                )}
+                onPress={() => bottomSheetModalRef.current?.present()}
+                style={styles.reportIcon}
+              />
+            </View>
+            <Card.Content>
+              {data.post !== "" && (
+                <Text variant="bodyLarge" style={styles.caption}>
+                  {data.post}
+                </Text>
               )}
-              onPress={() => likePost(data.id)}
-            >
-              <Text style={data.isLiked && { color: theme.colors.primary }}>
-                Like
-              </Text>
-            </Button>
-            <Button
-              icon={() => (
-                <Icon
-                  name="comment-alt"
-                  size={18}
-                  style={styles.reactionIcon}
+            </Card.Content>
+
+            <View style={styles.ImageBox}>
+              {data.photo !== null && data.photo !== "" && (
+                <Card.Cover
+                  source={{
+                    uri: `data:image/png;base64,${data.photo}`,
+                  }}
+                  style={{ borderRadius: 0 }}
                 />
               )}
-              onPress={toggleComment}
-            >
-              <Text>Comment</Text>
-            </Button>
-          </View>
-        </Card>
+            </View>
+
+            <View style={styles.Interactive}>
+              <Button
+                icon={() => (
+                  <View style={{ display: "flex", flexDirection: "row" }}>
+                    <Iconll
+                      name={data.isLiked === "1" ? "like1" : "like2"}
+                      size={18}
+                      style={data.isLiked && { color: theme.colors.primary }}
+                    />
+                  </View>
+                )}
+                onPress={() => likePost(data.id)}
+              >
+                <Text style={data.isLiked && { color: theme.colors.primary }}>
+                  Like
+                </Text>
+              </Button>
+              <Button
+                icon={() => (
+                  <Icon
+                    name="comment-alt"
+                    size={18}
+                    style={styles.reactionIcon}
+                  />
+                )}
+                onPress={toggleComment}
+              >
+                <Text>Comment</Text>
+              </Button>
+            </View>
+          </Card>
+        )}
       </ScrollView>
       <BottomSheetModal
         ref={bottomSheetModalRef}

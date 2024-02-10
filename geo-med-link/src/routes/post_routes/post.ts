@@ -7,7 +7,6 @@ import { AppDataSource } from "../../data-source";
 import { paginated } from "../../types/paginated";
 import { createResponse } from "../../utils/response";
 import { createPostSchema } from "../../zod-schema/post-post";
-import { sharedPostSchema } from "../../zod-schema/shared-post-schema";
 import { userNameSchema } from "../../zod-schema/user-schema";
 
 const createPostRouter = express.Router();
@@ -174,7 +173,7 @@ getAllPostRouter.get("/api/post/all", async (req, res) => {
   const limit = 5;
   const skip = page * limit;
   const post = await AppDataSource.query(`
-  SELECT u.userName, p.post, p.date, u.user_photo, p.photo, p.id, 
+  SELECT u.userName, p.post, p.date, u.user_photo, p.photo, p.id, p.is_spam, p.count_likes,
     (SELECT COUNT(*) FROM \`like\` WHERE userId = 17 AND postId = p.Id) > 0 AS isLiked
   FROM post AS p
   LEFT JOIN user AS u ON u.id = p.userId
@@ -206,39 +205,39 @@ getAllPostRouter.get("/api/post/all", async (req, res) => {
   });
 });
 
-sharedPostRouter.post("/api/post/shared", async (req, res) => {
-  const data = req.body;
-  sharedPostSchema.parse(data);
-  const user = await userRepository.findOne({
-    where: {
-      userName: data["userName"],
-    },
-  });
-  if (!user) {
-    return createResponse(res, StatusCodes.BAD_REQUEST, {
-      status: "error",
-      error: { message: ["User not found"] },
-    });
-  }
-  const sharedPost = postRepository.create();
-  if (!(await postRepository.findOne({ where: { id: data["id"] } }))) {
-    return createResponse(res, StatusCodes.BAD_REQUEST, {
-      status: "error",
-      error: { message: ["Shared_item is not available"] },
-    });
-  }
-  sharedPost.is_shared = true;
-  sharedPost.sharedPID = data["sharedPID"];
-  sharedPost.post = data["post"];
-  sharedPost.photo = data["image"];
-  sharedPost.user = user;
-  sharedPost.date = new Date();
-  await sharedPost.save();
-  return createResponse(res, StatusCodes.OK, {
-    status: "success",
-    data: await sharedPost.save(),
-  });
-});
+// sharedPostRouter.post("/api/post/shared", async (req, res) => {
+//   const data = req.body;
+//   sharedPostSchema.parse(data);
+//   const user = await userRepository.findOne({
+//     where: {
+//       userName: data["userName"],
+//     },
+//   });
+//   if (!user) {
+//     return createResponse(res, StatusCodes.BAD_REQUEST, {
+//       status: "error",
+//       error: { message: ["User not found"] },
+//     });
+//   }
+//   const sharedPost = postRepository.create();
+//   if (!(await postRepository.findOne({ where: { id: data["id"] } }))) {
+//     return createResponse(res, StatusCodes.BAD_REQUEST, {
+//       status: "error",
+//       error: { message: ["Shared_item is not available"] },
+//     });
+//   }
+//   sharedPost.is_shared = true;
+//   sharedPost.sharedPID = data["sharedPID"];
+//   sharedPost.post = data["post"];
+//   sharedPost.photo = data["image"];
+//   sharedPost.user = user;
+//   sharedPost.date = new Date();
+//   await sharedPost.save();
+//   return createResponse(res, StatusCodes.OK, {
+//     status: "success",
+//     data: await sharedPost.save(),
+//   });
+// });
 
 deletePostRouter.delete("/api/post/delete/:id", async (req, res) => {
   const postId = { id: parseInt(req.params.id) };

@@ -1,5 +1,5 @@
 import express from "express";
-import { spamPost } from "./routes/admin_routes/spam_post";
+import { spamPost, spamVerified } from "./routes/admin_routes/spam_post";
 import { unverifiedDoctor } from "./routes/admin_routes/unverified_doctor";
 import {
   deleteComment,
@@ -89,4 +89,5 @@ export const routes =
   app.use(activeDonor),
   app.use(bloodFilter),
   app.use(searchRoute),
-  app.use(query));
+  app.use(query),
+  app.use(spamVerified));
