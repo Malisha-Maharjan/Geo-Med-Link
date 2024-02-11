@@ -47,7 +47,14 @@ import {
   getUser,
   updateUser,
 } from "./routes/user_routes/user";
-import { notification } from "./utils/notification";
+import {
+  ambulanceRequest,
+  confirmAmbulance,
+  confirmNotification,
+  notification,
+  respondAmbulance,
+  respondNotification,
+} from "./utils/notification";
 
 const app = express();
 
@@ -90,4 +97,9 @@ export const routes =
   app.use(bloodFilter),
   app.use(searchRoute),
   app.use(query),
-  app.use(spamVerified));
+  app.use(spamVerified),
+  app.use(respondNotification),
+  app.use(confirmNotification),
+  app.use(ambulanceRequest),
+  app.use(respondAmbulance),
+  app.use(confirmAmbulance));
