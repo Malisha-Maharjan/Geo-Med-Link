@@ -53,8 +53,8 @@ router.post("/api/login", async (req, res) => {
     });
   }
   // user.is_active = true;
-  // user.deviceId = data["deviceId"];
-  // user.save();
+  user.deviceId = data["deviceId"];
+  user.save();
   const token = createToken(user.id, user.userName);
   const result: LoginParams = {
     token,

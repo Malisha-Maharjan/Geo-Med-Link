@@ -218,7 +218,7 @@ confirmNotificationRouter.post(
       : requestInitiatorInfo.phoneNumber;
     const message = {
       notification: {
-        title: "Blood Request Accepted",
+        title: "Accepted Request Confirmed",
         body: `${requestInitiatorInfo.userName} has confirmed your response. Please hurry `,
       },
       token: responderInfo.deviceId,
@@ -457,7 +457,7 @@ confirmAmbulanceNotificationRouter.post(
     const users = ambulances.map((ambulance) => ambulance.user.userName);
     const message = {
       notification: {
-        title: "Ambulance Request Accepted",
+        title: "Accepted Request Confirmed",
         body: `${responderInfo.userName} has accepted your service. Please proceed towards the destination`,
       },
       token: responderInfo.deviceId,
