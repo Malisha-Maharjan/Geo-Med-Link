@@ -15,7 +15,7 @@ import { routes } from "./routes";
 import { createResponse } from "./utils/response";
 const app = express();
 
-const hostname = "192.168.101.17";
+const hostname = "192.168.1.41";
 
 async function main() {
   AppDataSource.initialize()
@@ -34,8 +34,10 @@ async function main() {
   app.use(express.json({ limit: "30mb" }));
   app.use((req, res, next) => {
     console.log(req.url);
+    console.log("This is hitting api");
     next();
   });
+
   app.post("/", async (req, res) => {
     return createResponse(res, StatusCodes.BAD_GATEWAY, {
       status: "error",

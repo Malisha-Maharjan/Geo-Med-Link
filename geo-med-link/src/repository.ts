@@ -1,6 +1,7 @@
 import { AppDataSource } from "./data-source";
 import { Comment } from "./entity/Comment";
 import { Doctor } from "./entity/Doctor";
+import { Event } from "./entity/Event";
 import { Like } from "./entity/Like";
 import { Organization } from "./entity/Organization";
 import { People } from "./entity/People";
@@ -16,3 +17,4 @@ export const scrapNewsRepository = AppDataSource.getRepository(Scrap);
 export const postRepository = AppDataSource.getRepository(Post);
 export const commentRepository = AppDataSource.getRepository(Comment);
 export const likeRepository = AppDataSource.getRepository(Like);
+export const eventRepository = AppDataSource.getRepository(Event);

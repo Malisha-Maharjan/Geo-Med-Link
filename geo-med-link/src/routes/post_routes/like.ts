@@ -8,6 +8,7 @@ import { createResponse } from "../../utils/response";
 
 const likePostRouter = express.Router();
 likePostRouter.put("/api/post/like/:id/:username", async (req, res) => {
+  console.log("This is like");
   const queryRunner = AppDataSource.createQueryRunner();
   const userRunner = queryRunner.manager.getRepository(User);
   const likeRunner = queryRunner.manager.getRepository(Like);

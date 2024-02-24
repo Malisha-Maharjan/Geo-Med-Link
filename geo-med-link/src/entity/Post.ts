@@ -16,6 +16,7 @@ export class Post extends BaseEntity {
 
   @Column({
     nullable: true,
+    type: "longtext",
   })
   post!: String;
 

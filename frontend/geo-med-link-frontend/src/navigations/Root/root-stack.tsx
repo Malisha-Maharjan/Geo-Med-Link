@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useUserContext } from "~/context/userContext";
 import { LoginScreen } from "~/screens/Login/login";
 // import { Comment } from "~/screens/Post/Comment/comment";
+import { AddEvent } from "~/screens/Event/addEvent";
 import { Search } from "~/screens/Search/search";
 import { ChangePassword } from "~/screens/User/changePassword";
 import { EditDoctor } from "~/screens/User/editDoctor";
@@ -33,6 +34,7 @@ export const RootStackNavigator = () => {
           <Screen name="EditProfile" component={EditProfile} />
           <Screen name="EditDonor" component={EditDonor} />
           <Screen name="EditDoctor" component={EditDoctor} />
+          <Screen name="Event" component={AddEvent} />
           <Screen
             name="Profile"
             component={Profile}

@@ -21,7 +21,7 @@ bloodDonorFilterRouter.get("/api/bloodDonors/:bloodGroup", async (req, res) => {
       "person.blood_Group",
       "user.userName",
       "user.phoneNumber",
-      "user.photo",
+      "user.user_photo",
       "user.longitude",
       "user.latitude",
       "user.address",

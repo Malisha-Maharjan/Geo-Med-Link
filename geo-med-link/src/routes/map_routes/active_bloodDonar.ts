@@ -10,20 +10,7 @@ activeDonorRoutes.get("/api/active/bloodDonors", async (req, res) => {
     .createQueryBuilder("person")
     .leftJoinAndSelect("person.user", "user")
     .where("person.is_donor = :is_donor", { is_donor: true })
-    .select([
-      "person.id",
-      "person.firstName",
-      "person.lastName",
-      "person.blood_Group",
-      "user.userName",
-      "user.phoneNumber",
-      "user.photo",
-      "user.longitude",
-      "user.latitude",
-      "user.address",
-      "user.email",
-      "user.deviceId",
-    ])
+    .select(["person.id", "user.longitude", "user.latitude"])
     .getMany();
   console.log(bloodDonors);
   return createResponse(res, StatusCodes.OK, {

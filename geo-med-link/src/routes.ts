@@ -8,6 +8,8 @@ import {
   postComment,
   updateComment,
 } from "./routes/comment_routes/comment";
+
+import { addEvent, getEvent } from "./routes/event_routes/addEvent";
 import { login } from "./routes/login_routes/login";
 import { activeDonor } from "./routes/map_routes/active_bloodDonar";
 import { bloodFilter } from "./routes/map_routes/blood";
@@ -102,4 +104,6 @@ export const routes =
   app.use(confirmNotification),
   app.use(ambulanceRequest),
   app.use(respondAmbulance),
-  app.use(confirmAmbulance));
+  app.use(confirmAmbulance),
+  app.use(addEvent),
+  app.use(getEvent));

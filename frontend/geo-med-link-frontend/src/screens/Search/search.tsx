@@ -1,102 +1,9 @@
-// import { Ionicons } from "@expo/vector-icons";
-// import { useNavigation } from "@react-navigation/native";
-// import { useState } from "react";
-// import { Pressable, View } from "react-native";
-// import { Avatar, Searchbar, Text } from "react-native-paper";
-// import { Header, Row } from "~/components";
-// import { useDebounce } from "~/hooks/search/useDebounce";
-// import { useSearchFetch } from "~/hooks/search/useSearchApi";
-// import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
-
-// type Response = {
-//   id: number;
-//   userName: string;
-//   photo: string;
-// };
-
-// export const Search = () => {
-//   const navigation = useNavigation<RootStackNavigationProps>();
-//   const [searchValue, setSearchValue] = useState("");
-//   const debouncedSearch = useDebounce(searchValue, 500);
-//   const { data: response, error, isLoading } = useSearchFetch(debouncedSearch);
-//   // console.log(data?.data);
-//   const data = response?.data;
-//   console.log({ data });
-//   // if (isLoading) return <Loader />;
-
-//   return (
-//     <>
-//       <View>
-//         <Header style={{ alignItems: "center", gap: 5 }}>
-//           <Ionicons
-//             name="arrow-back-outline"
-//             size={24}
-//             color="black"
-//             onPress={() => navigation.navigate("BottomTab")}
-//           />
-//           <Searchbar
-//             placeholder="Search"
-//             value={searchValue}
-//             style={{
-//               flexShrink: 1,
-//               maxHeight: 35,
-//             }}
-//             inputStyle={{
-//               maxHeight: 25,
-//               bottom: 12,
-//               right: 10,
-//               color: "#607274",
-//             }}
-//             onPressIn={() => true}
-//             onChangeText={(searchValue) => setSearchValue(searchValue)}
-//             autoFocus
-//           />
-//         </Header>
-//         {isLoading || !data ? (
-//           <View>
-//             <Text>Loading..</Text>
-//           </View>
-//         ) : (
-//           <View>
-//             {data.map((item: Response) => (
-//               <Pressable
-//                 onPress={() =>
-//                   navigation.navigate("Profile", { username: item.userName })
-//                 }
-//               >
-//                 <Row>
-//                   {item.user_photo === "" || item.user_photo === null ? (
-//                     <Avatar.Image size={40} source={require("../mydp.png")} />
-//                   ) : (
-//                     <Avatar.Image
-//                       size={40}
-//                       source={{
-//                         uri: `data:image/png;base64,${item.user_photo}`,
-//                       }}
-//                     />
-//                   )}
-
-//                   <Text>{item.userName}</Text>
-//                 </Row>
-//               </Pressable>
-//             ))}
-//           </View>
-//         )}
-//         {error && (
-//           <View>
-//             <Text>{error.message}</Text>
-//           </View>
-//         )}
-//       </View>
-//     </>
-//   );
-// };
-
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { ImageBackground, Pressable, StyleSheet, View } from "react-native";
 import { Avatar, Searchbar, Text } from "react-native-paper";
+import Iconll from "react-native-vector-icons/Entypo";
 import { Header, Row } from "~/components";
 import { useDebounce } from "~/hooks/search/useDebounce";
 import { useSearchFetch } from "~/hooks/search/useSearchApi";
@@ -155,8 +62,10 @@ export const Search = () => {
           </View>
         ) : (
           <View style={style.test2}>
-            {data.map((item: Response) => (
+            {data.map((item: Response, idx: string) => (
               <Pressable
+                key={idx}
+                style={style.card}
                 onPress={() =>
                   navigation.navigate("Profile", { username: item.userName })
                 }
@@ -191,6 +100,8 @@ export const Search = () => {
 
                   <Text style={style.search_username}>{item.userName}</Text>
                 </Row>
+
+                <Iconll name="chevron-right" size={20} />
               </Pressable>
             ))}
           </View>
@@ -209,14 +120,11 @@ const style = StyleSheet.create({
   header: {
     alignItems: "center",
     gap: 5,
-    backgroundColor: "#C5FFF8",
+    backgroundColor: "#d4e2ff",
   },
   test: {
     padding: 10,
-    backgroundColor: "#96EFFF",
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    borderColor: "#5FBDFF",
+    backgroundColor: "#EFECEC",
   },
 
   test2: {
@@ -231,5 +139,16 @@ const style = StyleSheet.create({
     width: "100%",
     height: "90%",
     resizeMode: "cover",
+  },
+  card: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#EFECEC",
+    paddingRight: 24,
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    borderColor: "#fff",
   },
 });
