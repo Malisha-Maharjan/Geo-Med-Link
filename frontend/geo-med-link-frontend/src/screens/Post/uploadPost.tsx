@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
-
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import React, { useState } from "react";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { Avatar, Button, Text, TextInput } from "react-native-paper";
+import Icon from "react-native-vector-icons/Entypo";
 import { Header, Row } from "~/components";
 import { Loader } from "~/helper/loader";
 import { useAddPost } from "~/hooks/post/usePostApi";
 import { useFetchUser } from "~/hooks/user/useUserApi";
 import { TabNavigationProps } from "~/navigations/Bottom/bottom-stack.types";
 import { RootStackNavigationProps } from "~/navigations/Root/root-stack.types";
-
 export const UploadPost = () => {
   const rootNavigation = useNavigation<RootStackNavigationProps>();
   const [selectedImage, setSelectedImage] = useState("");
@@ -25,12 +24,10 @@ export const UploadPost = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: [16, 9],
       quality: 0.1,
       base64: true,
     });
-
-    // console.log(result);
 
     if (!result.canceled) {
       if (result.assets[0].base64) setSelectedImage(result.assets[0].base64);
@@ -76,12 +73,6 @@ export const UploadPost = () => {
           Post
         </Button>
       </Header>
-      {/* <Row style={styles.firstView}>
-        <Avatar.Image size={32} source={require("../mydp.png")} />
-        <Pressable style={styles.PostBtn} onPress={upload}>
-          <Text style={styles.PostText}>Post</Text>
-        </Pressable>
-      </Row> */}
       <ScrollView>
         <TextInput
           style={styles.secondView}
@@ -93,14 +84,22 @@ export const UploadPost = () => {
         />
         <View style={styles.thirdView}>
           {selectedImage && (
-            <Image
-              source={{ uri: `data:image/png;base64,${selectedImage}` }}
-              style={styles.selectedImage}
-            />
+            <View>
+              <Icon
+                style={{ display: "flex", alignSelf: "flex-end" }}
+                onPress={() => {
+                  setSelectedImage("");
+                }}
+                name="cross"
+                size={22}
+              />
+              <Image
+                source={{ uri: `data:image/png;base64,${selectedImage}` }}
+                style={styles.selectedImage}
+              />
+            </View>
           )}
-          {/* <Pressable onPress={pickImage}> */}
           <View>
-            {/* <MaterialIcons name="add-photo-alternate" size={24} color="red" /> */}
             {!selectedImage ? (
               <Row style={{ left: 120, gap: 10 }}>
                 <MaterialIcons
@@ -117,9 +116,7 @@ export const UploadPost = () => {
                 />
               </Row>
             ) : (
-              <Text variant="bodyMedium" style={styles.imageUpload}>
-                Change Photo
-              </Text>
+              ""
             )}
           </View>
         </View>
@@ -150,16 +147,15 @@ const styles = StyleSheet.create({
   secondView: {
     minHeight: 190,
     maxHeight: 800,
-    // paddingBottom: 10,
-    // marginTop: 20,
   },
 
   thirdView: {
     alignItems: "center",
     marginBottom: 40,
+    paddingVertical: 12,
     minHeight: 90,
     maxHeight: 900,
-    // backgroundColor: "#5FBDFF",
+    backgroundColor: "lightblue",
     justifyContent: "center",
   },
   imageUpload: {
@@ -168,8 +164,8 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   selectedImage: {
-    height: 150,
-    width: 150,
-    margin: 20,
+    height: 200,
+    width: 380,
+    marginVertical: 12,
   },
 });

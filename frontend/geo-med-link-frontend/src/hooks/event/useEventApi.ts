@@ -12,7 +12,7 @@ export type CreateEvent = {
   hour: string;
   minute: string;
   selectedImage: string;
-  date: string | undefined;
+  date: Date | undefined;
   longitude: string;
   latitude: string;
 };
