@@ -55,20 +55,20 @@ export const UserDetail = (userData: any) => {
             <Text style={style.fullName}>{data.name}</Text>
           )}
           <Text variant="bodySmall">{data.user.userName}</Text>
-          {data.user.type === 2 && (
+          {data.user.type !== 1 && (
             <>
               <Text variant="bodyMedium">{data.user.phoneNumber}</Text>
               <View style={{ flexDirection: "row", margin: 5 }}>
                 <EvilIcons name="location" size={20} color="blue" />
                 <Text>{data.user.address}</Text>
               </View>
-              <>
+              {/* <>
                 {data.services.map((a: any) => (
                   <Text>
                     {(a === "1" && "MRI") || (a === "2" && "Ambulance")}
                   </Text>
                 ))}
-              </>
+              </> */}
             </>
           )}
 

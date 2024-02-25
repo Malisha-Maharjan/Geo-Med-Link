@@ -11,7 +11,7 @@ import {
 
 import { addEvent, getEvent } from "./routes/event_routes/addEvent";
 import { login } from "./routes/login_routes/login";
-import { activeDonor } from "./routes/map_routes/active_bloodDonar";
+import { activeAmbulance, activeDonor } from "./routes/map_routes/active";
 import { bloodFilter } from "./routes/map_routes/blood";
 import { changePassword } from "./routes/password_routes/change-password";
 import { forgetPassword } from "./routes/password_routes/forget-password";
@@ -106,4 +106,5 @@ export const routes =
   app.use(respondAmbulance),
   app.use(confirmAmbulance),
   app.use(addEvent),
-  app.use(getEvent));
+  app.use(getEvent),
+  app.use(activeAmbulance));
