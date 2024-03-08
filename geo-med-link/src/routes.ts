@@ -1,5 +1,9 @@
 import express from "express";
-import { spamPost, spamVerified } from "./routes/admin_routes/spam_post";
+import {
+  notSpam,
+  spamPost,
+  spamVerified,
+} from "./routes/admin_routes/spam_post";
 import { unverifiedDoctor } from "./routes/admin_routes/unverified_doctor";
 import {
   deleteComment,
@@ -9,7 +13,11 @@ import {
   updateComment,
 } from "./routes/comment_routes/comment";
 
-import { addEvent, getEvent } from "./routes/event_routes/addEvent";
+import {
+  addEvent,
+  deleteEvent,
+  getEvent,
+} from "./routes/event_routes/addEvent";
 import { login } from "./routes/login_routes/login";
 import { activeAmbulance, activeDonor } from "./routes/map_routes/active";
 import { bloodFilter } from "./routes/map_routes/blood";
@@ -107,4 +115,6 @@ export const routes =
   app.use(confirmAmbulance),
   app.use(addEvent),
   app.use(getEvent),
-  app.use(activeAmbulance));
+  app.use(activeAmbulance),
+  app.use(deleteEvent),
+  app.use(notSpam));

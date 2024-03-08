@@ -6,6 +6,7 @@ import { createResponse } from "../../utils/response";
 
 const spamPostRouter = express.Router();
 const spamVerifiedRouter = express.Router();
+const spamRejectRouter = express.Router();
 
 spamPostRouter.get("/api/spam", async (req, res) => {
   const post = await postRepository.find({
@@ -45,4 +46,30 @@ spamVerifiedRouter.put("/api/spam/verify", async (req, res) => {
   });
 });
 
-export { spamPostRouter as spamPost, spamVerifiedRouter as spamVerified };
+spamRejectRouter.put("/api/spam/reject", async (req, res) => {
+  const post = await postRepository.findOne({
+    where: {
+      id: req.body["id"],
+    },
+  });
+
+  if (post === null || !post) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: { message: ["Post ns=ot available"] },
+    });
+  }
+  post.reported_spam = 0;
+  post.is_spam = false;
+  post.save();
+  return createResponse(res, StatusCodes.OK, {
+    status: "success",
+    data: { message: "Rejected" },
+  });
+});
+
+export {
+  spamRejectRouter as notSpam,
+  spamPostRouter as spamPost,
+  spamVerifiedRouter as spamVerified,
+};

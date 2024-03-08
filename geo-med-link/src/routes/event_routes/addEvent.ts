@@ -6,6 +6,7 @@ import { createResponse } from "../../utils/response";
 
 const addEventRouter = express.Router();
 const getEventRouter = express.Router();
+const deleteEventRouter = express.Router();
 
 addEventRouter.post("/api/event/create", async (req, res) => {
   console.log(req.body);
@@ -57,4 +58,29 @@ getEventRouter.get("/api/event/all", async (req, res) => {
   });
 });
 
-export { addEventRouter as addEvent, getEventRouter as getEvent };
+deleteEventRouter.delete("/api/event/delete/:id", async (req, res) => {
+  const eventId = { id: parseInt(req.params.id) };
+  const post = await eventRepository.findOne({
+    where: {
+      id: eventId["id"],
+    },
+  });
+  if (!post) {
+    return createResponse(res, StatusCodes.BAD_REQUEST, {
+      status: "error",
+      error: { message: ["Comment not available"] },
+    });
+  }
+  await eventRepository.delete({ id: eventId["id"] });
+  console.log("deleted");
+  return createResponse(res, StatusCodes.OK, {
+    status: "success",
+    data: { message: "successfully deleted" },
+  });
+});
+
+export {
+  addEventRouter as addEvent,
+  deleteEventRouter as deleteEvent,
+  getEventRouter as getEvent,
+};
