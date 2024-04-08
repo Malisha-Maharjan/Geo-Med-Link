@@ -12,6 +12,7 @@ spamPostRouter.get("/api/spam", async (req, res) => {
   const post = await postRepository.find({
     where: {
       reported_spam: 1,
+      is_spam: true,
     },
   });
   if (post === null) {

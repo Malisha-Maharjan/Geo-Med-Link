@@ -17,8 +17,6 @@ export const usePostComment = () => {
   const { username } = useUserContext();
   const queryClient = useQueryClient();
   const [id, setId] = useState(0);
-  console.log("this is posting");
-  console.log({ username });
   return useMutation({
     mutationFn: async ({ comment, postId }: PostCommentParams) => {
       const data = await fetch(`${BASEURL}/api/comment`, {
@@ -31,7 +29,7 @@ export const usePostComment = () => {
       return response;
     },
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["comment", id] });
     },
   });

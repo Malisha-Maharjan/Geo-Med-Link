@@ -47,14 +47,13 @@ export const useCreateEvent = () => {
       const response = await data.json();
       return response;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["event"] });
     },
   });
 };
 
 export const useFetchEvent = () => {
-  console.log("This is fetching events");
   return useInfiniteQuery({
     queryKey: ["event"],
     queryFn: async ({ pageParam }) => {

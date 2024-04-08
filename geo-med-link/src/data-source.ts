@@ -37,11 +37,11 @@ import { env } from "./utils/env";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
-  host: "MYSQL5048.site4now.net",
+  host: "MYSQL5049.site4now.net",
   // port: 3306,
-  username: "aa486b_geomed",
+  username: "aa75f9_geomed",
   password: "Malisha2001",
-  database: "db_aa486b_geomed",
+  database: "db_aa75f9_geomed",
   // logging: env.DATABASE_LOGGING,
   entities: [
     User,

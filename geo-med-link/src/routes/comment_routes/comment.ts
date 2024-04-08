@@ -97,7 +97,7 @@ getCommentRouter.get("/api/comment/:postId", async (req, res) => {
   //   skip: skip,
   // });
   const comments = await AppDataSource.query(
-    `Select c.comment, c.date, c.is_spam,u.userName, u.user_photo from comment as c left join user as u on u.id = c.userId where c.postId=${post.id} order by c.date desc Limit ${limit} offset ${skip} `
+    `Select c.comment, c.date, c.is_spam,u.userName, u.user_photo from comment as c left join user as u on u.id = c.userId where c.postId=${post.id} Limit ${limit} offset ${skip} `
   );
   const previous_link = `/api/comment/${data["id"]}?pageNumber=${page}`;
   const next_link = `/api/comment/${data["id"]}?pageNumber=${page + 1}`;
