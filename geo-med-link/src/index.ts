@@ -15,7 +15,7 @@ import { routes } from "./routes";
 import { createResponse } from "./utils/response";
 const app = express();
 
-const hostname = "192.168.1.109";
+const hostname = "192.168.1.67";
 
 async function main() {
   AppDataSource.initialize()
@@ -70,9 +70,9 @@ async function main() {
     console.log(`Server running at http://${hostname}:${port}`);
   });
 
-  app.listen(8000, () => {
-    console.log("Now running on port 8080");
-  });
+  // app.listen(8000, () => {
+  //   console.log("Now running on port 8080");
+  // });
 }
 
 main();

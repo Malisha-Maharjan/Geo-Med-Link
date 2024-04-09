@@ -57,6 +57,8 @@ import {
   getUser,
   updateUser,
 } from "./routes/user_routes/user";
+import { completedRouter } from "./utils/completed";
+import { distanceRouter } from "./utils/distance";
 import {
   ambulanceRequest,
   confirmAmbulance,
@@ -117,4 +119,6 @@ export const routes =
   app.use(getEvent),
   app.use(activeAmbulance),
   app.use(deleteEvent),
-  app.use(notSpam));
+  app.use(notSpam),
+  app.use(distanceRouter),
+  app.use(completedRouter));

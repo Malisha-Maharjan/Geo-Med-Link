@@ -7,6 +7,7 @@ import {
   personRepository,
   userRepository,
 } from "../repository";
+import { ambulanceNearby, shortestPath } from "./distance";
 import { createResponse } from "./response";
 
 const requestBloodNotificationRouter = express.Router();
@@ -33,17 +34,7 @@ requestBloodNotificationRouter.post(
       .where("user.userName = :username", { username })
       .getOne();
     if (!user) return res.send("Error");
-    const persons = await personRepository
-      .createQueryBuilder("person")
-      .leftJoinAndSelect("person.user", "user")
-      .where("person.blood_Group = :bloodGroup", { bloodGroup })
-      .andWhere("user.is_active = :isActive and user.userName != :username", {
-        isActive: false,
-        username: username,
-      })
-      .select(["person.id", "user.deviceId", "user.userName"])
-      .getMany();
-    console.log(JSON.stringify({ persons }, null, 2));
+    const persons = await shortestPath(1, bloodGroup, user.userName);
     if (!persons || persons.length === 0) {
       return createResponse(res, StatusCodes.BAD_REQUEST, {
         status: "error",
@@ -52,8 +43,8 @@ requestBloodNotificationRouter.post(
     }
     const phoneNumber = !user.phoneNumber ? "" : user.phoneNumber;
 
-    const deviceId = persons.map((person) => person.user.deviceId);
-    const users = persons.map((person) => person.user.userName);
+    const deviceId = persons.map((person: any) => person.user.deviceId);
+    const users = persons.map((person: any) => person.user.userName);
     console.log(`${users}`);
     console.log({ phoneNumber });
     console.log(deviceId);
@@ -194,6 +185,14 @@ confirmNotificationRouter.post(
       .createQueryBuilder("user")
       .where("user.userName = :username", { username: responder })
       .getOne();
+    if (responderInfo === null) {
+      return createResponse(res, StatusCodes.BAD_REQUEST, {
+        status: "error",
+        error: { message: ["error."] },
+      });
+    }
+    responderInfo.inService = true;
+    responderInfo.save();
 
     const persons = await personRepository
       .createQueryBuilder("person")
@@ -211,6 +210,7 @@ confirmNotificationRouter.post(
         error: { message: ["No any active user found."] },
       });
     }
+
     const users = persons.map((person) => person.user.userName);
     if (!requestInitiatorInfo || !responderInfo) return res.send("Error");
     const phoneNumber = !requestInitiatorInfo.phoneNumber
@@ -279,18 +279,19 @@ requestAmbulanceNotificationRouter.post(
     const phoneNumber = !user.phoneNumber ? "" : user.phoneNumber;
     const a = await organizationRepository.find();
     console.log(a);
-    const ambulances = await organizationRepository
-      .createQueryBuilder("organization")
-      .leftJoinAndSelect("organization.user", "user")
-      .where("organization.organizationType = :organizationType", {
-        organizationType: organization.AMBULANCE,
-      })
-      .andWhere("user.is_active = :isActive and user.userName != :username", {
-        isActive: false,
-        username: username,
-      })
-      .select(["organization.id", "user.deviceId", "user.userName"])
-      .getMany();
+    // const ambulances = await organizationRepository
+    //   .createQueryBuilder("organization")
+    //   .leftJoinAndSelect("organization.user", "user")
+    //   .where("organization.organizationType = :organizationType", {
+    //     organizationType: organization.AMBULANCE,
+    //   })
+    //   .andWhere("user.is_active = :isActive and user.userName != :username", {
+    //     isActive: false,
+    //     username: username,
+    //   })
+    //   .select(["organization.id", "user.deviceId", "user.userName"])
+    //   .getMany();
+    const ambulances = await ambulanceNearby(1, "Malisha");
     console.log(ambulances);
     if (!ambulances || ambulances.length === 0) {
       return createResponse(res, StatusCodes.BAD_REQUEST, {
@@ -298,8 +299,10 @@ requestAmbulanceNotificationRouter.post(
         error: { message: ["No any active user found."] },
       });
     }
-    const deviceId = ambulances.map((ambulance) => ambulance.user.deviceId);
-    const users = ambulances.map((ambulance) => ambulance.user.userName);
+    const deviceId = ambulances.map(
+      (ambulance: any) => ambulance.user.deviceId
+    );
+    const users = ambulances.map((ambulance: any) => ambulance.user.userName);
     const message = {
       notification: {
         title: "Ambulance Request",
@@ -431,7 +434,11 @@ confirmAmbulanceNotificationRouter.post(
       .createQueryBuilder("user")
       .where("user.userName = :username", { username: responder })
       .getOne();
+
     if (!requestInitiatorInfo || !responderInfo) return res.send("Error");
+    responderInfo.inService = true;
+    responderInfo.save();
+
     const phoneNumber = !requestInitiatorInfo.phoneNumber
       ? ""
       : requestInitiatorInfo.phoneNumber;

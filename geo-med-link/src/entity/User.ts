@@ -58,4 +58,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.user)
   like: Like[];
+
+  @Column({ default: false })
+  inService: boolean;
 }
